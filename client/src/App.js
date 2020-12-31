@@ -9,10 +9,11 @@ const App = () =>{
 
   const [song, setSong] = useState('');
   const [review, setReview] = useState('');
+  const [songList, setSongList] = useState([]);
 
   useEffect(() =>{
     Axios.get('http://localhost:3001/api/get').then(res => {
-      console.log(res.data);
+      setSongList(res.data);
     })
   },[]) 
 
@@ -20,9 +21,11 @@ const App = () =>{
     Axios.post('http://localhost:3001/api/insert', {
       songName: song,
       songReview: review,
-    }).then(() => {
-      alert('success');
     })
+
+    setSongList([
+      ...songList, {songName: song, songReview: review
+    }])
   }
 
   return (
@@ -41,6 +44,12 @@ const App = () =>{
           }}/>
 
           <button onClick={submitReview} className="btn btn-blue">Upload</button>
+
+          {songList.map((song) => {
+            return (
+              <p key={song.id}>Song: {song.songName} | Review: {song.songReview}</p>
+            )
+          })}
         </div>
       </div>
     </React.Fragment> 
