@@ -23,14 +23,6 @@ app.get("/api/get", (req, res) =>{
   db.query(sqlSelect, (err, result) => {
     res.send(result)
   })
-
-  const songName = req.body.songName;
-  const songReview = req.body.songReview;
-
-  const sqlInsert = "INSERT INTO song_reviews (songName, songReview) VALUES (?, ?)"
-  db.query(sqlInsert, [songName, songReview], (err, result) => {
-    console.log(result);
-  });
 })
 
 app.post("/api/insert", (req, res) =>{
@@ -41,6 +33,27 @@ app.post("/api/insert", (req, res) =>{
   const sqlInsert = "INSERT INTO song_reviews (songName, songReview) VALUES (?, ?)"
   db.query(sqlInsert, [songName, songReview], (err, result) => {
     console.log(result);
+  });
+})
+
+app.delete('/api/delete/:id', (req, res) => {
+  const id = req.params.id;
+
+  const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
+
+  db.query(sqlDelete, id, (err, res) => {
+    if(err) console.log('Error: ' + err);
+  });
+})
+
+app.put('/api/update', (req, res) => {
+  const id = req.body.id;
+  const review = req.body.songReview;
+
+  const sqlUpdate = "UPDATE song_reviews SET songReview = ? WHERE id = ?";
+
+  db.query(sqlUpdate, [review, id], (err, res) => {
+    if(err) console.log('Error: ' + err);
   });
 })
 
