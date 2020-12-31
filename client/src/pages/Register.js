@@ -2,6 +2,7 @@ import React, {useState, useEffect } from 'react';
 import '../App.css';
 import '../assets/main.css'
 import "tailwindcss/tailwind.css";
+import useDeepCompareEffect from 'use-deep-compare-effect'
 import musicIcon from '../assets/img/music.png';
 import Axios from 'axios';
 
@@ -13,11 +14,11 @@ const Register = () =>{
 
   const [newReview, setNewReview] = useState('');
 
-  useEffect(() =>{
+  useDeepCompareEffect(() =>{
     Axios.get('http://localhost:3001/api/get').then(res => {
       setSongList(res.data);
     })
-  },[]) 
+  },[songList]) 
 
   const submitReview = () =>{
     Axios.post('http://localhost:3001/api/insert', {
@@ -32,6 +33,7 @@ const Register = () =>{
 
   const deleteReview = (id) => {
     Axios.delete(`http://localhost:3001/api/delete/${id}`)
+    setSongList([]);
   }
 
   const updateReview = (id) => {
@@ -39,6 +41,7 @@ const Register = () =>{
       id: id,
       songReview : newReview,
     });
+    setSongList([]);
     setNewReview("");
   }
 
