@@ -28,12 +28,12 @@ const Home = () => {
   return (
     <div id="container">
       <div id="scene" ref={sceneEl}>
-        <div dataDepth="1.00"><img src={Layer1} /></div>
-        <div dataDepth="0.80"><img src={Layer2} /></div>
-        <div dataDepth="0.60"><img src={Layer3} /></div>
-        <div dataDepth="0.40"><img src={Layer4} /></div>
-        <div dataDepth="0.20"><img src={Layer5} /></div>
-        <div dataDepth="0.00"><img src={Layer6} /></div>
+        <div data-depth="1.00"><img src={Layer1} /></div>
+        <div data-depth="0.80"><img src={Layer2} /></div>
+        <div data-depth="0.60"><img src={Layer3} /></div>
+        <div data-depth="0.40"><img src={Layer4} /></div>
+        <div data-depth="0.20"><img src={Layer5} /></div>
+        <div data-depth="0.00"><img src={Layer6} /></div>
       </div>
     </div>
   )

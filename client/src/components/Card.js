@@ -1,7 +1,7 @@
 import React from "react";
 import "tailwindcss/tailwind.css";
 import '../components/styles/Card.css';
-import Clairo from '../assets/img/img-sample.jpg';
+import Clairo from '../assets/img/cults.jpeg';
 import ReactStars from "react-rating-stars-component";
 
 const firstExample = {

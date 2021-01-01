@@ -6,7 +6,7 @@ import '../components/styles/Navbar.css';
 const navbar = () => {
   return (
     <React.Fragment>
-      <nav class="bg-gray-800">
+      <nav class="bg-gray-800 ">
         <div class=" px-2 sm:px-6 lg:px-8">
           <div class="relative flex items-center justify-between h-16 w-100">
             <div class="flex sm:items-stretch sm:justify-start">
