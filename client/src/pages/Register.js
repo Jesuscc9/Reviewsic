@@ -1,10 +1,11 @@
 import React, {useState, useEffect } from 'react';
-import '../App.css';
-import '../assets/main.css'
 import "tailwindcss/tailwind.css";
+import "../assets/main.css";
 import useDeepCompareEffect from 'use-deep-compare-effect'
 import musicIcon from '../assets/img/music.png';
 import Axios from 'axios';
+import Navbar from '../components/Navbar';
+import Card from '../components/Card';
 
 const Register = () =>{
 
@@ -47,6 +48,8 @@ const Register = () =>{
 
   return (
     <React.Fragment>
+      <Navbar></Navbar>
+      <Card></Card>
       <div className="App">
         <h1>Music APP 😎</h1>
         

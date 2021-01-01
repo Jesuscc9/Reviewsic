@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Merriweather+Sans:wght@300;600;700;800&family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600;1,700&family=Open+Sans:wght@300;400;600&display=swap');
+
+.card{
+  width: 190px;
+  height:  330px;
+  margin: 30px;
+  background: #fff;
+  border-radius: 30px;
+}
+
+.image-container{
+  width: 100%;
+  /* min-width: 150px;
+  max-width: 150px; */
+  height: 120px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.song-img{
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%; 
+  border-radius: 15px;
+  height: auto;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.song-img:hover{
+  transform: translateY(-50%) translateX(-50%) scale(1.05);
+}
+
+.card-body{
+  margin: 6px auto;
+  width: 90%;
+}
+
+.card-footer{
+  margin: 6px auto;
+  width: 90%;
+}
+
+.song-name{
+  font-family: 'Hind', sans-serif;
+  font-size: 20px !important;
+  color: rgb(36, 36, 36);
+  font-weight: 500;
+  padding: 0px;
+}
+
+.artist-name{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(134, 134, 134);
+}
+
+.comment{
+  margin-top: 2px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+}
+
+.autor{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  font-style: italic;
+  color: rgb(160, 160, 160);
+  position: relative;
+  bottom: -20px;
+}
+
+.logo-title{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  width: 130px;
+  text-align: center;
+  color: rgb(255, 255, 255);
+}
+
