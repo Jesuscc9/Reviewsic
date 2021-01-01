@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
+
+.profile-letter{
+  background-color: white;
+  width: 35px;
+  height: 35px;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Staatliches', cursive;
+  font-size: 20px;
+  cursor: pointer;
+}

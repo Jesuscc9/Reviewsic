@@ -13,18 +13,20 @@ const firstExample = {
 const navbar = () => {
   return (
     <React.Fragment>
-      <div className="card">
+      <div className="card-custom shadow-lg">
         <div className="card-header">
           <div className="image-container">
-            <img alt="" src={Clairo} className="song-img"/>          </div>
+            <img alt="" src={Clairo} className="song-img"/>          
+          </div>
         </div>
         <div className="card-body">
           <h5 class="song-name">Pretty Girl</h5>
           <h5 class="artist-name">Clairo</h5>
-          <p className="comment">¡Nice song!, love bedroom pop vibes</p>
+          {/*40 caracteres máximo*/}
+          <p className="comment">¡Nice song!, love bedroom pop vibessssssssssssss</p>
         </div>
         <div className="card-footer">
-          <ReactStars {...firstExample} />
+          <ReactStars {...firstExample} class="stars-calification"/>
           <p className="autor">By: Jesús9</p>
         </div>
 
