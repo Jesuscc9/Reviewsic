@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { Link } from 'react-router-dom';
 // @ts-ignore
 import '../assets/animate.css';
@@ -8,11 +8,36 @@ import Moonlight from '../assets/img/moonlight.png';
 import Clairo from '../assets/img/clairo.png';
 import Slash from '../assets/img/slash.png';
 import StarBackground from '../assets/img/stars-back.png';
+import Axios from 'axios';
 
 import './styles/Home.css';
 
 const Home = () => {
+
+  const [nickname, setNickname] = useState('');
+
   const sceneEl = useRef(null);
+
+  const elements = {
+    objects: document.getElementsByName('element'),
+    on: function(){
+      this.objects.forEach((el) =>{
+        el.style.opacity = '1';
+      })
+  
+      const stars = document.getElementById('stars');
+      stars.classList.add('star-shadow');
+      stars.style.opacity = '1';
+    }, off: function(){
+      this.objects.forEach((el) =>{
+        el.style.opacity = '0.7';
+      })
+  
+      const stars = document.getElementById('stars');
+      stars.classList.remove('star-shadow');
+      stars.style.opacity = '0.2';
+    }
+  }
 
   useEffect(() => {
     const parallaxInstance = new Parallax(sceneEl.current, {
@@ -21,11 +46,12 @@ const Home = () => {
     
     parallaxInstance.enable();
 
-    // const header = document.getElementById('header');
-    // setTimeout(() => {
-    //   header.style.display = 'block';
-    //   header.classList.add('animate__fadeIn');
-    // }, 1500)
+
+    const header = document.getElementById('header');
+    setTimeout(() => {
+      header.style.display = 'block';
+      header.classList.add('animate__fadeIn');
+    }, 1500)
 
 
     return () => parallaxInstance.disable();
@@ -33,43 +59,43 @@ const Home = () => {
   }, [])
 
   const handleClick = (e) =>{
+    elements.on();
     e.preventDefault();
-    const link = document.getElementById('link');
     const header = document.getElementById('header');
     
-    // header.style.display = 'block';
-    // header.classList.remove('animate__fadeIn');
-    // header.classList.add('animate__fadeOut');
+    header.style.display = 'block';
+    header.classList.remove('animate__fadeIn');
+    header.classList.add('animate__fadeOut');
 
-    // setTimeout(() =>{
-    //   link.click();
-    // }, 1200)
+    setTimeout(() =>{
+      const login = document.getElementById('login-form');
+      login.style.display = 'flex';
+      elements.on();
+    }, 500)
+  }
+
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+    Axios.get('http://localhost:3001/api/newUser', {
+      nickname,
+    }).then((res) => {
+      if(!res.length){
+        document.getElementById('link').click();
+      }
+    }).catch(error => {
+      console.log('Hubo un error: ');
+      console.log(error);
+    })
   }
 
   const onMouseEnter = (e) =>{
     e.preventDefault();
-    const elements = document.getElementsByName('element');
-
-    elements.forEach((el) =>{
-      el.style.opacity = '1';
-    })
-
-    const stars = document.getElementById('stars');
-    stars.classList.add('star-shadow');
-    stars.style.opacity = '1';
+    elements.on();
   }
 
   const onMouseLeave = (e) =>{
     e.preventDefault();
-    const elements = document.getElementsByName('element');
-
-    elements.forEach((el) =>{
-      el.style.opacity = '0.7';
-    })
-
-    const stars = document.getElementById('stars');
-    stars.classList.remove('star-shadow');
-    stars.style.opacity = '0.2';
+    elements.off();
   }
 
   return (
@@ -78,14 +104,15 @@ const Home = () => {
         <button className="try-button" id="try-button" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={handleClick}>
           Try it now!  
         </button>       
-        <h1 className="title">Reviewsic</h1>   
-        <Link to="/login" id="link"></Link>          
+        <h1 className="title">Reviewsic</h1>        
       </div>
 
-      <form className="login-form">
+      <form className="login-form animate__animated animate__fadeIn" id="login-form" onSubmit={handleSubmit}>
         <h1 class="nickname">Nickname: </h1>
-        <input type="text" class="nickname-input"/>
+        <input type="text" class="nickname-input" onChange={(e) => setNickname(e.target.value)}/>
       </form>
+
+      <Link to="/home" id="link"></Link>
 
       <div id="container">
         <div id="scene" ref={sceneEl} data-scalar-x="10" data-scalar-y="10">

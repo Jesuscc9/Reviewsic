@@ -17,6 +17,14 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
+app.get("/api/newUser", (req, res) => {
+  const sqlSelect = 'SELECT author FROM song_reviews';
+  db.query(sqlSelect, (err, result) => {
+    console.log(result.length)
+    res.send(result)
+  })
+})
+
 app.get("/api/get", (req, res) =>{
 
   const sqlSelect = 'SELECT * FROM song_reviews';
