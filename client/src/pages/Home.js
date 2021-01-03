@@ -109,7 +109,7 @@ const Home = () => {
 
       <form className="login-form animate__animated animate__fadeIn" id="login-form" onSubmit={handleSubmit}>
         <h1 class="nickname">Nickname: </h1>
-        <input type="text" class="nickname-input" onChange={(e) => setNickname(e.target.value)}/>
+        <input type="text" class="nickname-input" onChange={(e) => setNickname(e.target.value)} placeholder="Username:"/>
       </form>
 
       <Link to="/home" id="link"></Link>
@@ -131,6 +131,13 @@ const Home = () => {
 
         </div>
       </div>
+
+      <style>{"\
+        body{\
+          background: rgb(7,33,64) !important;\
+          background: linear-gradient(90deg, rgba(7,33,64,1) 0%, rgba(8,33,57,1) 100%);\
+        }\
+      "}</style>
     </React.Fragment>
   )
 }

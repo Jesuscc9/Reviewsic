@@ -1,33 +1,40 @@
 import React from "react";
 import "tailwindcss/tailwind.css";
 import '../components/styles/Card.css';
-import Clairo from '../assets/img/cults.jpeg';
 import ReactStars from "react-rating-stars-component";
 
-const firstExample = {
-  size: 30,
-  value: 2.5,
-  edit: false
-};
+const navbar = (data) => {
 
-const navbar = () => {
+  const props = data.props;
+
+  const stars = {
+    size: 30,
+    value: 2.5,
+    edit: false,
+    isHalf: true,
+  }
+
+
+  const images = require.context('../assets/img', true);
+  let img = images('./' + props.image);
+
   return (
     <React.Fragment>
       <div className="card-custom shadow-lg">
         <div className="card-header">
           <div className="image-container">
-            <img alt="" src={Clairo} className="song-img"/>          
+            <img alt="" src={img.default} className="song-img"/>          
           </div>
         </div>
         <div className="card-body">
-          <h5 class="song-name">Pretty Girl</h5>
-          <h5 class="artist-name">Clairo</h5>
+          <h5 className="song-name">{props.songName}</h5>
+          <h5 className="artist-name">{props.singer}</h5>
           {/*40 caracteres máximo*/}
-          <p className="comment">¡Nice song!, love bedroom pop vibessssssssssssss</p>
+          <p className="comment">{props.songReview}</p>
         </div>
         <div className="card-footer">
-          <ReactStars {...firstExample} class="stars-calification"/>
-          <p className="autor">By: Jesús9</p>
+          <ReactStars {...stars} className="stars-calification"/>
+          <p className="autor">By: {props.author}</p>
         </div>
 
       </div>

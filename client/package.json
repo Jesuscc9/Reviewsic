@@ -21,6 +21,7 @@
     "react-rating-stars-component": "^2.2.0",
     "react-script-tag": "^1.1.2",
     "react-scripts": "4.0.1",
+    "sweetalert2": "^10.12.7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
     "use-deep-compare-effect": "^1.6.1",
     "web-vitals": "^0.2.4"

@@ -1,11 +1,13 @@
 import React, {useState, useEffect } from 'react';
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
-import useDeepCompareEffect from 'use-deep-compare-effect'
-import musicIcon from '../assets/img/music.png';
+import useDeepCompareEffect from 'use-deep-compare-effect';
+import Swal from 'sweetalert2';
 import Axios from 'axios';
 import Navbar from '../components/Navbar';
 import Card from '../components/Card';
+import '../pages/styles/Register.css';
+
 
 const Register = () =>{
 
@@ -46,10 +48,18 @@ const Register = () =>{
     setNewReview("");
   }
 
+  const alert = () => {
+    Swal.fire({
+      title: 'Error!',
+      text: 'Do you want to continue',
+      icon: 'error',
+      confirmButtonText: 'Cool'
+    })
+  }
+
   return (
     <React.Fragment>
-      <Navbar></Navbar>
-      <Card></Card>
+      <Navbar onAddClick={alert}></Navbar>
       <div className="App">
         <h1>Music APP 😎</h1>
         
@@ -67,12 +77,7 @@ const Register = () =>{
 
           {songList.map((song) => {
             return (
-              <React.Fragment key={song.id}>
-                <p>Song: {song.songName} | Review: {song.songReview}</p>
-                <button onClick={() => deleteReview(song.id)}>Delete</button>
-                <input type="text" id="updateInput" onChange={(e) => {setNewReview(e.target.value)}}/>
-                <button onClick={() => updateReview(song.id)}>Update</button>
-              </React.Fragment>
+              <Card props={song} key={song.id}></Card>
             )
           })}
         </div>
