@@ -1,15 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
 
-.profile-letter{
-  background-color: white;
-  width: 35px;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
+
+.add-button{
+  width: 90px;
   height: 35px;
-  color: black;
-  border-radius: 50%;
+  background-color: #7e22cd;
+  border-radius: 25px;
+  color: #fff;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  font-family: 'Staatliches', cursive;
-  font-size: 20px;
-  cursor: pointer;
-}
+  font-size: .875rem;
+  line-height: 1.25rem;
+  font-family: 'Nunito', sans-serif;
+  outline: 0 !important;
+  transition: all 0.4s;
+} 
+
+.add-button:hover{
+  background-color: #6b1fad;
+} 

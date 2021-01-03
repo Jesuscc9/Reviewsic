@@ -6,6 +6,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.14",
+    "@sweetalert/with-react": "^0.1.1",
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "@testing-library/jest-dom": "^5.11.8",
     "@testing-library/react": "^11.2.2",
@@ -22,6 +23,8 @@
     "react-script-tag": "^1.1.2",
     "react-scripts": "4.0.1",
     "sweetalert2": "^10.12.7",
+    "sweetalert2-react": "^0.8.3",
+    "sweetalert2-react-content": "^3.2.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
     "use-deep-compare-effect": "^1.6.1",
     "web-vitals": "^0.2.4"

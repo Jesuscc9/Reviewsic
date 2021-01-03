@@ -2,6 +2,8 @@ import React from "react";
 import "tailwindcss/tailwind.css";
 import Logo from '../assets/img/music.png';
 import '../components/styles/Navbar.css';
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const navbar = (data) => {
   return (
@@ -32,8 +34,9 @@ const navbar = (data) => {
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 profile">
               <div className="ml-3 relative">
                 <div>
-                  <button onClick={data.onAddClick}>
-                    AYUDA
+                  <button onClick={data.onAddClick} className="add-button">
+                    <FontAwesomeIcon icon={faPlus} />
+                    <p className="add-text">ADD</p>
                   </button>
                 </div>
               

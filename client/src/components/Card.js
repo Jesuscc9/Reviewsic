@@ -9,7 +9,7 @@ const navbar = (data) => {
 
   const stars = {
     size: 30,
-    value: 2.5,
+    value: props.calification,
     edit: false,
     isHalf: true,
   }

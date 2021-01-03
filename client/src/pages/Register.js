@@ -1,15 +1,22 @@
 import React, {useState, useEffect } from 'react';
-import "tailwindcss/tailwind.css";
-import "../assets/main.css";
 import useDeepCompareEffect from 'use-deep-compare-effect';
+
 import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
 import Axios from 'axios';
 import Navbar from '../components/Navbar';
 import Card from '../components/Card';
+import RegisterForm from '../components/RegisterForm';
+
+import "tailwindcss/tailwind.css";
+import "../assets/main.css";
 import '../pages/styles/Register.css';
 
 
 const Register = () =>{
+
+  const MySwal = withReactContent(Swal)
 
   const [song, setSong] = useState('');
   const [review, setReview] = useState('');
@@ -49,11 +56,9 @@ const Register = () =>{
   }
 
   const alert = () => {
-    Swal.fire({
-      title: 'Error!',
-      text: 'Do you want to continue',
-      icon: 'error',
-      confirmButtonText: 'Cool'
+
+    MySwal.fire({
+      html: <RegisterForm></RegisterForm>
     })
   }
 
@@ -82,6 +87,10 @@ const Register = () =>{
           })}
         </div>
       </div>
+      <RegisterForm>
+
+      </RegisterForm>
+
     </React.Fragment> 
   );
 }

@@ -108,8 +108,8 @@ const Home = () => {
       </div>
 
       <form className="login-form animate__animated animate__fadeIn" id="login-form" onSubmit={handleSubmit}>
-        <h1 class="nickname">Nickname: </h1>
-        <input type="text" class="nickname-input" onChange={(e) => setNickname(e.target.value)} placeholder="Username:"/>
+        <h1 className="nickname">Nickname: </h1>
+        <input type="text" className="nickname-input" onChange={(e) => setNickname(e.target.value)} placeholder="Username:"/>
       </form>
 
       <Link to="/home" id="link"></Link>
