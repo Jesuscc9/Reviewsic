@@ -16,6 +16,7 @@
   font-family: 'Nunito', sans-serif;
   outline: 0 !important;
   transition: all 0.2s;
+  padding-top: 2.5px;
 } 
 
 .add-button:hover{

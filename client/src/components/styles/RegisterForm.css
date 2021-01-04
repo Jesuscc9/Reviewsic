@@ -6,6 +6,9 @@
 
 .swal2-input{
   margin-top: 0px 0px 10px 0px !important;
+  -webkit-box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.09);
+  -moz-box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.09);
+  box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.09);
 }
 
 .submit-button{
@@ -28,4 +31,5 @@
 .input-label{
   text-align: start;
   font-weight: 700;
+  font-size: 18px;
 }

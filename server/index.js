@@ -50,19 +50,16 @@ app.post("/api/insert", (req, res) =>{
 
 
   const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, calification, author) VALUES (?, ?, ?, ?, ?, ?)"
-  db.query(sqlInsert, ['cults.jpeg', songName, artist, songReview, calification, 'jesu'], (err, result) => {
-    console.log(result);
+  db.query(sqlInsert, [image, songName, artist, songReview, calification, 'jesu'], (err, result) => {
+    res.send('success')
   });
 
-  myFile.mv(`${__dirname}/public/${myFile.name}`, function (err) {
+  myFile.mv(`${__dirname}/../client/src/assets/img/${myFile.name}`, function (err) {
     if (err) {
         console.log(err)
         return res.status(500).send({ msg: "Error occured" });
     }
-    // returing the response with file path and name
-    return res.send({name: myFile.name, path: `/${myFile.name}`});
-});
-    
+  });
 })
 
 app.delete('/api/delete/:id', (req, res) => {

@@ -28,7 +28,7 @@ const navbar = (data) => {
         </div>
         <div className="card-body">
           <h5 className="song-name">{props.songName}</h5>
-          <h5 className="artist-name">{props.singer}</h5>
+          <h5 className="artist-name">{props.artist}</h5>
           {/*40 caracteres máximo*/}
           <p className="comment">{props.songReview}</p>
         </div>

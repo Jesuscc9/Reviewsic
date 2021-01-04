@@ -19,6 +19,7 @@ const Register = () =>{
   const MySwal = withReactContent(Swal)
 
   const [song, setSong] = useState('');
+  const [file, setFile] = useState('');
   const [image, setImage] = useState([]);
   const [review, setReview] = useState('');
   const [artist, setArtist] = useState('');
@@ -34,21 +35,18 @@ const Register = () =>{
 
   const submitReview = () =>{
 
-    const config = {
-      headers: {
-          'content-type': 'multipart/form-data'
-      }
-    };
+    const formData = new FormData();
 
-    Axios.post('http://localhost:3001/api/insert', {
-      songName: song,
-      image: image.name,
-      file: image,
-      artist: artist,
-      songReview: review,
-      calification: calification,
-    }, config).then(() =>{
-      console.log('Se sinsertaaa');
+    formData.append('songName', song);
+    formData.append('image', image.name);
+    formData.append('file', image);
+    formData.append('artist', artist);
+    formData.append('songReview', review);
+    formData.append('calification', calification);
+
+    Axios.post('http://localhost:3001/api/insert', formData)
+    .then((res) =>{
+      setSongList([])
     })
 
   }
@@ -65,6 +63,10 @@ const Register = () =>{
     });
     setSongList([]);
     setNewReview("");
+  }
+
+  const modal = React.useRef(null);
+  const formValidation = () =>{
   }
 
   const alert = () => {
@@ -84,15 +86,20 @@ const Register = () =>{
       }} onSubmit={(e) => {
         document.getElementById('button').click();
         MySwal.close();
-      }}>
-         </RegisterForm>,
+      }} ref={modal}/> ,
+
       showConfirmButton: false,
+    }).then(() => {
+      console.log(modal);
     })
   }
 
   return (
     <React.Fragment>
-      <Navbar onAddClick={alert}></Navbar>
+      <Navbar onAddClick={() => {
+        console.log(modal);
+        alert()
+      }}></Navbar>
           <button onClick={submitReview} id="button"></button>
 
           <div className="card-container">
