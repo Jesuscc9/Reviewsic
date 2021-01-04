@@ -41,35 +41,41 @@ const RegisterForm = (props) =>{
 
     if((artist.current.value).length <= 0){
       artistAlert.current.style.opacity = '1';
-      image.current.classList.remove('wrong-input');
+      artist.current.classList.add('wrong-input');
       return false;
     }else{
       artistAlert.current.style.opacity = '0';
-      image.current.classList.add('wrong-input');
+      artist.current.classList.remove('wrong-input');
     }
 
     if((review.current.value).length <= 0){
       reviewAlert.current.style.opacity = '1';
+      review.current.classList.add('wrong-input');
       reviewAlert.current.textContent = 'Please fill out this field.';
       return false;
     }else{
+      review.current.classList.remove('wrong-input');
       reviewAlert.current.style.opacity = '0';
     }
 
     if((review.current.value).length <= 10){
       reviewAlert.current.style.opacity = '1';
       reviewAlert.current.textContent = 'Please, make a longer comment!';
+      review.current.classList.add('wrong-input');
       return false;
     }else{
+      review.current.classList.remove('wrong-input');
       reviewAlert.current.style.opacity = '0';
     }
 
     if((review.current.value).length >= 40){
       reviewAlert.current.textContent = 'Please, make a smaller comment!';
       reviewAlert.current.style.opacity = '1';
+      review.current.classList.add('wrong-input');
       return false;
     }else{
       reviewAlert.current.style.opacity = '0';
+      review.current.classList.add('wrong-input');
     }
 
     return true;

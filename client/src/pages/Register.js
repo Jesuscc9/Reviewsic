@@ -1,6 +1,6 @@
 import React, {useState, useEffect } from 'react';
 import useDeepCompareEffect from 'use-deep-compare-effect';
-
+import socketIOClient from "socket.io-client";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
@@ -12,6 +12,8 @@ import RegisterForm from '../components/RegisterForm';
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import '../pages/styles/Register.css';
+
+const ENDPOINT = "http://127.0.0.1:4001";
 
 
 const Register = () =>{
@@ -26,8 +28,13 @@ const Register = () =>{
   const [calification, setCalification] = useState(0);
   const [songList, setSongList] = useState([]);
   const [newReview, setNewReview] = useState('');
+  const [response, setResponse] = useState("");
 
   useDeepCompareEffect(() =>{
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("FromAPI", data => {
+      setResponse(data);
+    });
     Axios.get('http://localhost:3001/api/get').then(res => {
       setSongList(res.data);
     })
@@ -94,6 +101,7 @@ const Register = () =>{
       <Navbar onAddClick={() => {
         alert()
       }}></Navbar>
+          It's <time dateTime={response}>{response}</time>
           <button onClick={submitReview} id="button"></button>
 
           <div className="card-container">

@@ -79,7 +79,7 @@ const Home = () => {
     Axios.get(`http://localhost:3001/api/newUser/${nickname}`, {
       nickname,
     }).then((res) => {
-      if(!res.length){
+      if(res.data == 'success'){
         document.getElementById('link').click();
       }
     }).catch(error => {
@@ -109,7 +109,11 @@ const Home = () => {
 
       <form className="login-form animate__animated animate__fadeIn" id="login-form" onSubmit={handleSubmit}>
         <h1 className="nickname">Nickname: </h1>
-        <input type="text" className="nickname-input" onChange={(e) => setNickname(e.target.value)} placeholder="Username:"/>
+        <input type="text" className="nickname-input" onChange={(e) => setNickname(e.target.value)} placeholder="Username:" onFocus={
+          () => {elements.on()}
+        } onBlur={
+          () => {elements.off()}
+        }/>
       </form>
 
       <Link to="/home" id="link"></Link>
