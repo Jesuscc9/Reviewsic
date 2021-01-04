@@ -10,6 +10,8 @@ body{
   margin: 30px;
   background: #fff;
   border-radius: 30px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
   transition: all 0.2s;
 }
 
@@ -22,12 +24,11 @@ body{
   /* min-width: 150px;
   max-width: 150px; */
   height: 110px;
-  border-radius: 30px;
+  border-radius: 20px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
   overflow: hidden;
 
-  -webkit-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.109);
-  -moz-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.109);
-  box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.109);
 }
 
 .song-img{
@@ -45,7 +46,7 @@ body{
 }
 
 .song-img:hover{
-  transform: translateY(-50%) translateX(-50%) scale(1.05);
+  transform: translateY(-50%) translateX(-50%) scale(1.06);
 }
 
 .card-body{
@@ -78,14 +79,17 @@ body{
 
 .comment{
   margin-top: 10px;
-  margin-right: 0px;
+  margin-right: 0px !important;
+  margin: 0px !important;
+  width: 100% !important;
   font-family: 'Open Sans', sans-serif;
   font-size: 13px;
   height: 60px;
-  max-width: 120px;
   text-align: justify;
   color: rgb(53, 53, 53);
   font-weight: 600;
+  word-break: break-word;
+  display: flex;
 }
 
 .autor{

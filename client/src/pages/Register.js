@@ -65,10 +65,6 @@ const Register = () =>{
     setNewReview("");
   }
 
-  const modal = React.useRef(null);
-  const formValidation = () =>{
-  }
-
   const alert = () => {
 
     MySwal.fire({
@@ -86,18 +82,16 @@ const Register = () =>{
       }} onSubmit={(e) => {
         document.getElementById('button').click();
         MySwal.close();
-      }} ref={modal}/> ,
+      }}/> ,
 
       showConfirmButton: false,
     }).then(() => {
-      console.log(modal);
     })
   }
 
   return (
     <React.Fragment>
       <Navbar onAddClick={() => {
-        console.log(modal);
         alert()
       }}></Navbar>
           <button onClick={submitReview} id="button"></button>
