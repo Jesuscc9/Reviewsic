@@ -15,7 +15,7 @@
   line-height: 1.25rem;
   font-family: 'Nunito', sans-serif;
   outline: 0 !important;
-  transition: all 0.4s;
+  transition: all 0.2s;
 } 
 
 .add-button:hover{

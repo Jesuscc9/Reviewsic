@@ -19,9 +19,11 @@ const Register = () =>{
   const MySwal = withReactContent(Swal)
 
   const [song, setSong] = useState('');
+  const [image, setImage] = useState([]);
   const [review, setReview] = useState('');
+  const [artist, setArtist] = useState('');
+  const [calification, setCalification] = useState(0);
   const [songList, setSongList] = useState([]);
-
   const [newReview, setNewReview] = useState('');
 
   useDeepCompareEffect(() =>{
@@ -31,14 +33,24 @@ const Register = () =>{
   },[songList]) 
 
   const submitReview = () =>{
+
+    const config = {
+      headers: {
+          'content-type': 'multipart/form-data'
+      }
+    };
+
     Axios.post('http://localhost:3001/api/insert', {
       songName: song,
+      image: image.name,
+      file: image,
+      artist: artist,
       songReview: review,
+      calification: calification,
+    }, config).then(() =>{
+      console.log('Se sinsertaaa');
     })
 
-    setSongList([
-      ...songList, {songName: song, songReview: review
-    }])
   }
 
   const deleteReview = (id) => {
@@ -58,39 +70,38 @@ const Register = () =>{
   const alert = () => {
 
     MySwal.fire({
-      html: <RegisterForm></RegisterForm>
+      html: <RegisterForm onSongChange={(e) => {
+        setSong(e);
+        console.log(song);
+      }} selectImage={(e) =>{
+          setImage(e)
+      }} onArtistChange={(e) => {
+          setArtist(e)
+      }} onCommentChange={(e) => {
+          setReview(e);
+      }} ratingChanged={(e) => {
+        setCalification(e)
+      }} onSubmit={(e) => {
+        document.getElementById('button').click();
+        MySwal.close();
+      }}>
+         </RegisterForm>,
+      showConfirmButton: false,
     })
   }
 
   return (
     <React.Fragment>
       <Navbar onAddClick={alert}></Navbar>
-      <div className="App">
-        <h1>Music APP 😎</h1>
-        
-        <div className="form">
-          <label>Song Name:</label>
-          <input type="text" name="songName" onChange={(e) => {
-            setSong(e.target.value)
-          }}/>
-          <label>Review</label>
-          <input type="text" name="review" onChange={(e) => {
-            setReview(e.target.value)
-          }}/>
+          <button onClick={submitReview} id="button"></button>
 
-          <button onClick={submitReview} className="btn btn-blue">Upload</button>
-
-          {songList.map((song) => {
-            return (
-              <Card props={song} key={song.id}></Card>
-            )
-          })}
-        </div>
-      </div>
-      <RegisterForm>
-
-      </RegisterForm>
-
+          <div className="card-container">
+            {songList.map((song) => {
+              return (
+                <Card props={song} key={song.id}></Card>
+              )
+            })}
+          </div>
     </React.Fragment> 
   );
 }

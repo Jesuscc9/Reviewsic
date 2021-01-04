@@ -104,7 +104,7 @@ body{
 .try-button:hover + .title {
   opacity: 1;
   transform: scale(1.01);
-  text-shadow: 0 10px 20px rgba(78, 0, 141, 0.74);
+  text-shadow: 0 7px 20px rgba(78, 0, 141, 0.404);
 }
 
 .try-button:hover > .slash {
