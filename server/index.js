@@ -1,10 +1,14 @@
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const mysql = require('mysql')
 const fileUpload = require('express-fileupload');
 
 const app = express()
+
+app.use(session({secret: 'ssshhhhh',}));
+
 
 const db = mysql.createPool({
   host: 'localhost',
@@ -22,12 +26,10 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(fileUpload());
 
-app.get("/api/newUser", (req, res) => {
-  const sqlSelect = 'SELECT author FROM song_reviews';
-  db.query(sqlSelect, (err, result) => {
-    console.log(result.length)
-    res.send(result)
-  })
+var sess;
+app.get("/api/newUser/:user", (req, res) => {
+  sess = req.session;
+  sess.user = req.params.user;
 })
 
 app.get("/api/get", (req, res) =>{
@@ -50,7 +52,7 @@ app.post("/api/insert", (req, res) =>{
 
 
   const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, calification, author) VALUES (?, ?, ?, ?, ?, ?)"
-  db.query(sqlInsert, [image, songName, artist, songReview, calification, 'jesu'], (err, result) => {
+  db.query(sqlInsert, [image, songName, artist, songReview, calification, sess.user], (err, result) => {
     res.send('success')
   });
 

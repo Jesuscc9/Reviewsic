@@ -23,23 +23,29 @@ const RegisterForm = (props) =>{
   function validation(){
     if((song.current.value).length <= 1){
       songAlert.current.style.opacity = '1';
+      song.current.classList.add('wrong-input');
       return false;
     }else{
       songAlert.current.style.opacity = '0';
+      song.current.classList.remove('wrong-input');
     }
 
     if((image.current.value).length <= 0){
       imageAlert.current.style.opacity = '1';
+      image.current.classList.add('wrong-input');
       return false;
     }else{
       imageAlert.current.style.opacity = '0';
+      image.current.classList.remove('wrong-input');
     }
 
     if((artist.current.value).length <= 0){
       artistAlert.current.style.opacity = '1';
+      image.current.classList.remove('wrong-input');
       return false;
     }else{
       artistAlert.current.style.opacity = '0';
+      image.current.classList.add('wrong-input');
     }
 
     if((review.current.value).length <= 0){
@@ -94,7 +100,7 @@ const RegisterForm = (props) =>{
           }} ref={image}/> 
 
           
-        <p className="alert-label" ref={imageAlert}>Please fill out this field.</p>
+        <p className="alert-label" ref={imageAlert}>Please select an image.</p>
 
         <p className="input-label">Artist: </p>
 

@@ -45,11 +45,18 @@
 }
 
 .alert-label{
-  color: red;
+  color: rgb(255, 0, 0);
   font-size: 14px;
   text-align: start;
   font-style: italic;
   margin-bottom: 10px;
   opacity: 0;
   transition: all 0.5s;
+}
+
+.wrong-input{
+  border: 1.3px solid rgb(255, 0, 0);
+  -webkit-box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.09);
+  -moz-box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.09);
+  box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.09);
 }

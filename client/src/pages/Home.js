@@ -76,7 +76,7 @@ const Home = () => {
 
   const handleSubmit = async (e) =>{
     e.preventDefault();
-    Axios.get('http://localhost:3001/api/newUser', {
+    Axios.get(`http://localhost:3001/api/newUser/${nickname}`, {
       nickname,
     }).then((res) => {
       if(!res.length){
