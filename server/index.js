@@ -7,6 +7,9 @@ const fileUpload = require('express-fileupload');
 
 const app = express()
 
+app.use(session({secret: 'ssshhhhh',}));
+
+
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
@@ -14,7 +17,7 @@ const db = mysql.createPool({
   database: 'gf'
 })
 
-app.use(session({secret: 'ssshhhhh',}));
+
 app.use(express.static('public'));
 app.use(cors())
 app.use(express.json())
@@ -87,5 +90,3 @@ app.put('/api/update', (req, res) => {
 app.listen(3001, () => {
   console.log('se viense');
 })
-
-

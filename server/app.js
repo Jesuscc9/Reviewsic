@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require('express-session');
 const http = require("http");
 const cors = require('cors')
 const socketIo = require("socket.io");
@@ -17,21 +18,18 @@ const io = socketIo(server);
 let interval;
 
 io.on("connection", (socket) => {
-  console.log("New client connected");
-  if (interval) {
-    clearInterval(interval);
-  }
-  interval = setInterval(() => getApiAndEmit(socket), 5000);
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-    clearInterval(interval);
+  getApiAndEmit(socket);
+  console.log("New client connected " + socket.id);
+  socket.on("disconnect", (socket) => {
+    console.log("Disconnected " + socket.id);
   });
 });
 
 const getApiAndEmit = socket => {
-  const response = new Date();
-  // Emitting a new message. Will be consumed by the client
-  socket.emit("FromAPI", response);
+  socket.emit("FromAPI", {
+    hola: 'saludos',
+    gf: 'clairo',
+  });
 };
 
 server.listen(port, () => console.log(`Listening on port ${port}`));

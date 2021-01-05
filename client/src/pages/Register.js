@@ -13,7 +13,7 @@ import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import '../pages/styles/Register.css';
 
-const ENDPOINT = "http://127.0.0.1:4001";
+const ENDPOINT = "http://127.0.0.1:3001";
 
 
 const Register = () =>{
@@ -31,14 +31,17 @@ const Register = () =>{
   const [response, setResponse] = useState("");
 
   useDeepCompareEffect(() =>{
-    const socket = socketIOClient(ENDPOINT);
-    socket.on("FromAPI", data => {
-      setResponse(data);
-    });
     Axios.get('http://localhost:3001/api/get').then(res => {
       setSongList(res.data);
     })
   },[songList]) 
+
+  useEffect(() => {
+    const socket = socketIOClient(ENDPOINT);
+    socket.on("FromAPI", data => {
+      console.log(data);
+    });
+  }, [])
 
   const submitReview = () =>{
 
