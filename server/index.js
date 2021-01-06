@@ -11,13 +11,13 @@ const app = express()
 
 const index = require("./routes/index");
 
-app.use(session({secret: 'ssshhhhh',}));
+app.use(session({secret: 'secret',}));
 
 
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'password',
   database: 'gf'
 })
 
@@ -41,6 +41,7 @@ app.get("/api/get", (req, res) =>{
 
   const sqlSelect = 'SELECT * FROM song_reviews';
   db.query(sqlSelect, (err, result) => {
+    console.log(err);
     res.send(result)
   })
 })

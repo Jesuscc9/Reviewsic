@@ -108,7 +108,6 @@ const Register = () =>{
       <Navbar onAddClick={() => {
         alert()
       }}></Navbar>
-          <p>{response}</p>
           <button onClick={submitReview} id="button"></button>
 
           <div className="card-container">
