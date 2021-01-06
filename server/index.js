@@ -1,11 +1,15 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser')
+const http = require("http");
+const socketIo = require("socket.io");
 const cors = require('cors')
 const mysql = require('mysql')
 const fileUpload = require('express-fileupload');
 
 const app = express()
+
+const index = require("./routes/index");
 
 app.use(session({secret: 'ssshhhhh',}));
 
@@ -86,7 +90,44 @@ app.put('/api/update', (req, res) => {
   });
 })
 
+app.use(index);
 
-app.listen(3001, () => {
+const server = http.createServer(app);
+
+const io = socketIo(server);
+
+let users = {}
+
+io.on("connection", (socket) => {
+
+  if(sess){
+    if(socket.user in users) socket.emit('new user', 'error');
+    socket.user = sess.user;
+    console.log(socket.user);
+    users[socket.user] = socket;
+    updateUsers();
+
+    socket.on('disconnect', (data) => {
+      if(!socket.user) return;
+      delete users[socket.user];
+      updateUsers();
+    });
+
+  }else{
+    console.log('Usuario sin definir');
+    socket.emit('usernames', 'error');
+  }
+
+  function updateUsers(){
+    console.log('Se manda: ');
+    console.log(Object.keys(users));
+    io.sockets.emit('usernames', Object.keys(users));
+  }
+
+});
+
+
+
+server.listen(3001, () => {
   console.log('se viense');
 })

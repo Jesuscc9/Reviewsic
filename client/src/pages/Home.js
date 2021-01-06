@@ -140,6 +140,8 @@ const Home = () => {
         body{\
           background: rgb(7,33,64) !important;\
           background: linear-gradient(90deg, rgba(7,33,64,1) 0%, rgba(8,33,57,1) 100%);\
+          overflow-y: hidden !important;\
+          overflow-x: hidden !important;\
         }\
       "}</style>
     </React.Fragment>

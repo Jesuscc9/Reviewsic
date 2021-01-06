@@ -1,4 +1,5 @@
 import React, {useState, useEffect } from 'react';
+import { Redirect } from "react-router-dom";
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import socketIOClient from "socket.io-client";
 import Swal from 'sweetalert2';
@@ -38,8 +39,9 @@ const Register = () =>{
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
-    socket.on("FromAPI", data => {
-      console.log(data);
+    socket.on("usernames", data => {
+      console.log('Se recbie esto: ');
+      setResponse(data);
     });
   }, [])
 
@@ -99,12 +101,14 @@ const Register = () =>{
     })
   }
 
+  if(response == 'error') return <Redirect to="/"></Redirect>
+
   return (
     <React.Fragment>
       <Navbar onAddClick={() => {
         alert()
       }}></Navbar>
-          It's <time dateTime={response}>{response}</time>
+          <p>{response}</p>
           <button onClick={submitReview} id="button"></button>
 
           <div className="card-container">

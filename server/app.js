@@ -9,6 +9,7 @@ const index = require("./routes/index");
 
 const app = express();
 app.use(cors())
+ 
 app.use(index);
 
 const server = http.createServer(app);
