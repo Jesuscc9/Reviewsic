@@ -13,6 +13,7 @@ body{
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   transition: all 0.2s;
+  z-index: 1000;
 }
 
 .image-container{
@@ -105,5 +106,47 @@ body{
   width: 130px;
   text-align: center;
   color: rgb(255, 255, 255);
+}
+
+.card-options{
+  border-left: 1px solid rgba(128, 128, 128, 0.068);
+  width: 30px;
+  height: 90px;
+  position: relative;
+  left: 180px !important;
+  bottom: 90px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  background-color: white;
+  transition: left 0.25s linear, opacity .3s ease-in-out;
+  opacity: 0;
+}
+
+.card-options-visible{
+  left: 180px;
+  opacity: 1;
+}
+
+.option-container{
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.faPen{
+  color: rgb(255, 174, 0);
+  cursor: pointer
+}
+
+.faTrash{
+  color: rgb(179, 0, 0);
+  cursor: pointer
+}
+
+.faSpotify{
+  color: rgb(0, 179, 15);
+  cursor: pointer
 }
 

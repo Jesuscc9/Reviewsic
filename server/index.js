@@ -17,7 +17,7 @@ app.use(session({secret: 'secret',}));
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'password',
+  password: '',
   database: 'gf'
 })
 
