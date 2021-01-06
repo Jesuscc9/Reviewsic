@@ -6,12 +6,14 @@ const socketIo = require("socket.io");
 const cors = require('cors')
 const mysql = require('mysql')
 const fileUpload = require('express-fileupload');
+const fs = require('fs')
 
 const app = express()
 
 const index = require("./routes/index");
 
-app.use(session({secret: 'secret',}));
+app.use(session({secret: 'secret',     resave: true,
+saveUninitialized: true}));
 
 
 const db = mysql.createPool({
@@ -41,43 +43,74 @@ app.get("/api/get", (req, res) =>{
 
   const sqlSelect = 'SELECT * FROM song_reviews';
   db.query(sqlSelect, (err, result) => {
-    console.log(err);
-    res.send(result)
+    if(err){
+      res.send('error');
+      res.end();
+    }else{
+      res.send(result)
+    }
   })
 })
 
 app.post("/api/insert", (req, res) =>{
 
   const myFile = req.files.file;
-  console.log(myFile);
   const songName = req.body.songName;
   const image = req.body.image;
   const artist = req.body.artist;
   const songReview = req.body.songReview;
+  const spotifyUrl = req.body.spotifyUrl;
   const calification = req.body.calification;
 
 
-  const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, calification, author) VALUES (?, ?, ?, ?, ?, ?)"
-  db.query(sqlInsert, [image, songName, artist, songReview, calification, sess.user], (err, result) => {
-    res.send('success')
-  });
-
-  myFile.mv(`${__dirname}/../client/src/assets/img/${myFile.name}`, function (err) {
-    if (err) {
-        console.log(err)
-        return res.status(500).send({ msg: "Error occured" });
+  const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, spotifyUrl, calification, author) VALUES (?, ?, ?, ?, ?, ?, ?)"
+  db.query(sqlInsert, [image, songName, artist, songReview, spotifyUrl, calification, sess.user], (err, result) => {
+    if(err){
+      res.send('error');
+      res.end();
     }
   });
+
+  if(fs.existsSync(`${__dirname}/../client/src/images/${myFile.name}`)) {
+    res.send('error')
+    res.end();
+  } else {
+    myFile.mv(`${__dirname}/../client/src/images/${myFile.name}`, function (err) {
+      if (err) {
+        res.send('error');
+        res.end();
+      }
+    });
+  }
+
+  res.send('success')
+
 })
 
-app.delete('/api/delete/:id', (req, res) => {
+app.delete('/api/delete/:id/:image', (req, res) => {
   const id = req.params.id;
+  const image = req.params.image;
+
+  const path = `${__dirname}/../client/src/images/${image}`
+
+  try {
+    fs.unlinkSync(path)
+  } catch(err) {
+    res.send('error');
+    res.end();
+  }
 
   const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
 
   db.query(sqlDelete, id, (err, res) => {
-    if(err) console.log('Error: ' + err);
+    if(err){
+      res.send('error');
+      res.end();
+    }
   });
+  
+  res.send('success');
+
 })
 
 app.put('/api/update', (req, res) => {
@@ -87,8 +120,13 @@ app.put('/api/update', (req, res) => {
   const sqlUpdate = "UPDATE song_reviews SET songReview = ? WHERE id = ?";
 
   db.query(sqlUpdate, [review, id], (err, res) => {
-    if(err) console.log('Error: ' + err);
+    if(err){
+      res.send('error')
+      res.end();
+    }
   });
+
+  res.send('success')
 })
 
 app.use(index);
@@ -115,7 +153,6 @@ io.on("connection", (socket) => {
     });
 
   }else{
-    console.log('Usuario sin definir');
     socket.emit('usernames', 'error');
   }
 
@@ -130,5 +167,5 @@ io.on("connection", (socket) => {
 
 
 server.listen(3001, () => {
-  console.log('se viense');
+  console.log('Listening on port: 3001');
 })

@@ -26,6 +26,7 @@ const Register = () =>{
   const [image, setImage] = useState([]);
   const [review, setReview] = useState('');
   const [artist, setArtist] = useState('');
+  const [spotifyURL, setSpotifyURL] = useState('');
   const [calification, setCalification] = useState(0);
   const [songList, setSongList] = useState([]);
   const [newReview, setNewReview] = useState('');
@@ -53,6 +54,7 @@ const Register = () =>{
     formData.append('image', image.name);
     formData.append('file', image);
     formData.append('artist', artist);
+    formData.append('spotifyUrl', spotifyURL);
     formData.append('songReview', review);
     formData.append('calification', calification);
 
@@ -63,18 +65,23 @@ const Register = () =>{
 
   }
 
-  const deleteReview = (id) => {
-    Axios.delete(`http://localhost:3001/api/delete/${id}`)
-    setSongList([]);
+  const deleteReview = (id, image) => {
+    Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`).then((data) => {
+      console.log(data)
+      const newSongList = songList.filter((e) => {
+        return e.id == id;
+      })
+  
+      setSongList(newSongList);
+      console.log(songList);
+    })
   }
 
   const updateReview = (id) => {
     Axios.put('http://localhost:3001/api/update', {
       id: id,
       songReview : newReview,
-    });
-    setSongList([]);
-    setNewReview("");
+    })
   }
 
   const alert = () => {
@@ -89,7 +96,9 @@ const Register = () =>{
           setArtist(e)
       }} onCommentChange={(e) => {
           setReview(e);
-      }} ratingChanged={(e) => {
+      }} onSpotifyUrlChange={(e) => {
+          setSpotifyURL(e);
+      }}ratingChanged={(e) => {
         setCalification(e)
       }} onSubmit={(e) => {
         document.getElementById('button').click();
@@ -113,7 +122,10 @@ const Register = () =>{
           <div className="card-container">
             {songList.map((song) => {
               return (
-                <Card props={song} key={song.id}></Card>
+                <Card props={song} key={song.id} delete={(e) => {
+                  console.log(e);
+                  deleteReview(e.id, e.image);
+                }}></Card>
               )
             })}
           </div>

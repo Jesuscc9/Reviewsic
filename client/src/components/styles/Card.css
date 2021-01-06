@@ -133,10 +133,11 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 14px;
 }
 
 .faPen{
-  color: rgb(255, 174, 0);
+  color: rgb(255, 203, 34);
   cursor: pointer
 }
 
@@ -147,6 +148,7 @@ body{
 
 .faSpotify{
   color: rgb(0, 179, 15);
-  cursor: pointer
+  cursor: pointer;
+  font-size: 16px;
 }
 

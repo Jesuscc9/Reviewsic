@@ -29,7 +29,7 @@ const Card = (data) => {
     card_options.current.classList.remove('card-options-visible');
   }
 
-  const images = require.context('../assets/img', true);
+  const images = require.context('../images', true);
   let img = images('./' + props.image);
 
   return (
@@ -51,13 +51,19 @@ const Card = (data) => {
           <p className="autor">By: {props.author}</p>
           <div className="card-options" ref={card_options}>
             <div className="edit-option option-container">
-              <FontAwesomeIcon icon={faPen} className="faPen"/>
+              <a>
+                <FontAwesomeIcon icon={faPen} className="faPen"/>
+              </a>
             </div>
             <div className="edit-option option-container">
-              <FontAwesomeIcon icon={faTrash} className="faTrash"/>
+              <FontAwesomeIcon icon={faTrash} className="faTrash" onClick={ (e)=> {
+                data.delete({id: props.id, image: props.image})
+              }}/>
             </div>
             <div className="edit-option option-container">
-              <FontAwesomeIcon icon={faSpotify} className="faSpotify"/>
+              <a href={props.spotifyUrl} target="_blank">
+                <FontAwesomeIcon icon={faSpotify} className="faSpotify"/>
+              </a>
             </div>
           </div>
         </div>

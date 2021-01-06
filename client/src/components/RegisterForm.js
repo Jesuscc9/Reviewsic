@@ -19,6 +19,8 @@ const RegisterForm = (props) =>{
   const artistAlert = React.useRef(null);
   const review = React.useRef(null);
   const reviewAlert = React.useRef(null);
+  const spotifyURL = React.useRef(null);
+  const spotifyURLAlert = React.useRef(null);
 
   function validation(){
     if((song.current.value).length <= 1){
@@ -124,6 +126,15 @@ const RegisterForm = (props) =>{
 
         
         <p className="alert-label" ref={reviewAlert}>Please fill out this field.</p>
+
+        <p className="input-label">Spotify URL: </p>
+
+        <input type="text" id="swal-input2" className="swal2-input" placeholder="Spotify link of the song..." onChange={(e)=> {
+          props.onSpotifyUrlChange(e.target.value);
+        }} ref={spotifyURL}/>
+
+
+        <p className="alert-label" ref={spotifyURLAlert}>Please fill out this field.</p>
 
         <p className="input-label">Rating: </p>
 
