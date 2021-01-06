@@ -139,10 +139,15 @@ let users = {}
 
 io.on("connection", (socket) => {
 
+  socket.on('updateReviews', (data) => {
+    console.log('Nuevas actualizaciones: ');
+    console.log(data);
+    io.sockets.emit('updateReviews', 'siiiamigo');
+  }) 
+
   if(sess){
-    if(socket.user in users) socket.emit('new user', 'error');
+    if(socket.user in users) socket.emit('usernames', 'error');
     socket.user = sess.user;
-    console.log(socket.user);
     users[socket.user] = socket;
     updateUsers();
 
@@ -157,8 +162,6 @@ io.on("connection", (socket) => {
   }
 
   function updateUsers(){
-    console.log('Se manda: ');
-    console.log(Object.keys(users));
     io.sockets.emit('usernames', Object.keys(users));
   }
 

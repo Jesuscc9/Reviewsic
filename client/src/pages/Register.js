@@ -36,14 +36,18 @@ const Register = () =>{
     Axios.get('http://localhost:3001/api/get').then(res => {
       setSongList(res.data);
     })
+
   },[songList]) 
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
-    socket.on("usernames", data => {
-      console.log('Se recbie esto: ');
+
+    socket.on('usernames', data => {
+      console.log('Nuevos usuarios desde client: ')
+      console.log(data)
       setResponse(data);
     });
+
   }, [])
 
   const submitReview = () =>{
@@ -60,21 +64,23 @@ const Register = () =>{
 
     Axios.post('http://localhost:3001/api/insert', formData)
     .then((res) =>{
-      setSongList([])
     })
 
   }
 
   const deleteReview = (id, image) => {
-    Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`).then((data) => {
-      console.log(data)
-      const newSongList = songList.filter((e) => {
-        return e.id == id;
-      })
+    console.log('Se borora');
+    // Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`).then((data) => {
+    //   console.log(data)
+    //   const newSongList = songList.filter((e) => {
+    //     return e.id == id;
+    //   })
   
-      setSongList(newSongList);
-      console.log(songList);
-    })
+    //   setSongList(newSongList);
+    //   console.log(songList);
+    // })
+    const socket = socketIOClient(ENDPOINT);
+    socket.emit('asd', 'hola')
   }
 
   const updateReview = (id) => {
