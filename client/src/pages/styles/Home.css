@@ -84,6 +84,7 @@ body{
   left: 300px;
   top: 220px;
   border-radius: 7px;
+  border: 0px solid;
   width: 150px;
   height: 50px;
   background-color: rgb(3, 88, 207);
@@ -92,7 +93,7 @@ body{
   font-size: 20px;
   opacity: 0.7;
   transition: all 0.2s;
-  outline: none;
+  outline: none !important;
 }
 
 #scene{

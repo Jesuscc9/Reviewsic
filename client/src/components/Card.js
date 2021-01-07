@@ -32,12 +32,15 @@ const Card = (data) => {
   const images = require.context('../images', true);
   let img = images('./' + props.image);
 
+  // console.log('imagen: ')
+  // console.log(img)
+
   return (
     <React.Fragment>
       <div className="card-custom shadow-lg" onMouseLeave={handleMouseLeave}>
         <div className="card-header" onMouseOver={handleMouseOver} ref={card}>
           <div className="image-container">
-            <img alt="" src={img.default} className="song-img"/>          
+          <img alt="" src={img.default} className="song-img"/>             
           </div>
         </div>
         <div className="card-body">
@@ -51,12 +54,13 @@ const Card = (data) => {
           <p className="autor">By: {props.author}</p>
           <div className="card-options" ref={card_options}>
             <div className="edit-option option-container">
-              <a>
-                <FontAwesomeIcon icon={faPen} className="faPen"/>
-              </a>
+              <FontAwesomeIcon icon={faPen} className="faPen" onClick={() => {
+                data.update();
+              }}/>
             </div>
             <div className="edit-option option-container">
               <FontAwesomeIcon icon={faTrash} className="faTrash" onClick={ (e)=> {
+                
                 data.delete({id: props.id, image: props.image})
               }}/>
             </div>

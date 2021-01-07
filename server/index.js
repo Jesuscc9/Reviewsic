@@ -55,35 +55,48 @@ app.get("/api/get", (req, res) =>{
 app.post("/api/insert", (req, res) =>{
 
   const myFile = req.files.file;
-  const songName = req.body.songName;
-  const image = req.body.image;
-  const artist = req.body.artist;
-  const songReview = req.body.songReview;
-  const spotifyUrl = req.body.spotifyUrl;
-  const calification = req.body.calification;
+
+  const data = {
+    id: 0,
+    image: req.body.image,
+    songName: req.body.songName,
+    artist: req.body.artist,
+    songReview: req.body.songReview,
+    spotifyUrl: req.body.spotifyUrl,
+    calification: req.body.calification,
+    author: sess.user,
+  }
+  const user = sess.user;
 
 
   const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, spotifyUrl, calification, author) VALUES (?, ?, ?, ?, ?, ?, ?)"
-  db.query(sqlInsert, [image, songName, artist, songReview, spotifyUrl, calification, sess.user], (err, result) => {
+  db.query(sqlInsert, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, user], (err, result) => {
     if(err){
-      res.send('error');
+      res.send('query error');
       res.end();
+    }else{
+      console.log('Resultado: ');
+      console.log(result);
+      if(fs.existsSync(`${__dirname}/../client/src/images/${myFile.name}`)) {
+        res.send('existe el archivo error')
+        res.end();
+      } else {
+        myFile.mv(`${__dirname}/../client/src/images/${myFile.name}`, function (err) {
+          if (err) {
+            res.send('no se puede poner la imagen error');
+            res.end();
+          }else{
+            console.log('Se inserta exitosamente');
+            data.calification = parseInt(data.calification)
+            data.id = parseInt(result.insertId)
+            res.send(data);
+          }
+        });
+      }
     }
   });
 
-  if(fs.existsSync(`${__dirname}/../client/src/images/${myFile.name}`)) {
-    res.send('error')
-    res.end();
-  } else {
-    myFile.mv(`${__dirname}/../client/src/images/${myFile.name}`, function (err) {
-      if (err) {
-        res.send('error');
-        res.end();
-      }
-    });
-  }
 
-  res.send('success')
 
 })
 
@@ -113,16 +126,37 @@ app.delete('/api/delete/:id/:image', (req, res) => {
 
 })
 
-app.put('/api/update', (req, res) => {
-  const id = req.body.id;
+app.put('/api/update/:id', (req, res) => {
+  
+  const id = req.params.id;
+  const image = req.body.image;
+  const song = req.body.songName;
+  const artist = req.body.artist;
   const review = req.body.songReview;
+  const spotifyUrl = req.body.spotifyUrl;
+  const calification = req.body.calification;
 
-  const sqlUpdate = "UPDATE song_reviews SET songReview = ? WHERE id = ?";
+  console.log({
+    id,
+    image,
+    song,
+    artist,
+    review,
+    spotifyUrl,
+    calification,
+    author: sess.user,
+  })
 
-  db.query(sqlUpdate, [review, id], (err, res) => {
+  const sqlUpdate = "UPDATE song_reviews SET image = ?, songName = ?, artist = ?, songReview = ?, spotifyUrl = ?, calification = ?, author = ? WHERE id = ?";
+
+  db.query(sqlUpdate, [image, song, artist, review, spotifyUrl, calification, sess.user, id], (err, res) => {
     if(err){
+      console.log('Hubo un error');
+      console.log(err);
       res.send('error')
       res.end();
+    }else{
+      console.log('Se actualiza correctamente')
     }
   });
 
@@ -142,15 +176,18 @@ io.on("connection", (socket) => {
   socket.on('updateReviews', (data) => {
     console.log('Nuevas actualizaciones: ');
     console.log(data);
-    io.sockets.emit('updateReviews', 'siiiamigo');
+    io.sockets.emit('updateReviews', data);
   }) 
 
   if(sess){
-    if(socket.user in users) socket.emit('usernames', 'error');
-    socket.user = sess.user;
-    users[socket.user] = socket;
-    updateUsers();
-
+    if(!(sess.user in users)){
+      socket.user = sess.user;
+      users[socket.user] = socket;
+      updateUsers();
+    }else{
+      socket.emit('usernames', 'error');
+    }
+    
     socket.on('disconnect', (data) => {
       if(!socket.user) return;
       delete users[socket.user];

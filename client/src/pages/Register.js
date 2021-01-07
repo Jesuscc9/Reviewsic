@@ -13,6 +13,7 @@ import RegisterForm from '../components/RegisterForm';
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import '../pages/styles/Register.css';
+import UpdateForm from '../components/UpdateForm';
 
 const ENDPOINT = "http://127.0.0.1:3001";
 
@@ -22,31 +23,33 @@ const Register = () =>{
   const MySwal = withReactContent(Swal)
 
   const [song, setSong] = useState('');
-  const [file, setFile] = useState('');
   const [image, setImage] = useState([]);
   const [review, setReview] = useState('');
   const [artist, setArtist] = useState('');
   const [spotifyURL, setSpotifyURL] = useState('');
   const [calification, setCalification] = useState(0);
   const [songList, setSongList] = useState([]);
-  const [newReview, setNewReview] = useState('');
   const [response, setResponse] = useState("");
-
-  useDeepCompareEffect(() =>{
-    Axios.get('http://localhost:3001/api/get').then(res => {
-      setSongList(res.data);
-    })
-
-  },[songList]) 
+  const [updateId, setUpdateId] = useState(0);
+  const [newImage, setNewImage] = useState('');
+  const socket = socketIOClient(ENDPOINT);
 
   useEffect(() => {
-    const socket = socketIOClient(ENDPOINT);
 
-    socket.on('usernames', data => {
-      console.log('Nuevos usuarios desde client: ')
-      console.log(data)
-      setResponse(data);
-    });
+    console.log('Se ejecuta el effect');
+
+    Axios.get('http://localhost:3001/api/get').then(res => {
+      setSongList(res.data);
+
+
+      socket.on('usernames', data => {
+        setResponse(data);
+      });
+  
+      socket.on('updateReviews', data => {
+        setSongList(data);
+      });
+    })
 
   }, [])
 
@@ -64,29 +67,39 @@ const Register = () =>{
 
     Axios.post('http://localhost:3001/api/insert', formData)
     .then((res) =>{
+
+      const newSongList = songList;
+      newSongList.push(res.data)
+      console.log(newSongList);
+      setSongList(newSongList)
+      socket.emit('updateReviews', newSongList)
     })
 
   }
 
   const deleteReview = (id, image) => {
-    console.log('Se borora');
-    // Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`).then((data) => {
-    //   console.log(data)
-    //   const newSongList = songList.filter((e) => {
-    //     return e.id == id;
-    //   })
-  
-    //   setSongList(newSongList);
-    //   console.log(songList);
-    // })
-    const socket = socketIOClient(ENDPOINT);
-    socket.emit('asd', 'hola')
+    const newSongList = songList.filter((e) => {
+      return e.id != id;
+    })
+
+    setSongList(newSongList);
+
+    socket.emit('updateReviews', newSongList)
+
+
+    Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`).then((data) => {
+
+    })
   }
 
-  const updateReview = (id) => {
-    Axios.put('http://localhost:3001/api/update', {
-      id: id,
-      songReview : newReview,
+  const updateReview = () => {
+    Axios.put(`http://localhost:3001/api/update/${updateId}`, {
+      image: newImage,
+      songName: song,
+      artist: artist,
+      songReview: review,
+      spotifyUrl: spotifyURL,
+      calification: calification,
     })
   }
 
@@ -95,7 +108,6 @@ const Register = () =>{
     MySwal.fire({
       html: <RegisterForm onSongChange={(e) => {
         setSong(e);
-        console.log(song);
       }} selectImage={(e) =>{
           setImage(e)
       }} onArtistChange={(e) => {
@@ -115,6 +127,32 @@ const Register = () =>{
     }).then(() => {
     })
   }
+  
+  const alertUpdateForm = (data) => {
+    MySwal.fire({
+      html: <UpdateForm data={data} setSong={(e) => {
+        setSong(e)
+      }} setArtist={(e) => {
+        setArtist(e)
+      }} setUpdateId={(e) => {
+        setUpdateId(e)
+      }} setNewImage={(e) => {
+        setNewImage(e)
+      }}
+      onCommentChange={(e) => {
+          setReview(e);
+      }} onSpotifyUrlChange={(e) => {
+          setSpotifyURL(e);
+      }} ratingChanged={(e) => {
+          setCalification(e)
+      }} onSubmit={(e) => {
+        document.getElementById('update-button').click();
+        MySwal.close()
+      }}/> ,
+
+      showConfirmButton: false,
+    })
+  }
 
   if(response == 'error') return <Redirect to="/"></Redirect>
 
@@ -124,12 +162,14 @@ const Register = () =>{
         alert()
       }}></Navbar>
           <button onClick={submitReview} id="button"></button>
+          <button onClick={updateReview} id="update-button"></button>
 
           <div className="card-container">
-            {songList.map((song) => {
+            {songList.map((item) => {
               return (
-                <Card props={song} key={song.id} delete={(e) => {
-                  console.log(e);
+                <Card props={item} key={item.id} update={() => {
+                  alertUpdateForm(item)
+                }} delete={(e) => {
                   deleteReview(e.id, e.image);
                 }}></Card>
               )

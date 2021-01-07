@@ -87,14 +87,14 @@ const RegisterForm = (props) =>{
     <React.Fragment>
       <form onSubmit={(e) => {
         e.preventDefault()
-        if(validation()){
+        // if(validation()){
           props.onSubmit()
-        }
+        // }
       }} className="register-form">
 
         <p className="input-label">Song: </p>
 
-        <input type="text" id="swal-input1" className="swal2-input" placeholder="Name of the song..." onChange={(e) => {props.onSongChange(e.target.value);
+        <input type="text" className="swal2-input" placeholder="Name of the song..." onChange={(e) => {props.onSongChange(e.target.value);
         }} ref={song}/>
 
         <p className="alert-label" ref={songAlert}>Please fill out this field.</p>
@@ -112,7 +112,7 @@ const RegisterForm = (props) =>{
 
         <p className="input-label">Artist: </p>
 
-        <input type="text" id="swal-input1" className="swal2-input" placeholder="Author of the song..." onChange={(e)=> {
+        <input type="text" className="swal2-input" placeholder="Author of the song..." onChange={(e)=> {
           props.onArtistChange(e.target.value);
         }} ref={artist}/>
 
@@ -120,7 +120,7 @@ const RegisterForm = (props) =>{
 
         <p className="input-label">Commentary: </p>
 
-        <input type="text" id="swal-input2" className="swal2-input" placeholder="A little review..." onChange={(e)=> {
+        <input type="text" className="swal2-input" placeholder="A little review..." onChange={(e)=> {
           props.onCommentChange(e.target.value);
         }} ref={review}/>
 
@@ -129,7 +129,7 @@ const RegisterForm = (props) =>{
 
         <p className="input-label">Spotify URL: </p>
 
-        <input type="text" id="swal-input2" className="swal2-input" placeholder="Spotify link of the song..." onChange={(e)=> {
+        <input type="text" className="swal2-input" placeholder="Spotify link of the song..." onChange={(e)=> {
           props.onSpotifyUrlChange(e.target.value);
         }} ref={spotifyURL}/>
 
