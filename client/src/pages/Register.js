@@ -70,7 +70,6 @@ const Register = () =>{
 
       const newSongList = songList;
       newSongList.push(res.data)
-      console.log(newSongList);
       setSongList(newSongList)
       socket.emit('updateReviews', newSongList)
     })
@@ -93,6 +92,7 @@ const Register = () =>{
   }
 
   const updateReview = () => {
+
     Axios.put(`http://localhost:3001/api/update/${updateId}`, {
       image: newImage,
       songName: song,
@@ -100,7 +100,23 @@ const Register = () =>{
       songReview: review,
       spotifyUrl: spotifyURL,
       calification: calification,
-    })
+    }).then((res => {
+
+      let index = 0;
+
+      for(let i = 0;i<songList.length;i++){
+        if(songList[i].id == updateId){
+          index = i;
+          break;
+        }
+      }
+      console.log(res.data);
+
+      const newSongList = songList;
+      newSongList[index] = res.data;
+      setSongList(newSongList);
+      socket.emit('updateReviews', newSongList)
+    }))
   }
 
   const alert = () => {

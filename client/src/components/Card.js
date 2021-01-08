@@ -11,12 +11,18 @@ const Card = (data) => {
 
   const props = data.props;
 
+  console.log('Calification: ');
+  console.log(props.songName);
+  console.log(props.calification);
+
   const stars = {
     size: 30,
     value: props.calification,
-    edit: false,
+    edit: true,
     isHalf: true,
   }
+
+  console.log(stars)
 
   const card_options = React.useRef(null);
   const card = React.useRef(null);
@@ -29,8 +35,8 @@ const Card = (data) => {
     card_options.current.classList.remove('card-options-visible');
   }
 
-  const images = require.context('../images', true);
-  let img = images('./' + props.image);
+  // const images = require.context('../images', true);
+  // let img = images('./' + props.image);
 
   // console.log('imagen: ')
   // console.log(img)
@@ -40,7 +46,7 @@ const Card = (data) => {
       <div className="card-custom shadow-lg" onMouseLeave={handleMouseLeave}>
         <div className="card-header" onMouseOver={handleMouseOver} ref={card}>
           <div className="image-container">
-          <img alt="" src={img.default} className="song-img"/>             
+          <img alt="" src="" className="song-img"/>             
           </div>
         </div>
         <div className="card-body">
