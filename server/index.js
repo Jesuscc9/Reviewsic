@@ -135,14 +135,13 @@ app.put('/api/update/:id', (req, res) => {
     songReview: req.body.songReview,
     spotifyUrl: req.body.spotifyUrl,
     calification: req.body.calification,
-    author: sess.user,
   }
   
   console.log(data);
   
-  const sqlUpdate = "UPDATE song_reviews SET image = ?, songName = ?, artist = ?, songReview = ?, spotifyUrl = ?, calification = ?, author = ? WHERE id = ?";
+  const sqlUpdate = "UPDATE song_reviews SET image = ?, songName = ?, artist = ?, songReview = ?, spotifyUrl = ?, calification = ?  WHERE id = ?";
 
-  db.query(sqlUpdate, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, data.author, data.id], (err, result) => {
+  db.query(sqlUpdate, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, data.id], (err, result) => {
     if(err){
       res.send('error')
       res.end();

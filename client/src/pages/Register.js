@@ -36,8 +36,6 @@ const Register = () =>{
 
   useEffect(() => {
 
-    console.log('Se ejecuta el effect');
-
     Axios.get('http://localhost:3001/api/get').then(res => {
       setSongList(res.data);
 
@@ -112,6 +110,7 @@ const Register = () =>{
       }
 
       const newSongList = songList;
+      res.data.author = songList[index].author;
       newSongList[index] = res.data;
       setSongList(newSongList);
       socket.emit('updateReviews', newSongList)

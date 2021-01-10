@@ -15,24 +15,10 @@ const Card = (data) => {
 
   const props = data.props;
 
-  console.log('Se recibe: ' + props.id)
-  console.log(props.calification)
-
-  const [stars, setStars] = useState(4);
-
   var rating = {
     size: 30,
-    value: stars,
-    onChange: (newValue) => {
-      setStars(newValue);
-    }
+    value: props.calification,
   }
-
-  useEffect(() =>{
-    console.log('Se pone: ')
-    console.log(props.calification)
-    setStars(props.calification);
-  }, [])
 
   const card_options = React.useRef(null);
   const card = React.useRef(null);
@@ -48,7 +34,6 @@ const Card = (data) => {
 
   return (
     <React.Fragment>
-      <button onClick={() => setStars(5)}>Setear</button>
       <div className="card-custom shadow-lg" onMouseLeave={handleMouseLeave}>
         <div className="card-header" onMouseOver={handleMouseOver} ref={card}>
           <div className="image-container">

@@ -27,7 +27,7 @@ const UpdateForm = (props) =>{
     <React.Fragment>
       <form onSubmit={(e) => {
         e.preventDefault()
-        props.onSubmit()
+          props.onSubmit()
 
       }} className="register-form">
 
