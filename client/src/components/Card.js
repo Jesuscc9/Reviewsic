@@ -18,6 +18,7 @@ const Card = (data) => {
   var rating = {
     size: 30,
     value: props.calification,
+    edit: false,
   }
 
   const card_options = React.useRef(null);

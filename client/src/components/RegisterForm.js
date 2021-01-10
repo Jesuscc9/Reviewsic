@@ -70,7 +70,7 @@ const RegisterForm = (props) =>{
       reviewAlert.current.style.opacity = '0';
     }
 
-    if((review.current.value).length >= 40){
+    if((review.current.value).length >= 85){
       reviewAlert.current.textContent = 'Please, make a smaller comment!';
       reviewAlert.current.style.opacity = '1';
       review.current.classList.add('wrong-input');
@@ -87,9 +87,9 @@ const RegisterForm = (props) =>{
     <React.Fragment>
       <form onSubmit={(e) => {
         e.preventDefault()
-        // if(validation()){
+        if(validation()){
           props.onSubmit()
-        // }
+        }
       }} className="register-form">
 
         <p className="input-label">Song: </p>
