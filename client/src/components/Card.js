@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef} from "react";
 import "tailwindcss/tailwind.css";
 import '../components/styles/Card.css';
-import ReactStars from "react-rating-stars-component";
+
+
+import ReactStars from 'react-rating-stars-component';
+
+
 import {faSpotify} from '@fortawesome/fontawesome-free-brands'
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -11,18 +15,24 @@ const Card = (data) => {
 
   const props = data.props;
 
-  console.log('Calification: ');
-  console.log(props.songName);
-  console.log(props.calification);
+  console.log('Se recibe: ' + props.id)
+  console.log(props.calification)
 
-  const stars = {
+  const [stars, setStars] = useState(4);
+
+  var rating = {
     size: 30,
-    value: props.calification,
-    edit: true,
-    isHalf: true,
+    value: stars,
+    onChange: (newValue) => {
+      setStars(newValue);
+    }
   }
 
-  console.log(stars)
+  useEffect(() =>{
+    console.log('Se pone: ')
+    console.log(props.calification)
+    setStars(props.calification);
+  }, [])
 
   const card_options = React.useRef(null);
   const card = React.useRef(null);
@@ -35,18 +45,14 @@ const Card = (data) => {
     card_options.current.classList.remove('card-options-visible');
   }
 
-  // const images = require.context('../images', true);
-  // let img = images('./' + props.image);
-
-  // console.log('imagen: ')
-  // console.log(img)
 
   return (
     <React.Fragment>
+      <button onClick={() => setStars(5)}>Setear</button>
       <div className="card-custom shadow-lg" onMouseLeave={handleMouseLeave}>
         <div className="card-header" onMouseOver={handleMouseOver} ref={card}>
           <div className="image-container">
-          <img alt="" src="" className="song-img"/>             
+          <img alt="" src={`/images/${props.image}`} className="song-img"/>             
           </div>
         </div>
         <div className="card-body">
@@ -56,7 +62,8 @@ const Card = (data) => {
           <p className="comment">{props.songReview}</p>
         </div>
         <div className="card-footer">
-          <ReactStars {...stars} className="stars-calification"/>
+          <ReactStars {...rating} className="stars-calification"/> {// This component is not updated
+          }
           <p className="autor">By: {props.author}</p>
           <div className="card-options" ref={card_options}>
             <div className="edit-option option-container">

@@ -75,11 +75,11 @@ app.post("/api/insert", (req, res) =>{
       res.send('query error');
       res.end();
     }else{
-      if(fs.existsSync(`${__dirname}/../client/src/images/${myFile.name}`)) {
+      if(fs.existsSync(`${__dirname}/../client/public/images/${myFile.name}`)) {
         res.send('existe el archivo error')
         res.end();
       } else {
-        myFile.mv(`${__dirname}/../client/src/images/${myFile.name}`, function (err) {
+        myFile.mv(`${__dirname}/../client/public/images/${myFile.name}`, function (err) {
           if (err) {
             res.send('no se puede poner la imagen error');
             res.end();

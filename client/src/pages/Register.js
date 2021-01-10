@@ -110,7 +110,6 @@ const Register = () =>{
           break;
         }
       }
-      console.log(res.data);
 
       const newSongList = songList;
       newSongList[index] = res.data;
@@ -182,12 +181,13 @@ const Register = () =>{
 
           <div className="card-container">
             {songList.map((item) => {
+              console.log('Se ejecuta de nuevo')
               return (
                 <Card props={item} key={item.id} update={() => {
                   alertUpdateForm(item)
                 }} delete={(e) => {
                   deleteReview(e.id, e.image);
-                }}></Card>
+                }} />
               )
             })}
           </div>
