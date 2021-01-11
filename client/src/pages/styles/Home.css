@@ -48,6 +48,10 @@ body{
   display: none;
 }
 
+.login-form ::placeholder{
+  color: rgba(255, 255, 255, 0.74);
+}
+
 .nickname{
   width: 100%;
   height: 50px;
