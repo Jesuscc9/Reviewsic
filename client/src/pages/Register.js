@@ -39,7 +39,6 @@ const Register = () =>{
     Axios.get('http://localhost:3001/api/get').then(res => {
       setSongList(res.data);
 
-
       socket.on('usernames', data => {
         setResponse(data);
       });
@@ -77,17 +76,32 @@ const Register = () =>{
   }
 
   const deleteReview = (id, image) => {
-    const newSongList = songList.filter((e) => {
-      return e.id != id;
-    })
-
-    setSongList(newSongList);
-
-    socket.emit('updateReviews', newSongList)
-
-
-    Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`).then((data) => {
-
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const newSongList = songList.filter((e) => {
+          return e.id != id;
+        })
+    
+        setSongList(newSongList);
+    
+        socket.emit('updateReviews', newSongList)
+    
+        Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`).then((data) => {
+        })
+        Swal.fire(
+          'Deleted!',
+          'Your review has been deleted.',
+          'success'
+        )
+      }
     })
   }
 
