@@ -3,7 +3,7 @@ import "tailwindcss/tailwind.css";
 import '../components/styles/Card.css';
 
 
-import ReactStars from 'react-rating-stars-component';
+import ReactStars from 'react-rating-stars-component'
 
 
 import {faSpotify} from '@fortawesome/fontawesome-free-brands'

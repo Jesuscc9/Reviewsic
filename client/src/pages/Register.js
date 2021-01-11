@@ -68,6 +68,8 @@ const Register = () =>{
 
       const newSongList = songList;
       newSongList.push(res.data)
+      console.log('Se inserta correctamente');
+      console.log(newSongList);
       setSongList(newSongList)
       socket.emit('updateReviews', newSongList)
     })

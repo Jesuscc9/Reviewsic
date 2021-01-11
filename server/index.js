@@ -19,7 +19,7 @@ saveUninitialized: true}));
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'password',
   database: 'gf'
 })
 
@@ -73,6 +73,7 @@ app.post("/api/insert", (req, res) =>{
   db.query(sqlInsert, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, user], (err, result) => {
     if(err){
       res.send('query error');
+      console.log(err);
       res.end();
     }else{
       if(fs.existsSync(`${__dirname}/../client/public/images/${myFile.name}`)) {
@@ -87,6 +88,7 @@ app.post("/api/insert", (req, res) =>{
             data.calification = parseInt(data.calification)
             data.id = parseInt(result.insertId)
             res.send(data);
+            console.log('Se inserta correctamente');
           }
         });
       }

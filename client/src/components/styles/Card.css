@@ -120,11 +120,15 @@ body{
   background-color: white;
   transition: left 0.25s linear, opacity .3s ease-in-out;
   opacity: 0;
+  pointer-events: none;
+  cursor: default;
 }
 
 .card-options-visible{
   left: 180px;
   opacity: 1;
+  pointer-events:visible;
+  cursor: pointer;
 }
 
 .option-container{

@@ -2,6 +2,7 @@ import React,{ useEffect } from 'react';
 import "tailwindcss/tailwind.css";
 import '../components/styles/UpdateForm.css';
 import ReactStars from "react-rating-stars-component";
+import { protocol } from 'socket.io-client';
 
 const UpdateForm = (props) =>{
 
@@ -14,8 +15,6 @@ const UpdateForm = (props) =>{
     props.setUpdateId(data.id)
   })
 
-  console.log(data);
-
   const stars = {
     size: 50,
     value: data.calification,
@@ -27,6 +26,31 @@ const UpdateForm = (props) =>{
   const reviewAlert = React.useRef(null);
   const spotifyURL = React.useRef(null);
   const spotifyURLAlert = React.useRef(null);
+
+  const validateUrl = (spotifyUrl) =>{
+
+    const url = document.createElement('a');
+    url.href = spotifyUrl;
+
+    if(url.protocol != 'https:'){
+      console.log('es falso')
+      return false
+      
+    }
+    
+    if(url.hostname != 'open.spotify.com'){
+      console.log('es falso')
+      return false
+    }
+    
+    if(!(url.pathname).includes('/track/')){
+      console.log('es falso')
+      return false
+    }
+  
+    return true;
+    
+  }
 
   function validation(){
 
@@ -57,10 +81,20 @@ const UpdateForm = (props) =>{
       return false;
     }else{
       reviewAlert.current.style.opacity = '0';
-      review.current.classList.add('wrong-input');
+      review.current.classList.remove('wrong-input');
     }
 
-    return true;
+    if(!validateUrl(spotifyURL.current.value)){
+      spotifyURLAlert.current.textContent = 'Please, enter a valid URL!'
+      spotifyURLAlert.current.style.opacity = '1'
+      spotifyURL.current.classList.add('wrong-input')
+      return false
+    }else{
+      spotifyURLAlert.current.style.opacity = '0'
+      spotifyURL.current.classList.remove('wrong-input')
+    }
+
+    return true
   }
 
   return(
