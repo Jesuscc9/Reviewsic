@@ -51,27 +51,25 @@ const Card = (data) => {
             {data.user == props.author ? 
                 (
                   <React.Fragment>
-                    <div className="edit-option option-container">
+                    <div className="edit-option option-container" onClick={() => { 
+                        data.update();
+                      }}>
                       <FontAwesomeIcon
                         icon={faPen}
                         className="faPen"
-                        onClick={() => {
-                          data.update();
-                        }}
                       />
                     </div>
-                    <div className="edit-option option-container">
+                    <div className="edit-option option-container" onClick={(e) => {
+                        data.delete({ id: props.id, image: props.image });
+                      }}>
                       <FontAwesomeIcon
                         icon={faTrash}
                         className="faTrash"
-                        onClick={(e) => {
-                          data.delete({ id: props.id, image: props.image });
-                        }}
                       />
                     </div>
                   </React.Fragment>
                 ) : (
-                  <div></div>
+                  <React.Fragment></React.Fragment>
                 )
               }
             <div className="edit-option option-container">

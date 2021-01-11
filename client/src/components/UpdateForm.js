@@ -1,4 +1,4 @@
-import React,{ useEffect } from 'react';
+import React,{ useEffect, useState } from 'react';
 import "tailwindcss/tailwind.css";
 import '../components/styles/UpdateForm.css';
 import ReactStars from "react-rating-stars-component";
@@ -7,8 +7,13 @@ import { protocol } from 'socket.io-client';
 const UpdateForm = (props) =>{
 
   const data = props.data;
-
+  
+  const [reviewState, setReviewState] = useState(data.songReview)
+  const [spotifyUrlState, setSpotifyUrlState] = useState(data.spotifyUrl)
+  
   useEffect(() => {
+    props.onCommentChange(reviewState)
+    props.onSpotifyUrlChange(spotifyUrlState)
     props.setSong(data.songName)
     props.setNewImage(data.image)
     props.setArtist(data.artist)
@@ -121,8 +126,8 @@ const UpdateForm = (props) =>{
 
         <p className="input-label">Commentary: </p>
 
-        <input type="text" className="swal2-input" placeholder={data.songReview} onChange={(e)=> {
-          props.onCommentChange(e.target.value);
+        <input type="text" className="swal2-input" value={reviewState} placeholder="A little review..." onChange={(e)=> {
+          setReviewState(e.target.value)
         }} ref={review}/>
 
         
@@ -130,8 +135,8 @@ const UpdateForm = (props) =>{
 
         <p className="input-label">Spotify URL: </p>
 
-        <input type="text" className="swal2-input" placeholder={data.spotifyUrl} onChange={(e)=> {
-          props.onSpotifyUrlChange(e.target.value);
+        <input type="text" className="swal2-input" value={spotifyUrlState} placeholder={data.spotifyUrl} onChange={(e)=> {
+          setSpotifyUrlState(e.target.value)
         }} ref={spotifyURL}/>
 
 

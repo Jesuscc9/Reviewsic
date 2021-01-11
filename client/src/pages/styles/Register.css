@@ -5,7 +5,7 @@ body{
   background-attachment: fixed;
   background: rgb(223,241,255);
   background: -webkit-gradient(linear, left top, left bottom, from(rgba(223,241,255,1)), to( rgba(222, 197, 255, 0.383))) fixed !important;
-  overflow-y: scroll !important;
+  overflow-y: auto;
 }
 
 .card-container{
