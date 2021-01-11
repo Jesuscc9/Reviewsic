@@ -111,9 +111,9 @@ body{
 .card-options{
   border-left: 1px solid rgba(128, 128, 128, 0.068);
   width: 30px;
-  height: 90px;
+  height: auto;
   position: relative;
-  left: 180px !important;
+  left: 180px;
   bottom: 90px;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
@@ -122,6 +122,10 @@ body{
   opacity: 0;
   pointer-events: none;
   cursor: default;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
 }
 
 .card-options-visible{

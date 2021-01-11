@@ -32,21 +32,26 @@ const Register = () =>{
   const [response, setResponse] = useState("");
   const [updateId, setUpdateId] = useState(0);
   const [newImage, setNewImage] = useState('');
+  const [user, setUser] = useState('');
   const socket = socketIOClient(ENDPOINT);
 
-  useEffect(() => {
+  useEffect(async () => {
 
-    Axios.get('http://localhost:3001/api/get').then(res => {
-      setSongList(res.data);
+    let res = await Axios.get('http://localhost:3001/api/get')
 
-      socket.on('usernames', data => {
-        setResponse(data);
-      });
-  
-      socket.on('updateReviews', data => {
-        setSongList(data);
-      });
-    })
+    setSongList(res.data);
+
+    socket.on('usernames', data => {
+      setResponse(data);
+    });
+
+    socket.on('updateReviews', data => {
+      setSongList(data);
+    });
+
+    res = await Axios.get('http://localhost:3001/api/getUser')
+    console.log('Usuario: ' + res.data)
+    setUser(res.data)
 
   }, [])
 
@@ -198,7 +203,7 @@ const Register = () =>{
             {songList.map((item) => {
               console.log('Se ejecuta de nuevo')
               return (
-                <Card props={item} key={item.id} update={() => {
+                <Card props={item} user={user} key={item.id} update={() => {
                   alertUpdateForm(item)
                 }} delete={(e) => {
                   deleteReview(e.id, e.image);

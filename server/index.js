@@ -39,6 +39,10 @@ app.get("/api/newUser/:user", (req, res) => {
   res.send('success');
 })
 
+app.get('/api/getUser/', (req, res) => {
+  res.send(sess.user)
+})
+
 app.get("/api/get", (req, res) =>{
 
   const sqlSelect = 'SELECT * FROM song_reviews';
