@@ -32,7 +32,7 @@ const Card = (data) => {
 
   return (
     <React.Fragment>
-      <div className="card-custom shadow-lg" onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
+      <div className="card-custom" onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
         <div className="card-header" ref={card}>
           <div className="image-container">
             <img alt="" src={`/images/${props.image}`} className="song-img" />

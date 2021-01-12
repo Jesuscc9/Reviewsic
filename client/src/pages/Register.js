@@ -4,16 +4,17 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 import socketIOClient from "socket.io-client";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-
 import Axios from 'axios';
+
 import Navbar from '../components/Navbar';
 import Card from '../components/Card';
 import RegisterForm from '../components/RegisterForm';
+import UpdateForm from '../components/UpdateForm';
+import Contacts from '../components/Contacts'
 
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import '../pages/styles/Register.css';
-import UpdateForm from '../components/UpdateForm';
 
 const ENDPOINT = "http://127.0.0.1:3001";
 
@@ -29,7 +30,7 @@ const Register = () =>{
   const [spotifyURL, setSpotifyURL] = useState('');
   const [calification, setCalification] = useState(0);
   const [songList, setSongList] = useState([]);
-  const [response, setResponse] = useState("");
+  const [users, setUsers] = useState("");
   const [updateId, setUpdateId] = useState(0);
   const [newImage, setNewImage] = useState('');
   const [user, setUser] = useState('');
@@ -42,7 +43,7 @@ const Register = () =>{
     setSongList(res.data);
 
     socket.on('usernames', data => {
-      setResponse(data);
+      setUsers(data);
     });
 
     socket.on('updateReviews', data => {
@@ -50,7 +51,7 @@ const Register = () =>{
     });
 
     res = await Axios.get('http://localhost:3001/api/getUser')
-    console.log('Usuario: ' + res.data)
+
     setUser(res.data)
 
   }, [])
@@ -189,7 +190,7 @@ const Register = () =>{
     })
   }
 
-  if(response == 'error') return <Redirect to="/"></Redirect>
+  if(users == 'error') return <Redirect to="/"></Redirect>
 
   return (
     <React.Fragment>
@@ -198,18 +199,21 @@ const Register = () =>{
       }}></Navbar>
           <button onClick={submitReview} id="button"></button>
           <button onClick={updateReview} id="update-button"></button>
-
-          <div className="card-container">
-            {songList.map((item) => {
-              console.log('Se ejecuta de nuevo')
-              return (
-                <Card props={item} user={user} key={item.id} update={() => {
-                  alertUpdateForm(item)
-                }} delete={(e) => {
-                  deleteReview(e.id, e.image);
-                }} />
-              )
-            })}
+          <div className="main-container">
+            <div className="card-container">
+              {songList.map((item) => {
+                return (
+                  <Card props={item} user={user} key={item.id} update={() => {
+                    alertUpdateForm(item)
+                  }} delete={(e) => {
+                    deleteReview(e.id, e.image);
+                  }} />
+                )
+              })}
+            </div>
+            <div className="contact-container">
+              <Contacts data={users}/>
+            </div>
           </div>
     </React.Fragment> 
   );

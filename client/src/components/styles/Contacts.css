@@ -1,0 +1,71 @@
+.contacts{
+  width: 100%;
+  background-color: #ffffff;
+  height: 700px;
+  border-radius: 30px;
+  box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.contact-title{
+  font-family: 'Hind', sans-serif;
+  font-size: 24px;
+  color: #202a37;
+  font-weight: 600;
+}
+
+.contact-header{
+  width: 90%;
+  margin: auto;
+  padding-top: 10px;
+}
+
+.divisor{
+  width: 92%;
+  height: 1px;
+  background-color: rgba(160, 159, 159, 0.315);
+  border-radius: 100px;
+  margin: 6px auto;
+}
+
+.item{
+  width: 90%;
+  height: 40px;
+  margin: auto;
+  display: flex;
+}
+
+.item-info{
+  width: 95%;
+}
+
+.item-name{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  color: rgb(48, 48, 48);
+  font-weight: 100;
+  height: 16px;
+  margin-bottom: 6px;
+}
+
+.item-info-status{
+  font-family: 'Hind', sans-serif;
+  font-size: 14px;
+  height: 14px;
+  font-weight: 500;
+  color: rgb(134, 134, 134);
+  letter-spacing: 0.2px;
+}
+
+.item-status{
+  width: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status{
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: green;
+}
