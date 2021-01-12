@@ -30,7 +30,7 @@ const Register = () =>{
   const [spotifyURL, setSpotifyURL] = useState('');
   const [calification, setCalification] = useState(0);
   const [songList, setSongList] = useState([]);
-  const [users, setUsers] = useState("");
+  const [users, setUsers] = useState([]);
   const [updateId, setUpdateId] = useState(0);
   const [newImage, setNewImage] = useState('');
   const [user, setUser] = useState('');
@@ -43,10 +43,13 @@ const Register = () =>{
     setSongList(res.data);
 
     socket.on('usernames', data => {
+      console.log('SE RECIBEN USUAROPS')
+      console.log(data)
       setUsers(data);
     });
-
+    
     socket.on('updateReviews', data => {
+      console.log('SE RECIBEN USUAROPS')
       setSongList(data);
     });
 
@@ -212,7 +215,7 @@ const Register = () =>{
               })}
             </div>
             <div className="contact-container">
-              <Contacts data={users}/>
+              <Contacts users={users}/>
             </div>
           </div>
     </React.Fragment> 

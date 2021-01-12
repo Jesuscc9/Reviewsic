@@ -169,6 +169,8 @@ let users = {}
 
 io.on("connection", (socket) => {
 
+  //console.log('SE CONECTA: ' + socket.id)
+
   socket.on('updateReviews', (data) => {
     io.sockets.emit('updateReviews', data);
   }) 
@@ -177,13 +179,14 @@ io.on("connection", (socket) => {
     if(!(sess.user in users)){
       socket.user = sess.user;
       users[socket.user] = socket;
+      console.log('Se conecta uno nuevo')
       updateUsers();
-    }else{
-      socket.emit('usernames', 'error');
     }
     
     socket.on('disconnect', (data) => {
+      //console.log('SE DESCONECTA' + socket.id)
       if(!socket.user) return;
+      console.log('Se desconecta uno nuevo')
       delete users[socket.user];
       updateUsers();
     });
@@ -193,6 +196,8 @@ io.on("connection", (socket) => {
   }
 
   function updateUsers(){
+    console.log('Estos son los usuarios: ')
+    console.log(Object.keys(users))
     io.sockets.emit('usernames', Object.keys(users));
   }
 
