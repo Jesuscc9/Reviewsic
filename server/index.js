@@ -12,8 +12,7 @@ const app = express()
 
 const index = require("./routes/index");
 
-app.use(session({secret: 'secret',     resave: true,
-saveUninitialized: true}));
+let user = undefined;
 
 
 const db = mysql.createPool({
@@ -34,13 +33,12 @@ app.use(fileUpload());
 
 var sess;
 app.get("/api/newUser/:user", (req, res) => {
-  sess = req.session;
-  sess.user = req.params.user;
+  user = req.params.user;
   res.send('success');
 })
 
 app.get('/api/getUser/', (req, res) => {
-  res.send(sess.user)
+  res.send(user)
 })
 
 app.get("/api/get", (req, res) =>{
@@ -169,41 +167,36 @@ let users = {}
 
 io.on("connection", (socket) => {
 
-  //console.log('SE CONECTA: ' + socket.id)
+  console.log('NEW CONNECTION: ' + socket.id)
 
   socket.on('updateReviews', (data) => {
     io.sockets.emit('updateReviews', data);
   }) 
 
-  if(sess){
-    if(!(sess.user in users)){
-      socket.user = sess.user;
+  if(user){
+    if(!(user in users)){
+      socket.user = user;
       users[socket.user] = socket;
-      console.log('Se conecta uno nuevo')
+      console.log('NEW USER')
       updateUsers();
     }
     
     socket.on('disconnect', (data) => {
-      //console.log('SE DESCONECTA' + socket.id)
       if(!socket.user) return;
-      console.log('Se desconecta uno nuevo')
+      console.log('DISCONNECTED')
       delete users[socket.user];
       updateUsers();
     });
 
-  }else{
-    socket.emit('usernames', 'error');
   }
 
   function updateUsers(){
-    console.log('Estos son los usuarios: ')
+    console.log('These are the users: ')
     console.log(Object.keys(users))
     io.sockets.emit('usernames', Object.keys(users));
   }
 
 });
-
-
 
 server.listen(3001, () => {
   console.log('Listening on port: 3001');

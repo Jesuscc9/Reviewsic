@@ -5,13 +5,11 @@ import ReactStars from "react-rating-stars-component";
 
 const navbar = (props) => {
   const data = props.users;
-  console.log('data')
-  console.log(data)
 
-  data.map(user => {
-    console.log('maped')
-    console.log(user)
-  })
+  data.map((user) => {
+    console.log("maped");
+    console.log(user);
+  });
 
   return (
     <React.Fragment>
@@ -23,18 +21,18 @@ const navbar = (props) => {
           {data.map((user) => {
             return (
               <React.Fragment>
-              <div className="divisor"></div>
-              <div className="item">
-                <div className="item-info">
-                  <div className="item-name">{user}</div>
-                  <div className="item-info-status">Conectado</div>
+                <div className="divisor"></div>
+                <div className="item">
+                  <div className="item-info">
+                    <div className="item-name">{user}</div>
+                    <div className="item-info-status">Conectado</div>
+                  </div>
+                  <div className="item-status">
+                    <div className="status"></div>
+                  </div>
                 </div>
-                <div className="item-status">
-                  <div className="status"></div>
-                </div>
-              </div>
-            </React.Fragment>
-            )
+              </React.Fragment>
+            );
           })}
           <div className="divisor"></div>
         </div>

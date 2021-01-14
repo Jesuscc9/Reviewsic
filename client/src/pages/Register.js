@@ -34,7 +34,6 @@ const Register = () =>{
   const [updateId, setUpdateId] = useState(0);
   const [newImage, setNewImage] = useState('');
   const [user, setUser] = useState('');
-  const socket = socketIOClient(ENDPOINT);
 
   useEffect(async () => {
 
@@ -42,6 +41,8 @@ const Register = () =>{
 
     setSongList(res.data);
 
+    const socket = socketIOClient(ENDPOINT);
+    
     socket.on('usernames', data => {
       console.log('SE RECIBEN USUAROPS')
       console.log(data)
@@ -79,6 +80,7 @@ const Register = () =>{
       console.log('Se inserta correctamente');
       console.log(newSongList);
       setSongList(newSongList)
+      const socket = socketIOClient(ENDPOINT);
       socket.emit('updateReviews', newSongList)
     })
 
@@ -100,7 +102,7 @@ const Register = () =>{
         })
     
         setSongList(newSongList);
-    
+        const socket = socketIOClient(ENDPOINT);
         socket.emit('updateReviews', newSongList)
     
         Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`).then((data) => {
@@ -138,6 +140,7 @@ const Register = () =>{
       res.data.author = songList[index].author;
       newSongList[index] = res.data;
       setSongList(newSongList);
+      const socket = socketIOClient(ENDPOINT);
       socket.emit('updateReviews', newSongList)
     }))
   }
