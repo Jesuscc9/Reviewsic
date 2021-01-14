@@ -46,6 +46,8 @@ app.get("/api/get", (req, res) =>{
   const sqlSelect = 'SELECT * FROM song_reviews';
   db.query(sqlSelect, (err, result) => {
     if(err){
+      console.log('Hubo un error')
+      console.log(err)
       res.send('error');
       res.end();
     }else{

@@ -5,7 +5,7 @@ body{
 .card-custom{
   width: 190px;
   height:  330px;
-  margin: 30px;
+  margin: 0px 20px 20px;
   background: #fff;
   border-radius: 30px;
   border-top-left-radius: 20px;

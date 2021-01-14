@@ -14,8 +14,10 @@ body{
 
 .card-container{
   display: flex;
+  justify-content: space-around;
   flex-wrap: wrap;
   width: 60%;
+  max-width: 90%;
 }
 
 ::-webkit-scrollbar {
@@ -31,7 +33,6 @@ body::-webkit-scrollbar-track {
 /* Track */
 ::-webkit-scrollbar-track {
   background: rgb(223,241,255);
-  background: -webkit-gradient(linear, left top, left bottom, from(rgba(223,241,255,1)), to( rgba(222, 197, 255, 0.383))) fixed !important;
 }
  
 /* Handle */
@@ -50,11 +51,31 @@ body::-webkit-scrollbar-track {
 
 .main-container{
   width: 90%;
+  max-width: 90%;
   margin: 0 auto;
   display: flex;
   justify-content: space-around;
 }
 
 .contact-container{
-  width: 300px;
+  width: 30%;
+  min-width: 250px;
+  max-width: 300px;
+}
+
+@media (max-width: 500px){
+  .main-container{
+    width: 90%;
+    max-width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .contact-container{
+    width: 95%;
+    min-width: 95%;
+    margin: auto;
+    margin-bottom: 20px;
+  }
 }
