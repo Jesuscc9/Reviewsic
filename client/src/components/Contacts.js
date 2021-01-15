@@ -1,15 +1,9 @@
 import React, { useRef } from "react";
 import "tailwindcss/tailwind.css";
 import "../components/styles/Contacts.css";
-import ReactStars from "react-rating-stars-component";
 
 const Contacts = (props) => {
   const data = props.users;
-
-  data.map((user) => {
-    console.log("maped");
-    console.log(user);
-  });
 
   return (
     <React.Fragment>
@@ -20,7 +14,7 @@ const Contacts = (props) => {
         <div className="contact-body" >
           {data.map((user) => {
             return (
-              <React.Fragment>
+              <React.Fragment key={user}>
                 <div className="divisor"></div>
                 <div className="item">
                   <div className="item-info">

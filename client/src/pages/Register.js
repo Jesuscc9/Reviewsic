@@ -49,8 +49,9 @@ const Register = () =>{
       setUsers(data);
     });
     
+
     socket.on('updateReviews', data => {
-      console.log('SE RECIBEN USUAROPS')
+      console.log('SE ACTUALIZA LA DATA')
       setSongList(data);
     });
 
@@ -207,15 +208,20 @@ const Register = () =>{
           <button onClick={updateReview} id="update-button"></button>
           <div className="main-container">
             <div className="card-container">
-              {songList.map((item) => {
-                return (
-                  <Card props={item} user={user} key={item.id} update={() => {
-                    alertUpdateForm(item)
-                  }} delete={(e) => {
-                    deleteReview(e.id, e.image);
-                  }} />
-                )
-              })}
+              {songList.length ? 
+                songList.map((item) => {
+                  return (
+                    <Card props={item} user={user} key={item.id} update={() => {
+                      alertUpdateForm(item)
+                    }} delete={(e) => {
+                      deleteReview(e.id, e.image);
+                    }} />
+                  )
+                })  
+              : 
+                <div>Not reviews registered yet.</div>
+              }
+              
             </div>
             <div className="contact-container">
               <Contacts users={users}/>

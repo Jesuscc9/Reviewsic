@@ -68,9 +68,8 @@ app.post("/api/insert", (req, res) =>{
     songReview: req.body.songReview,
     spotifyUrl: req.body.spotifyUrl,
     calification: req.body.calification,
-    author: sess.user,
+    author: user,
   }
-  const user = sess.user;
 
 
   const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, spotifyUrl, calification, author) VALUES (?, ?, ?, ?, ?, ?, ?)"
@@ -179,22 +178,33 @@ io.on("connection", (socket) => {
     if(!(user in users)){
       socket.user = user;
       users[socket.user] = socket;
+      users[socket.user].instance = 1
+
       console.log('NEW USER')
       updateUsers();
+    }else{
+      users[user].instance++
+      console.log('ya existe ese user: ' + users[user].instance)
     }
     
     socket.on('disconnect', (data) => {
-      if(!socket.user) return;
-      console.log('DISCONNECTED')
-      delete users[socket.user];
+      users[user].instance--
+      if(users[user].instance == 0){
+        delete users[user];
+        console.log('DISCONNECTED TRUER')
+      }
       updateUsers();
     });
 
+  }else{
+    console.log('El usuario no está definido')
+    socket.emit('usernames', 'error')
   }
 
   function updateUsers(){
-    console.log('These are the users: ')
-    console.log(Object.keys(users))
+    // console.log('These are the users: ')
+    // console.log(Object.keys(users))
+    //console.log(users)
     io.sockets.emit('usernames', Object.keys(users));
   }
 
