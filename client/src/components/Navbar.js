@@ -33,11 +33,14 @@ const navbar = (data) => {
             </div>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 profile">
               <div className="ml-3 relative">
-                <div>
+                <div className="options-container">
                   <button onClick={data.onAddClick} className="add-button">
                     <FontAwesomeIcon icon={faPlus} />
                     <p className="add-text">ADD</p>
                   </button>
+                  <div className="image-profile-container">
+                    <img src="https://i.scdn.co/image/ab6775700000ee85d0fa974e0ddd191c7aee1037" alt=""/>
+                  </div>
                 </div>
               
               </div>
