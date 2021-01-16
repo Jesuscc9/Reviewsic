@@ -106,25 +106,29 @@ app.delete('/api/delete/:id/:image', (req, res) => {
   const id = req.params.id;
   const image = req.params.image;
 
-  const path = `${__dirname}/../client/src/images/${image}`
+  const path = `${__dirname}/../client/public/images/${image}`
 
   try {
     fs.unlinkSync(path)
   } catch(err) {
     res.send('error');
     res.end();
+    console.log('Hubo un error intentando borrar la imagen')
+    console.log(err)
   }
 
   const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
 
-  db.query(sqlDelete, id, (err, res) => {
+  db.query(sqlDelete, id, (err, result) => {
     if(err){
+      console.log('Error en elq uery')
+      console.log(err)
       res.send('error');
       res.end();
+    }else{
+      res.send('success')
     }
   });
-  
-  res.send('success');
 
 })
 
