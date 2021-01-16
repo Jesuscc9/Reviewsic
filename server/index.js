@@ -181,8 +181,9 @@ io.on("connection", (socket) => {
       users[socket.user].instance = 1
 
       console.log('NEW USER')
-      updateUsers();
+      updateUsers()
     }else{
+      updateUsers()
       users[user].instance++
       console.log('ya existe ese user: ' + users[user].instance)
     }
