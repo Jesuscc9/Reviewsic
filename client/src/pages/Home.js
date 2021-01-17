@@ -83,8 +83,9 @@ const Home = () => {
   const onMouseEnter = (e) => {
     e.preventDefault();
     elements.on();
-  };
+  }
 
+  
   const onMouseLeave = (e) => {
     e.preventDefault();
     elements.off();
