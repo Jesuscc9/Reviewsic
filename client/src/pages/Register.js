@@ -11,6 +11,7 @@ import Card from "../components/Card";
 import RegisterForm from "../components/RegisterForm";
 import UpdateForm from "../components/UpdateForm";
 import Contacts from "../components/Contacts";
+import Login from "../components/Login"
 import Cookies from "js-cookie";
 import { SpotifyApiContext } from "react-spotify-api";
 
@@ -242,6 +243,7 @@ const Register = () => {
           alert();
         }}
         profileImage={profileImage}
+        token={token}
       ></Navbar>
       <button onClick={submitReview} id="button"></button>
       <button onClick={updateReview} id="update-button"></button>
@@ -249,7 +251,6 @@ const Register = () => {
       {token ? (
       <SpotifyApiContext.Provider value={token}>
         {(() => {fetchSpotifyData()})()}
-      <p>This is the token {token}</p>
       <div className="main-container">
         <div className="card-container">
           {songList.length ? (
@@ -278,7 +279,7 @@ const Register = () => {
       </div>
     </SpotifyApiContext.Provider>
       ) : (
-        <h1>Oops... You are not loged in.</h1>
+        <Login></Login>
       )}
     </React.Fragment>
   );

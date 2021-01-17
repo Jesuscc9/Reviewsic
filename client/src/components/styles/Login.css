@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@700;900&display=swap');
+
+.login-first-container{
+  width: 600px;
+  max-width: 90%;
+  margin: auto;
+  padding: 10px;
+}
+
+.login-button{
+  margin-top: 20px;
+  width: 140px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background: #f2709c;
+  background: -webkit-linear-gradient(to left, #ff9472, #f2709c);
+  background: linear-gradient(to left, #ff9472, #f2709c);
+  transition: all 0.5s;
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.login-button:hover{
+  box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
+}
+
+.login-title{
+  font-size: calc(1em + 1.7vw);
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  color: rgb(44, 44, 44);
+}

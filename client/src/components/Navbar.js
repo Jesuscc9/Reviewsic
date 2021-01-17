@@ -1,12 +1,11 @@
 import React from "react";
 import "tailwindcss/tailwind.css";
-import Logo from '../assets/img/music.png';
-import '../components/styles/Navbar.css';
+import Logo from "../assets/img/music.png";
+import "../components/styles/Navbar.css";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const navbar = (props) => {
-
   return (
     <React.Fragment>
       <nav className="bg-gray-800 ">
@@ -35,13 +34,22 @@ const navbar = (props) => {
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 profile">
               <div className="ml-3 relative">
                 <div className="options-container">
-                  <button onClick={props.onAddClick} className="add-button">
-                    <FontAwesomeIcon icon={faPlus} />
-                    <p className="add-text">ADD</p>
-                  </button>
-                    <img className="profile-image" src={props.profileImage} alt=""/>
+                  {props.token ? (
+                    <React.Fragment>
+                      <button onClick={props.onAddClick} className="add-button">
+                        <FontAwesomeIcon icon={faPlus} />
+                        <p className="add-text">ADD</p>
+                      </button>
+                      <img
+                        className="profile-image"
+                        src={props.profileImage}
+                        alt=""
+                      />
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment></React.Fragment>
+                  )}
                 </div>
-              
               </div>
             </div>
           </div>

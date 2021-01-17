@@ -93,7 +93,6 @@ const Home = () => {
   console.log('token')
   console.log(token)
 
-
   return (
     <React.Fragment>
       <div className="header animate__animated" id="header">
@@ -108,10 +107,6 @@ const Home = () => {
         </button>
         <h1 className="title">Reviewsic</h1>
       </div>
-
-      <SpotifyApiContext.Provider value={token}>
-        <p>This is the token: {token}</p>
-      </SpotifyApiContext.Provider>
 
       <form
         className="login-form animate__animated animate__fadeIn"
