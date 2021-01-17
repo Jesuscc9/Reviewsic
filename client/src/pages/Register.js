@@ -11,7 +11,7 @@ import Card from "../components/Card";
 import RegisterForm from "../components/RegisterForm";
 import UpdateForm from "../components/UpdateForm";
 import Contacts from "../components/Contacts";
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
 import { SpotifyApiContext } from "react-spotify-api";
 
 import "tailwindcss/tailwind.css";
@@ -22,7 +22,6 @@ const ENDPOINT = "http://127.0.0.1:3001";
 
 const Register = () => {
   const MySwal = withReactContent(Swal);
-
   const [song, setSong] = useState("");
   const [image, setImage] = useState([]);
   const [review, setReview] = useState("");
@@ -34,14 +33,18 @@ const Register = () => {
   const [updateId, setUpdateId] = useState(0);
   const [newImage, setNewImage] = useState("");
   const [user, setUser] = useState("");
+  const [profileImage, setProfileImage] = useState("");
 
+  const [token, setToken] = useState("");
 
   useEffect(async () => {
+
+    const socket = socketIOClient(ENDPOINT);
+
+
     let res = await Axios.get("http://localhost:3001/api/get");
 
     setSongList(res.data);
-
-    const socket = socketIOClient(ENDPOINT);
 
     socket.on("usernames", (data) => {
       console.log("SE RECIBEN USUAROPS");
@@ -57,6 +60,8 @@ const Register = () => {
     res = await Axios.get("http://localhost:3001/api/getUser");
 
     setUser(res.data);
+
+    setToken(Cookies.get("spotifyAuthToken"));
   }, []);
 
   const submitReview = () => {
@@ -205,21 +210,30 @@ const Register = () => {
     });
   };
 
-  const token = Cookies.get("spotifyAuthToken");
-
-  const getUserData = () =>{
+  const fetchSpotifyData = async() => {
     const config = {
       headers: {
         'Authorization': 'Bearer ' + token
      }
     }
-    Axios.get('https://api.spotify.com/v1/me', config).then((data) => {
-      console.log(data)
+
+    let spotifyData = await Axios.get('https://api.spotify.com/v1/me', config)
+
+    console.log(spotifyData)
+
+    const nickname = spotifyData.data.display_name
+    if((spotifyData.data.images).length > 0){
+      setProfileImage(spotifyData.data.images[0].url)
+    }else{
+      setProfileImage('')
+    }
+
+    let res = await Axios.get(`http://localhost:3001/api/newUser/${nickname}`, {
+      nickname,
     })
   }
 
-  if(!token) return <Redirect to="/"></Redirect> 
-  
+  //if(!token) return <Redirect to="/"></Redirect>
 
   return (
     <React.Fragment>
@@ -227,17 +241,16 @@ const Register = () => {
         onAddClick={() => {
           alert();
         }}
+        profileImage={profileImage}
       ></Navbar>
       <button onClick={submitReview} id="button"></button>
       <button onClick={updateReview} id="update-button"></button>
 
+      {token ? (
       <SpotifyApiContext.Provider value={token}>
-          {/* Your Spotify Code here */}
-          <p>You are authorized with token: {token}</p>
-          <button onClick={getUserData}>Fetch data</button>
-        </SpotifyApiContext.Provider>
-      {/* <div className="main-container">
-        
+        {(() => {fetchSpotifyData()})()}
+      <p>This is the token {token}</p>
+      <div className="main-container">
         <div className="card-container">
           {songList.length ? (
             songList.map((item) => {
@@ -262,7 +275,11 @@ const Register = () => {
         <div className="contact-container">
           <Contacts users={users} />
         </div>
-      </div> */}
+      </div>
+    </SpotifyApiContext.Provider>
+      ) : (
+        <h1>Oops... You are not loged in.</h1>
+      )}
     </React.Fragment>
   );
 };

@@ -22,16 +22,17 @@
 .options-container{
   display: flex;
   justify-content: space-between;
-  width: 160px;
+  width: 150px;
   height: 40px;
-  border: 1px solid white;
+  align-items: center;
+}
+
+.profile-image{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
 }
 
 .add-button:hover{
   background-color: #6b1fad;
 } 
-
-.image-profile-container{
-  width: 50px;
-  height: 50px;
-}

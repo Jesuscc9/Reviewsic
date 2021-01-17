@@ -207,9 +207,8 @@ io.on("connection", (socket) => {
   }
 
   function updateUsers(){
-    // console.log('These are the users: ')
-    // console.log(Object.keys(users))
-    //console.log(users)
+    console.log('These are the users: ')
+    console.log(Object.keys(users))
     io.sockets.emit('usernames', Object.keys(users));
   }
 

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { Redirect } from 'react-router-dom'
 // @ts-ignore
 import "../assets/animate.css";
+import "react-spotify-auth/dist/index.css";
 import Parallax from "parallax-js";
 import Stars from "../assets/img/star.svg";
 import Moonlight from "../assets/img/moonlight.png";
@@ -9,13 +11,16 @@ import Clairo from "../assets/img/clairo.png";
 import Slash from "../assets/img/slash.png";
 import StarBackground from "../assets/img/stars-back.png";
 import Axios from "axios";
+import Cookies from "js-cookie";
 
 import { SpotifyAuth, Scopes } from "react-spotify-auth";
+import { SpotifyApiContext } from "react-spotify-api";
 
 import "./styles/Home.css";
 
 const Home = () => {
-  const [nickname, setNickname] = useState("");
+  
+  const [token, setToken] = useState("")
 
   const sceneEl = useRef(null);
 
@@ -48,13 +53,15 @@ const Home = () => {
 
     parallaxInstance.enable();
 
-    const header = document.getElementById("header");
+    const header = document.getElementById("header")
     setTimeout(() => {
       header.style.display = "block";
-      header.classList.add("animate__fadeIn");
+      header.classList.add("animate__fadeIn")
     }, 1500);
 
-    return () => parallaxInstance.disable();
+    setToken(Cookies.get("spotifyAuthToken"))
+
+    return () => parallaxInstance.disable()
   }, []);
 
   const handleClick = (e) => {
@@ -73,22 +80,6 @@ const Home = () => {
     }, 500);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    Axios.get(`http://localhost:3001/api/newUser/${nickname}`, {
-      nickname,
-    })
-      .then((res) => {
-        if (res.data == "success") {
-          document.getElementById("link").click();
-        }
-      })
-      .catch((error) => {
-        console.log("Hubo un error: ");
-        console.log(error);
-      });
-  };
-
   const onMouseEnter = (e) => {
     e.preventDefault();
     elements.on();
@@ -98,6 +89,9 @@ const Home = () => {
     e.preventDefault();
     elements.off();
   };
+
+  console.log('token')
+  console.log(token)
 
 
   return (
@@ -115,32 +109,27 @@ const Home = () => {
         <h1 className="title">Reviewsic</h1>
       </div>
 
+      <SpotifyApiContext.Provider value={token}>
+        <p>This is the token: {token}</p>
+      </SpotifyApiContext.Provider>
+
       <form
         className="login-form animate__animated animate__fadeIn"
         id="login-form"
-        onSubmit={handleSubmit}
+        onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
       >
-        {0 ? (
-          <React.Fragment>
-            <h1 className="nickname">Nickname: </h1>
-            <input
-              type="text"
-              className="nickname-input"
-              onChange={(e) => setNickname(e.target.value)}
-              placeholder="Username:"
-              onFocus={() => {
-                elements.on();
-              }}
-              onBlur={() => {
-                elements.off();
-              }}
-            />
-          </React.Fragment>
+        {token ? (
+          <div>
+            <SpotifyApiContext.Provider value={token}>
+              <Redirect to="/home"></Redirect>
+            </SpotifyApiContext.Provider>
+          </div>
         ) : (
           <SpotifyAuth
-            redirectUri="http://localhost:3000/home"
+            className="spotify-auth"
+            redirectUri="http://localhost:3000/"
             clientID="9751c1f85b2a4684a8cc0a02f6942b91"
-            scopes={[Scopes.userReadPrivate, "user-read-email"]} // either style will work
+            scopes={[Scopes.userReadPrivate, "user-read-email"]} // either styles will work
           />
         )}
       </form>
