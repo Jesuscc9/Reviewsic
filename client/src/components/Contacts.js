@@ -21,7 +21,7 @@ const Contacts = (props) => {
                 <div className="divisor"></div>
                 <div className="item">
                   <div className="item-image-container">
-                    <img className="profile-image-item" src={user.image} alt=""/>
+                    <img className="profile-image" src={user.image} alt=""/>
                   </div>
                   <div className="item-info">
                     <div className="item-name">{user.nickname}</div>
