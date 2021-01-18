@@ -78,4 +78,13 @@ body::-webkit-scrollbar-track {
     margin: auto;
     margin-bottom: 20px;
   }
+
+  .card-container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 90%;
+    max-width: 90%;
+    margin: auto;
+  }
 }

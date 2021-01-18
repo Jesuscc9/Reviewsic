@@ -229,8 +229,17 @@ const Register = () => {
       setProfileImage('')
     }
 
-    let res = await Axios.get(`http://localhost:3001/api/newUser/${nickname}`, {
-      nickname,
+    const user = {
+      nickname: spotifyData.data.display_name,
+      followers: spotifyData.data.followers.total,
+      url: spotifyData.data.href,
+      type: spotifyData.data.product,
+      image: spotifyData.data.images[0].url,
+    }
+
+    Axios.post(`http://localhost:3001/api/newUser`, user).then((res) => {
+      console.log('JEJEJEJEJE')
+      console.log(res)
     })
   }
 

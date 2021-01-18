@@ -13,6 +13,7 @@ const app = express()
 const index = require("./routes/index");
 
 let user = undefined;
+let user_data = {};
 
 
 const db = mysql.createPool({
@@ -31,9 +32,11 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(fileUpload());
 
-var sess;
-app.get("/api/newUser/:user", (req, res) => {
-  user = req.params.user;
+
+app.post("/api/newUser/", (req, res) => {
+  user = req.body.nickname
+  user_data = req.body
+
   res.send('success');
 })
 
@@ -183,6 +186,7 @@ io.on("connection", (socket) => {
       socket.user = user;
       users[socket.user] = socket;
       users[socket.user].instance = 1
+      users[socket.user].data = user_data
 
       console.log('NEW USER')
       updateUsers()
@@ -207,9 +211,22 @@ io.on("connection", (socket) => {
   }
 
   function updateUsers(){
-    console.log('These are the users: ')
-    console.log(Object.keys(users))
-    io.sockets.emit('usernames', Object.keys(users));
+    console.log('These are the keys: ')
+    const keys = Object.keys(users)
+    console.log(keys)
+
+
+    let new_users = []
+
+    for(let i = 0; i<keys.length;i++){
+      let new_user = users[keys[i]].data
+      new_users.push(new_user)
+    }
+
+    console.log('USUARIO COMPLETO: ')
+    console.log(new_users)
+
+    io.sockets.emit('usernames', new_users);
   }
 
 });

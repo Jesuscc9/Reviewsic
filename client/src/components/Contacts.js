@@ -5,6 +5,9 @@ import "../components/styles/Contacts.css";
 const Contacts = (props) => {
   const data = props.users;
 
+  console.log('DASDASDASD YOLOO')
+  console.log(data)
+
   return (
     <React.Fragment>
       <div className="contacts">
@@ -17,9 +20,14 @@ const Contacts = (props) => {
               <React.Fragment key={user}>
                 <div className="divisor"></div>
                 <div className="item">
+                  <div className="item-image-container">
+                    <img className="profile-image-item" src={user.image} alt=""/>
+                  </div>
                   <div className="item-info">
-                    <div className="item-name">{user}</div>
-                    <div className="item-info-status">Online</div>
+                    <div className="item-name">{user.nickname}</div>
+                    <div className="item-info-status">
+                      {user.followers == 1 ? <p>1 follower </p> : <p>{user.followers} followers</p>}
+                    </div>
                   </div>
                   <div className="item-status">
                     <div className="status"></div>
