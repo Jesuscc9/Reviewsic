@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
-import useDeepCompareEffect from "use-deep-compare-effect";
+import { SpotifyApiContext } from "react-spotify-api";
+
 import socketIOClient from "socket.io-client";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -13,7 +13,6 @@ import UpdateForm from "../components/UpdateForm";
 import Contacts from "../components/Contacts";
 import Login from "../components/Login"
 import Cookies from "js-cookie";
-import { SpotifyApiContext } from "react-spotify-api";
 
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
@@ -33,8 +32,8 @@ const Register = () => {
   const [users, setUsers] = useState([]);
   const [updateId, setUpdateId] = useState(0);
   const [newImage, setNewImage] = useState("");
-  const [user, setUser] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [spotifyData, setSpotifyData] = useState({})
+  const [profileImage, setProfileImage] = useState('')
 
   const [token, setToken] = useState("");
 
@@ -48,19 +47,12 @@ const Register = () => {
     setSongList(res.data);
 
     socket.on("usernames", (data) => {
-      console.log("SE RECIBEN USUAROPS");
-      console.log(data);
       setUsers(data);
     });
 
     socket.on("updateReviews", (data) => {
-      console.log("SE ACTUALIZA LA DATA");
       setSongList(data);
     });
-
-    res = await Axios.get("http://localhost:3001/api/getUser");
-
-    setUser(res.data);
 
     setToken(Cookies.get("spotifyAuthToken"));
   }, []);
@@ -79,8 +71,6 @@ const Register = () => {
     Axios.post("http://localhost:3001/api/insert", formData).then((res) => {
       const newSongList = songList;
       newSongList.push(res.data);
-      console.log("Se inserta correctamente");
-      console.log(newSongList);
       setSongList(newSongList);
       const socket = socketIOClient(ENDPOINT);
       socket.emit("updateReviews", newSongList);
@@ -218,32 +208,25 @@ const Register = () => {
      }
     }
 
-    let spotifyData = await Axios.get('https://api.spotify.com/v1/me', config)
+    let spotifyDataRes = await Axios.get('https://api.spotify.com/v1/me', config)
 
-    console.log(spotifyData)
 
-    const nickname = spotifyData.data.display_name
-    if((spotifyData.data.images).length > 0){
-      setProfileImage(spotifyData.data.images[0].url)
+    if((spotifyDataRes.data.images).length > 0){
+
+      setProfileImage(spotifyDataRes.data.images[0].url)
+
+      Axios.post(`http://localhost:3001/api/newUser`, {
+        nickname: spotifyDataRes.data.display_name,
+        followers: spotifyDataRes.data.followers.total,
+        url: spotifyDataRes.data.href,
+        type: spotifyDataRes.data.product,
+        image: spotifyDataRes.data.images[0].url,
+      }).then((res) => {
+      })
     }else{
       setProfileImage('')
     }
-
-    const user = {
-      nickname: spotifyData.data.display_name,
-      followers: spotifyData.data.followers.total,
-      url: spotifyData.data.href,
-      type: spotifyData.data.product,
-      image: spotifyData.data.images[0].url,
-    }
-
-    Axios.post(`http://localhost:3001/api/newUser`, user).then((res) => {
-      console.log('JEJEJEJEJE')
-      console.log(res)
-    })
   }
-
-  //if(!token) return <Redirect to="/"></Redirect>
 
   return (
     <React.Fragment>
@@ -267,7 +250,7 @@ const Register = () => {
               return (
                 <Card
                   props={item}
-                  user={user}
+                  user={spotifyData.nickname}
                   key={item.id}
                   update={() => {
                     alertUpdateForm(item);
@@ -279,7 +262,7 @@ const Register = () => {
               );
             })
           ) : (
-            <div>Not reviews registered yet.</div>
+            <div>Not reviews registered yet :(</div>
           )}
         </div>
         <div className="contact-container">

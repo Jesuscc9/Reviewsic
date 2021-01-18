@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Card = (data) => {
   const props = data.props;
-  console.log(data.user)
 
   var rating = {
     size: 30,
@@ -41,7 +40,6 @@ const Card = (data) => {
         <div className="card-body">
           <h5 className="song-name">{props.songName}</h5>
           <h5 className="artist-name">{props.artist}</h5>
-          {/*40 caracteres máximo*/}
           <p className="comment">{props.songReview}</p>
         </div>
         <div className="card-footer">

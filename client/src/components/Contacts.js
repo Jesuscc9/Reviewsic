@@ -5,9 +5,6 @@ import "../components/styles/Contacts.css";
 const Contacts = (props) => {
   const data = props.users;
 
-  console.log('DASDASDASD YOLOO')
-  console.log(data)
-
   return (
     <React.Fragment>
       <div className="contacts">

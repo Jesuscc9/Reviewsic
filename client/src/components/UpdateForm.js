@@ -2,7 +2,6 @@ import React,{ useEffect, useState } from 'react';
 import "tailwindcss/tailwind.css";
 import '../components/styles/UpdateForm.css';
 import ReactStars from "react-rating-stars-component";
-import { protocol } from 'socket.io-client';
 
 const UpdateForm = (props) =>{
 
@@ -38,27 +37,21 @@ const UpdateForm = (props) =>{
     url.href = spotifyUrl;
 
     if(url.protocol != 'https:'){
-      console.log('es falso')
-      return false
-      
+      return false 
     }
     
     if(url.hostname != 'open.spotify.com'){
-      console.log('es falso')
       return false
     }
     
     if(!(url.pathname).includes('/track/')){
-      console.log('es falso')
       return false
     }
   
     return true;
-    
   }
 
   function validation(){
-
     if((review.current.value).length <= 0){
       reviewAlert.current.style.opacity = '1';
       review.current.classList.add('wrong-input');

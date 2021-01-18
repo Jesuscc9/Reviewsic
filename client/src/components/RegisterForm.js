@@ -28,23 +28,18 @@ const RegisterForm = (props) =>{
     url.href = spotifyUrl;
 
     if(url.protocol != 'https:'){
-      console.log('es falso')
       return false
-      
     }
     
     if(url.hostname != 'open.spotify.com'){
-      console.log('es falso')
       return false
     }
     
     if(!(url.pathname).includes('/track/')){
-      console.log('es falso')
       return false
     }
   
     return true;
-    
   }
 
   function validation(){
