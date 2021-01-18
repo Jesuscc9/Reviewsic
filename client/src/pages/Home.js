@@ -1,102 +1,95 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react"
+import { Link } from "react-router-dom"
 import { Redirect } from 'react-router-dom'
-// @ts-ignore
-import "../assets/animate.css";
-import "react-spotify-auth/dist/index.css";
-import Parallax from "parallax-js";
-import Stars from "../assets/img/star.svg";
-import Moonlight from "../assets/img/moonlight.png";
-import Clairo from "../assets/img/clairo.png";
-import Slash from "../assets/img/slash.png";
-import StarBackground from "../assets/img/stars-back.png";
-import Axios from "axios";
-import Cookies from "js-cookie";
+import { SpotifyAuth, Scopes } from "react-spotify-auth"
+import { SpotifyApiContext } from "react-spotify-api"
 
-import { SpotifyAuth, Scopes } from "react-spotify-auth";
-import { SpotifyApiContext } from "react-spotify-api";
+import "../assets/animate.css"
+import "react-spotify-auth/dist/index.css"
+import "./styles/Home.css"
 
-import "./styles/Home.css";
+import Parallax from "parallax-js"
+import Stars from "../assets/img/star.svg"
+import Moonlight from "../assets/img/moonlight.png"
+import Clairo from "../assets/img/clairo.png"
+import Slash from "../assets/img/slash.png"
+import StarBackground from "../assets/img/stars-back.png"
+import Cookies from "js-cookie"
 
 const Home = () => {
   
   const [token, setToken] = useState("")
 
-  const sceneEl = useRef(null);
+  const sceneEl = useRef(null)
+  const stars = useRef(null)
+  const header = useRef(null)
+  const login = useRef(null)
 
   const elements = {
     objects: document.getElementsByName("element"),
     on: function () {
       this.objects.forEach((el) => {
-        el.style.opacity = "1";
-      });
+        el.style.opacity = "1"
+      })
 
-      const stars = document.getElementById("stars");
-      stars.classList.add("star-shadow");
-      stars.style.opacity = "1";
+      stars.current.classList.add("star-shadow")
+      stars.current.style.opacity = "1"
     },
     off: function () {
       this.objects.forEach((el) => {
-        el.style.opacity = "0.7";
-      });
+        el.style.opacity = "0.7"
+      })
 
-      const stars = document.getElementById("stars");
-      stars.classList.remove("star-shadow");
-      stars.style.opacity = "0.2";
+      stars.current.classList.remove("star-shadow")
+      stars.current.style.opacity = "0.2"
     },
-  };
+  }
 
   useEffect(() => {
     const parallaxInstance = new Parallax(sceneEl.current, {
       relativeInput: true,
-    });
+    })
 
-    parallaxInstance.enable();
+    parallaxInstance.enable()
 
-    const header = document.getElementById("header")
     setTimeout(() => {
-      header.style.display = "block";
-      header.classList.add("animate__fadeIn")
-    }, 1500);
+      header.current.style.display = "block"
+      header.current.classList.add("animate__fadeIn")
+    }, 1500)
 
     setToken(Cookies.get("spotifyAuthToken"))
 
     return () => parallaxInstance.disable()
-  }, []);
+  }, [])
 
   const handleClick = (e) => {
-    elements.on();
-    e.preventDefault();
-    const header = document.getElementById("header");
+    elements.on()
+    e.preventDefault()
 
-    header.style.display = "block";
-    header.classList.remove("animate__fadeIn");
-    header.classList.add("animate__fadeOut");
+    header.current.style.display = "block"
+    header.current.classList.remove("animate__fadeIn")
+    header.current.classList.add("animate__fadeOut")
 
     setTimeout(() => {
-      const login = document.getElementById("login-form");
-      login.style.display = "flex";
-      elements.on();
-    }, 500);
-  };
-
-  const onMouseEnter = (e) => {
-    e.preventDefault();
-    elements.on();
+      login.current.style.display = "flex"
+      elements.on()
+    }, 500)
   }
 
-  
-  const onMouseLeave = (e) => {
-    e.preventDefault();
-    elements.off();
-  };
+  const onMouseEnter = (e) => {
+    e.preventDefault()
+    elements.on()
+  }
 
-  console.log('token')
-  console.log(token)
+  const onMouseLeave = (e) => {
+    e.preventDefault()
+    elements.off()
+  }
+
 
   return (
     <React.Fragment>
-      <div className="header animate__animated" id="header">
+      <div className="header animate__animated" ref={header}>
         <button
           className="try-button"
           id="try-button"
@@ -109,9 +102,9 @@ const Home = () => {
         <h1 className="title">Reviewsic</h1>
       </div>
 
-      <form
+      <div
         className="login-form animate__animated animate__fadeIn"
-        id="login-form"
+        ref={login}
         onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
       >
         {token ? (
@@ -125,10 +118,10 @@ const Home = () => {
             className="spotify-auth"
             redirectUri="http://localhost:3000/"
             clientID="9751c1f85b2a4684a8cc0a02f6942b91"
-            scopes={[Scopes.userReadPrivate, "user-read-email"]} // either styles will work
+            scopes={[Scopes.userReadPrivate, "user-read-email"]}
           />
         )}
-      </form>
+      </div>
 
       <Link to="/home" id="link"></Link>
 
@@ -139,7 +132,7 @@ const Home = () => {
           </div>
 
           <div data-depth="0.1">
-            <img src={StarBackground} id="stars" className="star" />
+            <img src={StarBackground} ref={stars} className="star" />
           </div>
 
           <div data-depth="0.3">
@@ -169,7 +162,7 @@ const Home = () => {
         }
       </style>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
