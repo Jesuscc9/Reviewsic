@@ -11,6 +11,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Card = (data) => {
   const props = data.props;
+
+  console.log(props)
   
   var rating = {
     size: 30,

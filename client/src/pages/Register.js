@@ -70,6 +70,7 @@ const Register = () => {
 
     Axios.post("http://localhost:3001/api/insert", formData).then((res) => {
       const newSongList = songList;
+      res.data.calification = calification
       newSongList.push(res.data);
       setSongList(newSongList);
       const socket = socketIOClient(ENDPOINT);
