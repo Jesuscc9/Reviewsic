@@ -53,8 +53,10 @@ const Home = () => {
     parallaxInstance.enable()
 
     setTimeout(() => {
-      header.current.style.display = "block"
-      header.current.classList.add("animate__fadeIn")
+      if(header.current){
+        header.current.style.display = "block"
+        header.current.classList.add("animate__fadeIn")
+      }
     }, 1500)
 
     setToken(Cookies.get("spotifyAuthToken"))

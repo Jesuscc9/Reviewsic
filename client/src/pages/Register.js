@@ -32,8 +32,8 @@ const Register = () => {
   const [users, setUsers] = useState([]);
   const [updateId, setUpdateId] = useState(0);
   const [newImage, setNewImage] = useState("");
-  const [spotifyData, setSpotifyData] = useState({})
   const [profileImage, setProfileImage] = useState('')
+  const [userId, setUserId] = useState('')
 
   const [token, setToken] = useState("");
 
@@ -98,7 +98,7 @@ const Register = () => {
 
         Axios.delete(
           `http://localhost:3001/api/delete/${id}/${image}`
-        ).then((data) => {});
+        )
         Swal.fire("Deleted!", "Your review has been deleted.", "success");
       }
     });
@@ -208,23 +208,30 @@ const Register = () => {
      }
     }
 
-    let spotifyDataRes = await Axios.get('https://api.spotify.com/v1/me', config)
+    if(userId == ''){
+      let spotifyData = await Axios.get('https://api.spotify.com/v1/me', config)
 
 
-    if((spotifyDataRes.data.images).length > 0){
-
-      setProfileImage(spotifyDataRes.data.images[0].url)
-
-      Axios.post(`http://localhost:3001/api/newUser`, {
-        nickname: spotifyDataRes.data.display_name,
-        followers: spotifyDataRes.data.followers.total,
-        url: spotifyDataRes.data.href,
-        type: spotifyDataRes.data.product,
-        image: spotifyDataRes.data.images[0].url,
-      }).then((res) => {
-      })
-    }else{
-      setProfileImage('')
+      if((spotifyData.data.images).length > 0){
+  
+        setProfileImage(spotifyData.data.images[0].url)
+        setUserId(spotifyData.data.id)
+  
+        const newUser = {
+          nickname: spotifyData.data.display_name,
+          followers: spotifyData.data.followers.total,
+          url: spotifyData.data.href,
+          type: spotifyData.data.product,
+          image: spotifyData.data.images[0].url,
+          id: spotifyData.data.id,
+        }
+  
+        Axios.post(`http://localhost:3001/api/newUser`, newUser).then((res) => {
+          setUsers([newUser])
+        })
+      }else{
+        setProfileImage('')
+      }
     }
   }
 
@@ -250,7 +257,7 @@ const Register = () => {
               return (
                 <Card
                   props={item}
-                  user={spotifyData.nickname}
+                  user={userId}
                   key={item.id}
                   update={() => {
                     alertUpdateForm(item);
@@ -262,7 +269,7 @@ const Register = () => {
               );
             })
           ) : (
-            <div>Not reviews registered yet :(</div>
+            <div>Not reviews registered yet 😕</div>
           )}
         </div>
         <div className="contact-container">

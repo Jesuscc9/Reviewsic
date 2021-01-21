@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Card = (data) => {
   const props = data.props;
-
+  
   var rating = {
     size: 30,
     value: props.calification,
@@ -46,7 +46,7 @@ const Card = (data) => {
           <ReactStars {...rating} className="stars-calification" />{" "}
           <p className="autor">By: {props.author}</p>
           <div className="card-options" ref={card_options}>
-            {data.user == props.author ? 
+            {props.author_id === data.user ? 
                 (
                   <React.Fragment>
                     <div className="edit-option option-container" onClick={() => { 

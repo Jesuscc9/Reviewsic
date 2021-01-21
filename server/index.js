@@ -1,5 +1,4 @@
 const express = require('express');
-const session = require('express-session');
 const bodyParser = require('body-parser')
 const http = require("http");
 const socketIo = require("socket.io");
@@ -13,6 +12,7 @@ const app = express()
 const index = require("./routes/index");
 
 let user = undefined;
+let user_id = undefined;
 let user_data = {};
 
 
@@ -20,7 +20,7 @@ const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'password',
-  database: 'gf'
+  database: 'reviewsic'
 })
 
 
@@ -35,13 +35,10 @@ app.use(fileUpload());
 
 app.post("/api/newUser/", (req, res) => {
   user = req.body.nickname
+  user_id = req.body.id
   user_data = req.body
 
-  res.send('success');
-})
-
-app.get('/api/getUser/', (req, res) => {
-  res.send(user)
+  res.send('success')
 })
 
 app.get("/api/get", (req, res) =>{
@@ -49,8 +46,6 @@ app.get("/api/get", (req, res) =>{
   const sqlSelect = 'SELECT * FROM song_reviews';
   db.query(sqlSelect, (err, result) => {
     if(err){
-      console.log('Hubo un error')
-      console.log(err)
       res.send('error');
       res.end();
     }else{
@@ -61,7 +56,8 @@ app.get("/api/get", (req, res) =>{
 
 app.post("/api/insert", (req, res) =>{
 
-  const myFile = req.files.file;
+
+  const file = req.files.file;
 
   const data = {
     id: 0,
@@ -72,36 +68,30 @@ app.post("/api/insert", (req, res) =>{
     spotifyUrl: req.body.spotifyUrl,
     calification: req.body.calification,
     author: user,
+    author_id: user_id,
   }
 
+  const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, spotifyUrl, calification, author, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
-  const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, spotifyUrl, calification, author) VALUES (?, ?, ?, ?, ?, ?, ?)"
-  db.query(sqlInsert, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, user], (err, result) => {
-    if(err){
-      res.send('query error');
-      console.log(err);
-      res.end();
-    }else{
-      if(fs.existsSync(`${__dirname}/../client/public/images/${myFile.name}`)) {
-        res.send('existe el archivo error')
-        res.end();
-      } else {
-        myFile.mv(`${__dirname}/../client/public/images/${myFile.name}`, function (err) {
-          if (err) {
-            res.send('no se puede poner la imagen error');
-            res.end();
-          }else{
+  db.query(sqlInsert, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, user, user_id], (err, result) => {
+    if(!err){
+      if(!(fs.existsSync(`${__dirname}/../client/public/images/${file.name}`))) {
+        file.mv(`${__dirname}/../client/public/images/${file.name}`, function (error) {
+          if (!error) {
             data.calification = parseInt(data.calification)
             data.id = parseInt(result.insertId)
             res.send(data);
-            console.log('Se inserta correctamente');
+          }else{
+            res.send(error)
           }
         });
+      }else{
+        res.send('uya habia de esosa xd')
       }
+    }else{
+      res.send(err)
     }
-  });
-
-
+  })
 
 })
 
@@ -113,31 +103,18 @@ app.delete('/api/delete/:id/:image', (req, res) => {
 
   try {
     fs.unlinkSync(path)
+
+    const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
+
+    db.query(sqlDelete, id, (err, result) => {});
+
   } catch(err) {
-    res.send('error');
-    res.end();
-    console.log('Hubo un error intentando borrar la imagen')
-    console.log(err)
+
   }
-
-  const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
-
-  db.query(sqlDelete, id, (err, result) => {
-    if(err){
-      console.log('Error en elq uery')
-      console.log(err)
-      res.send('error');
-      res.end();
-    }else{
-      res.send('success')
-    }
-  });
 
 })
 
 app.put('/api/update/:id', (req, res) => {
-
-  console.log('nuevo: ');
   
   const data = {
     id: parseInt(req.params.id),
@@ -149,17 +126,10 @@ app.put('/api/update/:id', (req, res) => {
     calification: req.body.calification,
   }
   
-  console.log(data);
-  
   const sqlUpdate = "UPDATE song_reviews SET image = ?, songName = ?, artist = ?, songReview = ?, spotifyUrl = ?, calification = ?  WHERE id = ?";
 
   db.query(sqlUpdate, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, data.id], (err, result) => {
-    if(err){
-      res.send('error')
-      res.end();
-    }else{
-      console.log('data: ');
-      console.log(data);
+    if(!err){
       res.send(data)
     }
   });
@@ -174,9 +144,6 @@ const io = socketIo(server);
 let users = {}
 
 io.on("connection", (socket) => {
-
-  console.log('NEW CONNECTION: ' + socket.id)
-
   socket.on('updateReviews', (data) => {
     io.sockets.emit('updateReviews', data);
   }) 
@@ -187,34 +154,26 @@ io.on("connection", (socket) => {
       users[socket.user] = socket;
       users[socket.user].instance = 1
       users[socket.user].data = user_data
-
-      console.log('NEW USER')
       updateUsers()
     }else{
       updateUsers()
       users[user].instance++
-      console.log('ya existe ese user: ' + users[user].instance)
     }
     
     socket.on('disconnect', (data) => {
       users[user].instance--
       if(users[user].instance == 0){
         delete users[user];
-        console.log('DISCONNECTED TRUER')
       }
       updateUsers();
     });
 
   }else{
-    console.log('El usuario no está definido')
     socket.emit('usernames', 'error')
   }
 
   function updateUsers(){
-    console.log('These are the keys: ')
     const keys = Object.keys(users)
-    console.log(keys)
-
 
     let new_users = []
 
@@ -223,14 +182,10 @@ io.on("connection", (socket) => {
       new_users.push(new_user)
     }
 
-    console.log('USUARIO COMPLETO: ')
-    console.log(new_users)
-
     io.sockets.emit('usernames', new_users);
   }
 
 });
 
 server.listen(3001, () => {
-  console.log('Listening on port: 3001');
 })
