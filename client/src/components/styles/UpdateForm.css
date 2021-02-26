@@ -3,3 +3,28 @@
   color: rgb(121, 121, 121);
   cursor: text;
 }
+
+@media (max-width: 600px){
+  .swal2-input{
+    height: 35px !important;
+    font-size: 15px;
+  } 
+
+  .input-label{
+    font-size: 15px;
+  }
+
+  .stars-calification span{
+    font-size: 30px !important;
+  }
+
+  .submit-button{
+    width: 140px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .swal2-file{
+    font-size: 16px;
+  }
+}

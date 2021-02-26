@@ -60,3 +60,28 @@
   -moz-box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.09);
   box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.09);
 }
+
+@media (max-width: 600px){
+  .swal2-input{
+    height: 35px !important;
+    font-size: 15px;
+  } 
+
+  .input-label{
+    font-size: 15px;
+  }
+
+  .stars-calification span{
+    font-size: 40px !important;
+  }
+
+  .submit-button{
+    width: 140px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .swal2-file{
+    font-size: 16px;
+  }
+}

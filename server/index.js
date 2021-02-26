@@ -56,7 +56,6 @@ app.get("/api/get", (req, res) =>{
 
 app.post("/api/insert", (req, res) =>{
 
-
   const file = req.files.file;
 
   const data = {

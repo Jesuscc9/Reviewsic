@@ -2,6 +2,7 @@ import React from 'react';
 import "tailwindcss/tailwind.css";
 import '../components/styles/RegisterForm.css';
 import ReactStars from "react-rating-stars-component";
+import Tabs from '../components/Tabs';
 
 const RegisterForm = (props) =>{
 
@@ -121,7 +122,7 @@ const RegisterForm = (props) =>{
           props.onSubmit()
         }
       }} className="register-form">
-
+        <Tabs />
         <p className="input-label">Song: </p>
 
         <input type="text" className="swal2-input" placeholder="Name of the song..." onChange={(e) => {props.onSongChange(e.target.value);
@@ -131,9 +132,8 @@ const RegisterForm = (props) =>{
 
         <p className="input-label">Image: </p>
 
-        <input type="file" accept=".png, .jpg, .jpeg" aria-label="Upload your profile picture" className="swal2-file" placeholder="" style={{display: 'flex'
+        <input type="file" accept=".png, .jpg, .jpeg" className="swal2-file" placeholder="" style={{display: 'flex'
          }} onChange={(e) => {
-           
            props.selectImage(e.target.files[0]);
           }} ref={image}/> 
 
