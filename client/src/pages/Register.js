@@ -9,6 +9,7 @@ import Axios from "axios";
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import RegisterForm from "../components/RegisterForm";
+import SmartRegisterForm from "../components/SmartRegisterForm";
 import UpdateForm from "../components/UpdateForm";
 import Contacts from "../components/Contacts";
 import Login from "../components/Login"
@@ -132,6 +133,30 @@ const Register = () => {
     });
   };
 
+  const smartRegister = () => {
+    MySwal.fire({
+      html: (
+        <SmartRegisterForm
+          onSpotifyUrlChange={(e) => {
+            setSpotifyURL(e);
+          }}
+          onCommentChange={(e) => {
+            setReview(e);
+          }}
+          ratingChanged={(e) => {
+            setCalification(e);
+          }}
+          onSubmit={(e) => {
+            document.getElementById("button").click();
+            MySwal.close();
+          }}
+        />
+      ),
+
+      showConfirmButton: false,
+    }).then(() => {});
+  }
+
   const alert = () => {
     MySwal.fire({
       html: (
@@ -240,14 +265,15 @@ const Register = () => {
     <React.Fragment>
       <Navbar
         onAddClick={() => {
-          alert();
+          smartRegister()
         }}
         profileImage={profileImage}
         token={token}
       ></Navbar>
       <button onClick={submitReview} id="button"></button>
       <button onClick={updateReview} id="update-button"></button>
-
+      
+    
       {token ? (
       <SpotifyApiContext.Provider value={token}>
         {(() => {fetchSpotifyData()})()}

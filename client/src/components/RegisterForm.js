@@ -2,7 +2,6 @@ import React from 'react';
 import "tailwindcss/tailwind.css";
 import '../components/styles/RegisterForm.css';
 import ReactStars from "react-rating-stars-component";
-import Tabs from '../components/Tabs';
 
 const RegisterForm = (props) =>{
 
@@ -122,7 +121,7 @@ const RegisterForm = (props) =>{
           props.onSubmit()
         }
       }} className="register-form">
-        <Tabs />
+
         <p className="input-label">Song: </p>
 
         <input type="text" className="swal2-input" placeholder="Name of the song..." onChange={(e) => {props.onSongChange(e.target.value);
