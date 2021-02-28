@@ -47,7 +47,7 @@ app.get("/api/get", (req, res) =>{
   const sqlSelect = 'SELECT * FROM song_reviews';
   db.query(sqlSelect, (err, result) => {
     if(err){
-      res.send('error');
+      res.send('error 50');
       res.end();
     }else{
       res.send(result)
@@ -58,30 +58,11 @@ app.get("/api/get", (req, res) =>{
 app.post("/api/insert", async (req, res) =>{
 
 
-  let file, image_name
-
-  if(req.files){
-    file = req.files.file;
-  }else{
-    const url = req.body.file
-
-    const response = await fetch(url);
-    const buffer = await response.buffer();
-    console.log(url)
-    // https://i.scdn.co/image/ab67616d0000b273412e18ab5452ac84eafe5c9d
-    // 23
-    image_name = url.slice(23, url.length - 1)
-    console.log(image_name + '.jpeg')
-    fs.writeFile(`${__dirname}/../client/public/images/${image_name}.jpeg`, buffer, () => 
-      console.log('finished downloading!'));
-  
-
-  }
-  
+  let file, image_name, url
 
   const data = {
     id: 0,
-    image: image_name + '.jpeg',
+    image: req.body.image,
     songName: req.body.songName,
     artist: req.body.artist,
     songReview: req.body.songReview,
@@ -91,23 +72,51 @@ app.post("/api/insert", async (req, res) =>{
     author_id: user_id,
   }
 
+  if(req.files){
+    file = req.files.file;
+  }else{
+    url = req.body.file
+
+    image_name = url.slice(23, url.length - 1)
+    data.image = image_name + '.jpeg'
+  }
+
   const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, spotifyUrl, calification, author, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
-  db.query(sqlInsert, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, user, user_id], (err, result) => {
+  db.query(sqlInsert, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, user, user_id], async (err, result) => {
     if(!err){
-      // if(!(fs.existsSync(`${__dirname}/../client/public/images/${file.name}`))) {
-      //   file.mv(`${__dirname}/../client/public/images/${file.name}`, function (error) {
-      //     if (!error) {
-      //       data.calification = parseInt(data.calification)
-      //       data.id = parseInt(result.insertId)
-      //       res.send(data);
-      //     }else{
-      //       res.send(error)
-      //     }
-      //   });
-      // }else{
-      //   res.send('uya habia de esosa xd')
-      // }
+      if(!req.files){
+        if(!(fs.existsSync(`${__dirname}/../client/public/images/${image_name}.jpeg`))) {
+
+        const response = await fetch(url);
+        const buffer = await response.buffer();
+
+        fs.writeFile(`${__dirname}/../client/public/images/${image_name}.jpeg`, buffer, () => {})
+          if (!err) {
+            data.calification = parseInt(data.calification)
+            data.id = parseInt(result.insertId)
+            res.send(data);
+          }else{
+            res.send(err)
+          }
+        }else{
+          res.send('error 103')
+        }
+      }else{
+        if(!(fs.existsSync(`${__dirname}/../client/public/images/${file.name}`))) {
+          file.mv(`${__dirname}/../client/public/images/${file.name}`, function (error) {
+            if (!error) {
+              data.calification = parseInt(data.calification)
+              data.id = parseInt(result.insertId)
+              res.send(data);
+            }else{
+              res.send(error)
+            }
+          });
+        }else{
+          res.send('error 117')
+        }
+      }
     }else{
       res.send(err)
     }
