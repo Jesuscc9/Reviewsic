@@ -6,6 +6,7 @@ const cors = require('cors')
 const mysql = require('mysql')
 const fileUpload = require('express-fileupload');
 const fs = require('fs')
+const fetch = require('node-fetch');
 
 const app = express()
 
@@ -54,13 +55,33 @@ app.get("/api/get", (req, res) =>{
   })
 })
 
-app.post("/api/insert", (req, res) =>{
+app.post("/api/insert", async (req, res) =>{
 
-  const file = req.files.file;
+
+  let file, image_name
+
+  if(req.files){
+    file = req.files.file;
+  }else{
+    const url = req.body.file
+
+    const response = await fetch(url);
+    const buffer = await response.buffer();
+    console.log(url)
+    // https://i.scdn.co/image/ab67616d0000b273412e18ab5452ac84eafe5c9d
+    // 23
+    image_name = url.slice(23, url.length - 1)
+    console.log(image_name + '.jpeg')
+    fs.writeFile(`${__dirname}/../client/public/images/${image_name}.jpeg`, buffer, () => 
+      console.log('finished downloading!'));
+  
+
+  }
+  
 
   const data = {
     id: 0,
-    image: req.body.image,
+    image: image_name + '.jpeg',
     songName: req.body.songName,
     artist: req.body.artist,
     songReview: req.body.songReview,
@@ -74,19 +95,19 @@ app.post("/api/insert", (req, res) =>{
 
   db.query(sqlInsert, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, user, user_id], (err, result) => {
     if(!err){
-      if(!(fs.existsSync(`${__dirname}/../client/public/images/${file.name}`))) {
-        file.mv(`${__dirname}/../client/public/images/${file.name}`, function (error) {
-          if (!error) {
-            data.calification = parseInt(data.calification)
-            data.id = parseInt(result.insertId)
-            res.send(data);
-          }else{
-            res.send(error)
-          }
-        });
-      }else{
-        res.send('uya habia de esosa xd')
-      }
+      // if(!(fs.existsSync(`${__dirname}/../client/public/images/${file.name}`))) {
+      //   file.mv(`${__dirname}/../client/public/images/${file.name}`, function (error) {
+      //     if (!error) {
+      //       data.calification = parseInt(data.calification)
+      //       data.id = parseInt(result.insertId)
+      //       res.send(data);
+      //     }else{
+      //       res.send(error)
+      //     }
+      //   });
+      // }else{
+      //   res.send('uya habia de esosa xd')
+      // }
     }else{
       res.send(err)
     }

@@ -165,7 +165,14 @@ const SmartRegisterForm = (props) =>{
           }
 
           try{
-            const data = await Axios.get(`https://api.spotify.com/v1/tracks/${track_id}`, config)
+            let data = await Axios.get(`https://api.spotify.com/v1/tracks/${track_id}`, config)
+
+            data = data.data
+            console.log(data)
+            props.onSongChange(data.name)
+            props.onArtistChange(data.artists[0].name)
+            props.selectImage(data.album.images[0].url)
+
             spotifyInputStatus.sucess()
           } catch(err){
             console.log('Hubo un error')

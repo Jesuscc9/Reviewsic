@@ -137,11 +137,20 @@ const Register = () => {
     MySwal.fire({
       html: (
         <SmartRegisterForm
-          onSpotifyUrlChange={(e) => {
-            setSpotifyURL(e);
+          onSongChange={(e) => {
+            setSong(e);
+          }}
+          selectImage={(e) => {
+            setImage(e);
+          }}
+          onArtistChange={(e) => {
+            setArtist(e);
           }}
           onCommentChange={(e) => {
             setReview(e);
+          }}
+          onSpotifyUrlChange={(e) => {
+            setSpotifyURL(e);
           }}
           ratingChanged={(e) => {
             setCalification(e);
