@@ -81,42 +81,40 @@ app.post("/api/insert", async (req, res) =>{
     data.image = image_name + '.jpeg'
   }
 
+  if(!req.files){
+    while((fs.existsSync(`${__dirname}/../client/public/images/${image_name}.jpeg`))) {
+      const random = Math.floor(Math.random() * 10);
+      image_name = `${image_name}${random}`
+    }
+    data.image = image_name + '.jpeg'
+
+    const response = await fetch(url);
+    const buffer = await response.buffer();
+
+    fs.writeFile(`${__dirname}/../client/public/images/${image_name}.jpeg`, buffer, () => {})
+
+  }else{
+    if(!(fs.existsSync(`${__dirname}/../client/public/images/${file.name}`))) {
+      file.mv(`${__dirname}/../client/public/images/${file.name}`, function (error) {
+        if (!error) {
+          data.calification = parseInt(data.calification)
+          data.id = parseInt(result.insertId)
+        }else{
+          res.send(error)
+        }
+      });
+    }else{
+      res.send('error 117')
+    }
+  }
+
   const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, spotifyUrl, calification, author, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
   db.query(sqlInsert, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, user, user_id], async (err, result) => {
     if(!err){
-      if(!req.files){
-        if(!(fs.existsSync(`${__dirname}/../client/public/images/${image_name}.jpeg`))) {
-
-        const response = await fetch(url);
-        const buffer = await response.buffer();
-
-        fs.writeFile(`${__dirname}/../client/public/images/${image_name}.jpeg`, buffer, () => {})
-          if (!err) {
-            data.calification = parseInt(data.calification)
-            data.id = parseInt(result.insertId)
-            res.send(data);
-          }else{
-            res.send(err)
-          }
-        }else{
-          res.send('error 103')
-        }
-      }else{
-        if(!(fs.existsSync(`${__dirname}/../client/public/images/${file.name}`))) {
-          file.mv(`${__dirname}/../client/public/images/${file.name}`, function (error) {
-            if (!error) {
-              data.calification = parseInt(data.calification)
-              data.id = parseInt(result.insertId)
-              res.send(data);
-            }else{
-              res.send(error)
-            }
-          });
-        }else{
-          res.send('error 117')
-        }
-      }
+      data.calification = parseInt(data.calification)
+      data.id = parseInt(result.insertId)
+      res.send(data);
     }else{
       res.send(err)
     }
@@ -131,11 +129,20 @@ app.delete('/api/delete/:id/:image', (req, res) => {
   const path = `${__dirname}/../client/public/images/${image}`
 
   try {
-    fs.unlinkSync(path)
 
     const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
+    console.log('Este es el id: ')
+    console.log(id)
+    db.query(sqlDelete, id, (err, result) => {
+      if(err){
+        console.log('Error: ')
+        console.log(error)
+      }
 
-    db.query(sqlDelete, id, (err, result) => {});
+      console.log('result')
+      console.log(result)
+      fs.unlinkSync(path)
+    })
 
   } catch(err) {
 

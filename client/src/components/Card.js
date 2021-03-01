@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 const Card = (data) => {
   const props = data.props;
 
+  console.log('Este es el id: ' + props.id)
+
   const song_name = useRef(null)
 
   var rating = {

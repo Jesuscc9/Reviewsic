@@ -69,6 +69,8 @@ const Register = () => {
     formData.append("calification", calification);
 
     Axios.post("http://localhost:3001/api/insert", formData).then((res) => {
+      console.log('SE recibe: ')
+      console.log(res.data)
       const newSongList = songList;
       res.data.calification = calification;
       newSongList.push(res.data);
@@ -97,7 +99,7 @@ const Register = () => {
         const socket = socketIOClient(ENDPOINT);
         socket.emit("updateReviews", newSongList);
 
-        Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`);
+        Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`)
         Swal.fire("Deleted!", "Your review has been deleted.", "success");
       }
     });
