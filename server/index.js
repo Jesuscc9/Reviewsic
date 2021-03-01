@@ -77,7 +77,7 @@ app.post("/api/insert", async (req, res) =>{
   }else{
     url = req.body.file
 
-    image_name = url.slice(23, url.length - 1)
+    image_name = url.slice(24, url.length - 1)
     data.image = image_name + '.jpeg'
   }
 
@@ -153,11 +153,13 @@ app.put('/api/update/:id', (req, res) => {
     songReview: req.body.songReview,
     spotifyUrl: req.body.spotifyUrl,
     calification: req.body.calification,
+    author_id: req.body.author_id || 'NO se ha registrado',
   }
   
   const sqlUpdate = "UPDATE song_reviews SET image = ?, songName = ?, artist = ?, songReview = ?, spotifyUrl = ?, calification = ?  WHERE id = ?";
 
   db.query(sqlUpdate, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, data.id], (err, result) => {
+    console.log(result)
     if(!err){
       res.send(data)
     }

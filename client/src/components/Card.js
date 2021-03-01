@@ -1,16 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
-import "tailwindcss/tailwind.css";
-import "../components/styles/Card.css";
+import React, { useState, useEffect, useRef } from "react"
+import "tailwindcss/tailwind.css"
+import "../components/styles/Card.css"
+import ReactStars from "react-rating-stars-component"
 
-import ReactStars from "react-rating-stars-component";
-
-import { faSpotify } from "@fortawesome/fontawesome-free-brands";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpotify } from "@fortawesome/fontawesome-free-brands"
+import { faPen, faTrash, faHeart } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const Card = (data) => {
   const props = data.props;
+
+  console.log('Este es el que esta ', data.user)
+  console.log('eSTE ES el que estaregistrado: ', props.author_id)
+  console.log(props)
 
   const song_name = useRef(null)
 
@@ -36,7 +38,10 @@ const Card = (data) => {
       <div className="card-custom" onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
         <div className="card-header" ref={card}>
           <div className="image-container">
-            <img alt="" src={`/images/${props.image}`} className="song-img" />
+            <a  href={props.spotifyUrl} target="_blank">
+            <img alt="" src={`/images/${props.image}`} className="song-img"/>
+
+            </a>
           </div>
         </div>
         <div className="card-body">
@@ -73,9 +78,9 @@ const Card = (data) => {
                 )
               }
             <div className="edit-option option-container">
-              <a href={props.spotifyUrl} target="_blank">
-                <FontAwesomeIcon icon={faSpotify} className="faSpotify" />
-              </a>
+              <button href={props.spotifyUrl} target="_blank">
+                <FontAwesomeIcon icon={faHeart} className="faHeart" />
+              </button>
             </div>
           </div>
         </div>

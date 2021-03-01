@@ -13,6 +13,12 @@ body{
   transition: all 0.2s;
   z-index: 1000;
   box-shadow: 0 0px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.card-custom::-webkit-scrollbar { 
+  display: none;
 }
 
 .image-container{
@@ -63,10 +69,18 @@ body{
   padding: 0px;
   line-height: 20px;
   text-transform: capitalize;
-  /* max-width: 190px;
+  max-width: 190px;
   white-space: nowrap;
-  overflow-x: hidden;
-  overflow-y: hidden; */
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.song-name {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.song-name::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
 }
 
 .artist-name{
@@ -157,11 +171,19 @@ body{
   cursor: pointer
 }
 
-.faSpotify{
-  color: rgb(0, 179, 15);
+.faHeart{
+  color: #7E22CD;
   cursor: pointer;
   font-size: 16px;
+  opacity: 0.4;
+  transition: all 0.3s;
 }
+
+.faHeart:hover{
+  color: #7E22CD;
+  opacity: 0.6;
+}
+
 
 @media (max-width: 600px){
   .stars-calification span{

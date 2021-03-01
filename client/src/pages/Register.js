@@ -111,7 +111,9 @@ const Register = () => {
       songReview: review,
       spotifyUrl: spotifyURL,
       calification: calification,
+      author_id: userId,
     }).then((res) => {
+      console.log(res)
       let index = 0;
 
       for (let i = 0; i < songList.length; i++) {
