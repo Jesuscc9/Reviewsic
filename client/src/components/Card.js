@@ -10,10 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 const Card = (data) => {
   const props = data.props;
 
-  console.log('Este es el que esta ', data.user)
-  console.log('eSTE ES el que estaregistrado: ', props.author_id)
-  console.log(props)
-
   const song_name = useRef(null)
 
   var rating = {
@@ -24,6 +20,7 @@ const Card = (data) => {
 
   const card_options = React.useRef(null);
   const card = React.useRef(null);
+  const heart = React.useRef(null)
 
   const handleMouseOver = () => {
     card_options.current.classList.add("card-options-visible");
@@ -32,6 +29,14 @@ const Card = (data) => {
   const handleMouseLeave = () => {
     card_options.current.classList.remove("card-options-visible");
   };
+
+  const handleHeartClick = () => {
+    heart.current.classList.add('is_animating')
+    heart.current.addEventListener('animationend', () => {
+      heart.current.classList.remove('is_animating')
+      heart.current.classList.add('clicked_heart')
+    })
+  }
 
   return (
     <React.Fragment>
@@ -79,8 +84,9 @@ const Card = (data) => {
               }
             <div className="edit-option option-container">
               <button href={props.spotifyUrl} target="_blank">
-                <FontAwesomeIcon icon={faHeart} className="faHeart" />
+                {/* <FontAwesomeIcon icon={faHeart} className="faHeart" /> */}
               </button>
+                <div className="heart" ref={heart} onClick={handleHeartClick}></div>
             </div>
           </div>
         </div>
