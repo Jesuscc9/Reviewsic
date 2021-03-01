@@ -147,7 +147,8 @@ const SmartRegisterForm = (props) => {
   }
 
   const handleChange = (e) => {
-    if (spotifyURL.current.value.length > 0) {
+    if (e.length > 0) {
+      spotifyInputStatus.loading()
       spotifyURLAlert.current.style.opacity = "0";
       spotifyURL.current.classList.remove("wrong-input");
 
@@ -208,9 +209,8 @@ const SmartRegisterForm = (props) => {
             className="swal2-input spotify-link-input"
             placeholder="Spotify link of the song..."
             onChange={(e) => {
-              spotifyInputStatus.loading();
-              handleChange(e.target.value);
-              props.onSpotifyUrlChange(e.target.value);
+              handleChange(e.target.value)
+              props.onSpotifyUrlChange(e.target.value)
             }}
             ref={spotifyURL}
           />
