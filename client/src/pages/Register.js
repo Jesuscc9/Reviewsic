@@ -12,7 +12,8 @@ import RegisterForm from "../components/RegisterForm";
 import SmartRegisterForm from "../components/SmartRegisterForm";
 import UpdateForm from "../components/UpdateForm";
 import Contacts from "../components/Contacts";
-import Login from "../components/Login"
+import Login from "../components/Login";
+import Switch from "../components/SwitchSample";
 import Cookies from "js-cookie";
 
 import "tailwindcss/tailwind.css";
@@ -33,15 +34,13 @@ const Register = () => {
   const [users, setUsers] = useState([]);
   const [updateId, setUpdateId] = useState(0);
   const [newImage, setNewImage] = useState("");
-  const [profileImage, setProfileImage] = useState('')
-  const [userId, setUserId] = useState('')
+  const [profileImage, setProfileImage] = useState("");
+  const [userId, setUserId] = useState("");
 
   const [token, setToken] = useState("");
 
   useEffect(async () => {
-
     const socket = socketIOClient(ENDPOINT);
-
 
     let res = await Axios.get("http://localhost:3001/api/get");
 
@@ -71,7 +70,7 @@ const Register = () => {
 
     Axios.post("http://localhost:3001/api/insert", formData).then((res) => {
       const newSongList = songList;
-      res.data.calification = calification
+      res.data.calification = calification;
       newSongList.push(res.data);
       setSongList(newSongList);
       const socket = socketIOClient(ENDPOINT);
@@ -98,9 +97,7 @@ const Register = () => {
         const socket = socketIOClient(ENDPOINT);
         socket.emit("updateReviews", newSongList);
 
-        Axios.delete(
-          `http://localhost:3001/api/delete/${id}/${image}`
-        )
+        Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`);
         Swal.fire("Deleted!", "Your review has been deleted.", "success");
       }
     });
@@ -136,63 +133,69 @@ const Register = () => {
   const smartRegister = () => {
     MySwal.fire({
       html: (
-        <SmartRegisterForm
-          onSongChange={(e) => {
-            setSong(e);
-          }}
-          selectImage={(e) => {
-            setImage(e);
-          }}
-          onArtistChange={(e) => {
-            setArtist(e);
-          }}
-          onCommentChange={(e) => {
-            setReview(e);
-          }}
-          onSpotifyUrlChange={(e) => {
-            setSpotifyURL(e);
-          }}
-          ratingChanged={(e) => {
-            setCalification(e);
-          }}
-          onSubmit={(e) => {
-            document.getElementById("button").click();
-            MySwal.close();
-          }}
-        />
+        <React.Fragment>
+          <Switch onChange={alert} value={true}/>
+          <SmartRegisterForm
+            onSongChange={(e) => {
+              setSong(e);
+            }}
+            selectImage={(e) => {
+              setImage(e);
+            }}
+            onArtistChange={(e) => {
+              setArtist(e);
+            }}
+            onCommentChange={(e) => {
+              setReview(e);
+            }}
+            onSpotifyUrlChange={(e) => {
+              setSpotifyURL(e);
+            }}
+            ratingChanged={(e) => {
+              setCalification(e);
+            }}
+            onSubmit={(e) => {
+              document.getElementById("button").click();
+              MySwal.close();
+            }}
+          />
+        </React.Fragment>
       ),
 
       showConfirmButton: false,
     }).then(() => {});
-  }
+  };
 
   const alert = () => {
     MySwal.fire({
       html: (
-        <RegisterForm
-          onSongChange={(e) => {
-            setSong(e);
-          }}
-          selectImage={(e) => {
-            setImage(e);
-          }}
-          onArtistChange={(e) => {
-            setArtist(e);
-          }}
-          onCommentChange={(e) => {
-            setReview(e);
-          }}
-          onSpotifyUrlChange={(e) => {
-            setSpotifyURL(e);
-          }}
-          ratingChanged={(e) => {
-            setCalification(e);
-          }}
-          onSubmit={(e) => {
-            document.getElementById("button").click();
-            MySwal.close();
-          }}
-        />
+        <React.Fragment>
+          <Switch onChange={smartRegister} value={false}/>
+          <RegisterForm
+            onSongChange={(e) => {
+              setSong(e);
+            }}
+            selectImage={(e) => {
+              setImage(e);
+            }}
+            onArtistChange={(e) => {
+              setArtist(e);
+            }}
+            onCommentChange={(e) => {
+              setReview(e);
+            }}
+            onSpotifyUrlChange={(e) => {
+              setSpotifyURL(e);
+            }}
+            ratingChanged={(e) => {
+              setCalification(e);
+            }}
+            onSubmit={(e) => {
+              document.getElementById("button").click();
+              MySwal.close();
+            }}
+          />
+        </React.Fragment>
       ),
 
       showConfirmButton: false,
@@ -236,22 +239,23 @@ const Register = () => {
     });
   };
 
-  const fetchSpotifyData = async() => {
+  const fetchSpotifyData = async () => {
     const config = {
       headers: {
-        'Authorization': 'Bearer ' + token
-     }
-    }
+        Authorization: "Bearer " + token,
+      },
+    };
 
-    if(userId == ''){
-      let spotifyData = await Axios.get('https://api.spotify.com/v1/me', config)
+    if (userId == "") {
+      let spotifyData = await Axios.get(
+        "https://api.spotify.com/v1/me",
+        config
+      );
 
+      if (spotifyData.data.images.length > 0) {
+        setProfileImage(spotifyData.data.images[0].url);
+        setUserId(spotifyData.data.id);
 
-      if((spotifyData.data.images).length > 0){
-  
-        setProfileImage(spotifyData.data.images[0].url)
-        setUserId(spotifyData.data.id)
-  
         const newUser = {
           nickname: spotifyData.data.display_name,
           followers: spotifyData.data.followers.total,
@@ -259,60 +263,61 @@ const Register = () => {
           type: spotifyData.data.product,
           image: spotifyData.data.images[0].url,
           id: spotifyData.data.id,
-        }
-  
+        };
+
         Axios.post(`http://localhost:3001/api/newUser`, newUser).then((res) => {
-          setUsers([newUser])
-        })
-      }else{
-        setProfileImage('')
+          setUsers([newUser]);
+        });
+      } else {
+        setProfileImage("");
       }
     }
-  }
+  };
 
   return (
     <React.Fragment>
       <Navbar
         onAddClick={() => {
-          smartRegister()
+          smartRegister();
         }}
         profileImage={profileImage}
         token={token}
       ></Navbar>
       <button onClick={submitReview} id="button"></button>
       <button onClick={updateReview} id="update-button"></button>
-      
-    
+
       {token ? (
-      <SpotifyApiContext.Provider value={token}>
-        {(() => {fetchSpotifyData()})()}
-      <div className="main-container">
-        <div className="card-container">
-          {songList.length ? (
-            songList.map((item) => {
-              return (
-                <Card
-                  props={item}
-                  user={userId}
-                  key={item.id}
-                  update={() => {
-                    alertUpdateForm(item);
-                  }}
-                  delete={(e) => {
-                    deleteReview(e.id, e.image);
-                  }}
-                />
-              );
-            })
-          ) : (
-            <div>Not reviews registered yet 😕</div>
-          )}
-        </div>
-        <div className="contact-container">
-          <Contacts users={users} />
-        </div>
-      </div>
-    </SpotifyApiContext.Provider>
+        <SpotifyApiContext.Provider value={token}>
+          {(() => {
+            fetchSpotifyData();
+          })()}
+          <div className="main-container">
+            <div className="card-container">
+              {songList.length ? (
+                songList.map((item) => {
+                  return (
+                    <Card
+                      props={item}
+                      user={userId}
+                      key={item.id}
+                      update={() => {
+                        alertUpdateForm(item);
+                      }}
+                      delete={(e) => {
+                        deleteReview(e.id, e.image);
+                      }}
+                    />
+                  );
+                })
+              ) : (
+                <div>Not reviews registered yet 😕</div>
+              )}
+            </div>
+            <div className="contact-container">
+              <Contacts users={users} />
+            </div>
+          </div>
+        </SpotifyApiContext.Provider>
       ) : (
         <Login></Login>
       )}

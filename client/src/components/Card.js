@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Card = (data) => {
   const props = data.props;
 
+  const song_name = useRef(null)
+
   var rating = {
     size: 20,
     value: props.calification,
@@ -38,7 +40,7 @@ const Card = (data) => {
           </div>
         </div>
         <div className="card-body">
-          <h5 className="song-name">{props.songName}</h5>
+          <div className="song-name" ref={song_name}>{props.songName}</div>
           <h5 className="artist-name">{props.artist}</h5>
           <p className="comment">{props.songReview}</p>
         </div>

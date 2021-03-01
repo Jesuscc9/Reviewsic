@@ -1,0 +1,10 @@
+.switch-container{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.switch-label{
+  margin-right: 5px;
+}

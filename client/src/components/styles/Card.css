@@ -63,6 +63,10 @@ body{
   padding: 0px;
   line-height: 20px;
   text-transform: capitalize;
+  /* max-width: 190px;
+  white-space: nowrap;
+  overflow-x: hidden;
+  overflow-y: hidden; */
 }
 
 .artist-name{

@@ -27,7 +27,7 @@ body{
 }
 
 body::-webkit-scrollbar-track {
-  background-color:rgba(26, 16, 59, 0.301);
+  background-color: #1F2937;
 }
 
 /* Track */
