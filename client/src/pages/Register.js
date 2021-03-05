@@ -19,6 +19,7 @@ import Cookies from "js-cookie";
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import "../pages/styles/Register.css";
+import axios from "axios";
 
 const ENDPOINT = "http://127.0.0.1:3001";
 
@@ -132,7 +133,7 @@ const Register = () => {
       const socket = socketIOClient(ENDPOINT);
       socket.emit("updateReviews", newSongList);
     });
-  };
+  }
 
   const smartRegister = () => {
     MySwal.fire({
@@ -168,7 +169,7 @@ const Register = () => {
 
       showConfirmButton: false,
     }).then(() => {});
-  };
+  }
 
   const alert = () => {
     MySwal.fire({
@@ -204,7 +205,7 @@ const Register = () => {
 
       showConfirmButton: false,
     }).then(() => {});
-  };
+  }
 
   const alertUpdateForm = (data) => {
     MySwal.fire({
@@ -241,7 +242,7 @@ const Register = () => {
 
       showConfirmButton: false,
     });
-  };
+  }
 
   const fetchSpotifyData = async () => {
     const config = {
@@ -276,7 +277,76 @@ const Register = () => {
         setProfileImage("");
       }
     }
-  };
+  }
+
+  const onLikeClick = async (song_name, song_id) => {
+
+    const config = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+
+    let playlistId = 0
+
+    const playlists = await Axios.get(`https://api.spotify.com/v1/me/playlists`, config)
+
+    const reviewsicExists = () => {
+
+      for(var i = 0; i < (playlists.data.items).length; i++){
+        if((playlists.data.items)[i].name === 'Reviewsic'){
+          playlistId = (playlists.data.items)[i].id
+          return true
+        }
+      }
+
+      return false
+    }
+
+    if(!reviewsicExists()){
+      const createPlaylist = await Axios.post(`https://api.spotify.com/v1/users/${userId}/playlists`, {
+        name: 'Reviewsic',
+      }, config)
+
+      playlistId = createPlaylist.data.id
+    }
+
+    async function songExists(){
+      console.log('se checkea la cansion')
+      const songs = await Axios.get(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, config)
+
+      const song_list = songs.data.items
+
+      for(var i = 0; i < song_list.length; i++){
+        if(song_list[i].track.name == song_name){
+          console.log('Se es verdadero')
+          return true
+        }else{
+          console.log(song_list[i].track.name + ' no es ' + song_name)
+        }
+      }
+
+      return false
+
+    }
+
+    if(!(await songExists())){
+      let songUri = `spotify:track:${song_id}`
+      let uri = [songUri]
+
+      const json_body = JSON.stringify({
+        uris: uri
+      })
+
+      console.log(json_body)
+
+      const addSong = await Axios.post(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        uris: uri
+      }, config)
+      console.log(addSong)
+    }
+
+  }
 
   return (
     <React.Fragment>
@@ -309,6 +379,9 @@ const Register = () => {
                       }}
                       delete={(e) => {
                         deleteReview(e.id, e.image);
+                      }}
+                      onLikeClick={(e, id) => {
+                        onLikeClick(e, id)
                       }}
                     />
                   );

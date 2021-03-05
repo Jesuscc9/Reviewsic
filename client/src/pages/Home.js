@@ -120,7 +120,7 @@ const Home = () => {
             className="spotify-auth"
             redirectUri="http://localhost:3000/"
             clientID="9751c1f85b2a4684a8cc0a02f6942b91"
-            scopes={[Scopes.userReadPrivate, "user-read-email"]}
+            scopes={[Scopes.playlistModifyPrivate, Scopes.userReadPrivate, Scopes.playlistReadCollaborative, Scopes.playlistModifyPublic]}
           />
         )}
       </div>

@@ -154,7 +154,7 @@ const SmartRegisterForm = (props) => {
 
       setTimeout(async () => {
         if (validateUrl(spotifyURL.current.value)) {
-          const track_id = e.slice(31, 53);
+          const track_id = e.slice(31, 53)
 
           const config = {
             headers: {

@@ -6,11 +6,10 @@ import ReactStars from "react-rating-stars-component"
 import { faSpotify } from "@fortawesome/fontawesome-free-brands"
 import { faPen, faTrash, faHeart } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Axios from "axios"
 
 const Card = (data) => {
   const props = data.props;
-
-  console.log('Este es el id: ' + props.id)
 
   const song_name = useRef(null)
 
@@ -23,6 +22,8 @@ const Card = (data) => {
   const card_options = React.useRef(null);
   const card = React.useRef(null);
   const heart = React.useRef(null)
+
+  const song_id = (props.spotifyUrl).slice(31, 53)
 
   const handleMouseOver = () => {
     card_options.current.classList.add("card-options-visible");
@@ -88,7 +89,10 @@ const Card = (data) => {
               <button href={props.spotifyUrl} target="_blank">
                 {/* <FontAwesomeIcon icon={faHeart} className="faHeart" /> */}
               </button>
-                <div className="heart" ref={heart} onClick={handleHeartClick}></div>
+                <div className="heart" ref={heart} onClick={() => {
+                  handleHeartClick()
+                  data.onLikeClick(props.songName, song_id)
+                }}></div>
             </div>
           </div>
         </div>
