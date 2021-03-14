@@ -16,6 +16,9 @@ import Login from "../components/Login";
 import Switch from "../components/SwitchSample";
 import Cookies from "js-cookie";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import "../pages/styles/Register.css";
@@ -68,10 +71,17 @@ const Register = () => {
     formData.append("spotifyUrl", spotifyURL);
     formData.append("songReview", review);
     formData.append("calification", calification);
+    toast.success('🚀 Successfully Added!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      })
 
     Axios.post("http://localhost:3001/api/insert", formData).then((res) => {
-      console.log('SE recibe: ')
-      console.log(res.data)
       const newSongList = songList;
       res.data.calification = calification;
       newSongList.push(res.data);
@@ -79,7 +89,7 @@ const Register = () => {
       const socket = socketIOClient(ENDPOINT);
       socket.emit("updateReviews", newSongList);
     });
-  };
+  }
 
   const deleteReview = (id, image) => {
     Swal.fire({
@@ -101,10 +111,18 @@ const Register = () => {
         socket.emit("updateReviews", newSongList);
 
         Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`)
-        Swal.fire("Deleted!", "Your review has been deleted.", "success");
+        toast.success('🚀 Your review has been deleted!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          })
       }
     });
-  };
+  }
 
   const updateReview = () => {
     Axios.put(`http://localhost:3001/api/update/${updateId}`, {
@@ -116,7 +134,6 @@ const Register = () => {
       calification: calification,
       author_id: userId,
     }).then((res) => {
-      console.log(res)
       let index = 0;
 
       for (let i = 0; i < songList.length; i++) {
@@ -132,6 +149,16 @@ const Register = () => {
       setSongList(newSongList);
       const socket = socketIOClient(ENDPOINT);
       socket.emit("updateReviews", newSongList);
+      
+      toast.success('🚀 Your review has been updated!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        })
     });
   }
 
@@ -312,18 +339,12 @@ const Register = () => {
     }
 
     async function songExists(){
-      console.log('se checkea la cansion')
       const songs = await Axios.get(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, config)
 
       const song_list = songs.data.items
 
       for(var i = 0; i < song_list.length; i++){
-        if(song_list[i].track.name == song_name){
-          console.log('Se es verdadero')
-          return true
-        }else{
-          console.log(song_list[i].track.name + ' no es ' + song_name)
-        }
+        if(song_list[i].track.name == song_name)return true
       }
 
       return false
@@ -334,17 +355,22 @@ const Register = () => {
       let songUri = `spotify:track:${song_id}`
       let uri = [songUri]
 
-      const json_body = JSON.stringify({
-        uris: uri
-      })
-
-      console.log(json_body)
-
       const addSong = await Axios.post(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
         uris: uri
       }, config)
-      console.log(addSong)
+    }else{
     }
+
+    toast('🎵 Song added to your playlist!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+
 
   }
 
@@ -359,6 +385,8 @@ const Register = () => {
       ></Navbar>
       <button onClick={submitReview} id="button"></button>
       <button onClick={updateReview} id="update-button"></button>
+
+      <ToastContainer />
 
       {token ? (
         <SpotifyApiContext.Provider value={token}>

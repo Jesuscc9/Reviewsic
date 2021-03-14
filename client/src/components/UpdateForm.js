@@ -141,7 +141,7 @@ const UpdateForm = (props) =>{
           props.ratingChanged(e)
         }}/>
 
-        <button type="submit" className="submit-button">UPLOAD</button>
+        <button type="submit" className="submit-button">UPDATE</button>
 
       </form>
     </React.Fragment>
