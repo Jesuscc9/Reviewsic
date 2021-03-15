@@ -24,7 +24,7 @@ import "../assets/main.css";
 import "../pages/styles/Register.css";
 import axios from "axios";
 
-const ENDPOINT = "http://127.0.0.1:3001";
+const ENDPOINT = "http://localhost:3001";
 
 const Register = () => {
   const MySwal = withReactContent(Swal);
@@ -51,10 +51,14 @@ const Register = () => {
     setSongList(res.data);
 
     socket.on("usernames", (data) => {
+      console.log('nuevo usuario')
+      console.log(data)
       setUsers(data);
     });
 
     socket.on("updateReviews", (data) => {
+      console.log('se actualizan los reviewis')
+      console.log(data)
       setSongList(data);
     });
 

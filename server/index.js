@@ -20,8 +20,8 @@ let user_data = {};
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'password',
-  database: 'reviewsic'
+  password: '',
+  database: 'gf'
 })
 
 
@@ -71,6 +71,8 @@ app.post("/api/insert", async (req, res) =>{
     author: user,
     author_id: user_id,
   }
+
+  console.log(data)
 
   if(req.files){
     file = req.files.file;
