@@ -118,6 +118,7 @@ const Home = () => {
         ) : (
           <SpotifyAuth
             className="spotify-auth"
+            // redirectUri="https://reviewsic.herokuapp.com/"
             redirectUri="http://localhost:3000/"
             clientID="9751c1f85b2a4684a8cc0a02f6942b91"
             scopes={[Scopes.playlistModifyPrivate, Scopes.userReadPrivate, Scopes.playlistReadCollaborative, Scopes.playlistModifyPublic]}

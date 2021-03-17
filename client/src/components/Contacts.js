@@ -3,7 +3,15 @@ import "tailwindcss/tailwind.css";
 import "../components/styles/Contacts.css";
 
 const Contacts = (props) => {
-  const data = props.users;
+  const data = props.users
+  // console.log('Elementos :')
+  // console.log(data)
+  // console.log('Elemento')
+  // data.forEach(element => {
+  //   console.log(element)
+  // })
+  // console.log('Keys: ')
+  // console.log(Object.keys(data))
 
   return (
     <React.Fragment>
@@ -13,6 +21,7 @@ const Contacts = (props) => {
         </div>
         <div className="contact-body" >
           {data.map((user) => {
+            console.log(user)
             return (
               <React.Fragment key={user}>
                 <div className="divisor"></div>

@@ -2,18 +2,21 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const http = require("http");
 const socketIo = require("socket.io");
+const path = require('path');
 const cors = require('cors')
 const mysql = require('mysql')
 const fileUpload = require('express-fileupload');
 const fs = require('fs')
 const fetch = require('node-fetch');
 
+//const PORT = process.env.PORT || 3001;
+const PORT = 3001;
+
 const app = express()
 
 const index = require("./routes/index");
 
-let user = undefined;
-let user_id = undefined;
+
 let user_data = {};
 
 
@@ -25,7 +28,7 @@ const db = mysql.createPool({
 })
 
 
-app.use(express.static('public'));
+app.use(express.static(path.resolve(__dirname, 'build/')));
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ 
@@ -38,7 +41,6 @@ app.post("/api/newUser/", (req, res) => {
   user = req.body.nickname
   user_id = req.body.id
   user_data = req.body
-
   res.send('success')
 })
 
@@ -57,7 +59,6 @@ app.get("/api/get", (req, res) =>{
 
 app.post("/api/insert", async (req, res) =>{
 
-
   let file, image_name, url
 
   const data = {
@@ -68,11 +69,10 @@ app.post("/api/insert", async (req, res) =>{
     songReview: req.body.songReview,
     spotifyUrl: req.body.spotifyUrl,
     calification: req.body.calification,
-    author: user,
-    author_id: user_id,
+    author: req.body.author,
+    author_id: req.body.author_id,
   }
 
-  console.log(data)
 
   if(req.files){
     file = req.files.file;
@@ -84,7 +84,7 @@ app.post("/api/insert", async (req, res) =>{
   }
 
   if(!req.files){
-    while((fs.existsSync(`${__dirname}/../client/public/images/${image_name}.jpeg`))) {
+    while((fs.existsSync(`${__dirname}/build/images/${image_name}.jpeg`))) {
       const random = Math.floor(Math.random() * 10);
       image_name = `${image_name}${random}`
     }
@@ -93,11 +93,11 @@ app.post("/api/insert", async (req, res) =>{
     const response = await fetch(url);
     const buffer = await response.buffer();
 
-    fs.writeFile(`${__dirname}/../client/public/images/${image_name}.jpeg`, buffer, () => {})
+    fs.writeFile(`${__dirname}/build/images/${image_name}.jpeg`, buffer, () => {})
 
   }else{
-    if(!(fs.existsSync(`${__dirname}/../client/public/images/${file.name}`))) {
-      file.mv(`${__dirname}/../client/public/images/${file.name}`, function (error) {
+    if(!(fs.existsSync(`${__dirname}/build/images/${file.name}`))) {
+      file.mv(`${__dirname}/build/images/${file.name}`, function (error) {
         if (!error) {
           data.calification = parseInt(data.calification)
           data.id = parseInt(result.insertId)
@@ -128,21 +128,15 @@ app.delete('/api/delete/:id/:image', (req, res) => {
   const id = req.params.id;
   const image = req.params.image;
 
-  const path = `${__dirname}/../client/public/images/${image}`
+  const path = `${__dirname}/build/images/images/${image}`
 
   try {
 
     const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
-    console.log('Este es el id: ')
-    console.log(id)
     db.query(sqlDelete, id, (err, result) => {
       if(err){
-        console.log('Error: ')
-        console.log(error)
       }
 
-      console.log('result')
-      console.log(result)
       fs.unlinkSync(path)
     })
 
@@ -168,12 +162,15 @@ app.put('/api/update/:id', (req, res) => {
   const sqlUpdate = "UPDATE song_reviews SET image = ?, songName = ?, artist = ?, songReview = ?, spotifyUrl = ?, calification = ?  WHERE id = ?";
 
   db.query(sqlUpdate, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, data.id], (err, result) => {
-    console.log(result)
     if(!err){
       res.send(data)
     }
   });
 })
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build/', 'index.html'));
+});
 
 app.use(index);
 
@@ -184,48 +181,49 @@ const io = socketIo(server);
 let users = {}
 
 io.on("connection", (socket) => {
+
   socket.on('updateReviews', (data) => {
     io.sockets.emit('updateReviews', data);
   }) 
 
-  if(user){
-    if(!(user in users)){
-      socket.user = user;
-      users[socket.user] = socket;
+  socket.on('new user', (data) => {
+    socket.user = data.nickname
+    if(!(data in users)){
+      users[socket.user] = socket
       users[socket.user].instance = 1
       users[socket.user].data = user_data
       updateUsers()
     }else{
+      users[socket.user].instance++
       updateUsers()
-      users[user].instance++
     }
-    
-    socket.on('disconnect', (data) => {
-      users[user].instance--
-      if(users[user].instance == 0){
-        delete users[user];
-      }
-      updateUsers();
-    });
+  })
 
-  }else{
-    socket.emit('usernames', 'error')
-  }
+  socket.on('disconnect', (data) => {
+
+    if(!socket.user) return
+    users[socket.user].instance--
+    if(users[socket.user].instance == 0){
+      delete users[socket.user];
+    }
+    updateUsers();
+
+  })
+
 
   function updateUsers(){
     const keys = Object.keys(users)
-
     let new_users = []
 
     for(let i = 0; i<keys.length;i++){
       let new_user = users[keys[i]].data
       new_users.push(new_user)
-    }
+    } 
 
     io.sockets.emit('usernames', new_users);
   }
 
 });
 
-server.listen(3001, () => {
+server.listen(PORT, () => {
 })

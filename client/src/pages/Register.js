@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SpotifyApiContext } from "react-spotify-api";
 
-import socketIOClient from "socket.io-client";
+import openSocket from "socket.io-client";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Axios from "axios";
@@ -22,9 +22,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import "../pages/styles/Register.css";
-import axios from "axios";
 
-const ENDPOINT = "http://localhost:3001";
+const ENDPOINT = "/"
+const API_ENDPOINT = "http://localhost:3001"
+// const socket = openSocket(ENDPOINT)
+const socket = openSocket('http://localhost:3001')
 
 const Register = () => {
   const MySwal = withReactContent(Swal);
@@ -40,30 +42,22 @@ const Register = () => {
   const [newImage, setNewImage] = useState("");
   const [profileImage, setProfileImage] = useState("");
   const [userId, setUserId] = useState("");
+  const [user, setUser] = useState("");
 
   const [token, setToken] = useState("");
 
+
   useEffect(async () => {
-    const socket = socketIOClient(ENDPOINT);
 
-    let res = await Axios.get("http://localhost:3001/api/get");
-
+    let res = await Axios.get(`${API_ENDPOINT}/api/get`);
+    
     setSongList(res.data);
-
-    socket.on("usernames", (data) => {
-      console.log('nuevo usuario')
-      console.log(data)
-      setUsers(data);
-    });
-
-    socket.on("updateReviews", (data) => {
-      console.log('se actualizan los reviewis')
-      console.log(data)
-      setSongList(data);
-    });
+  
 
     setToken(Cookies.get("spotifyAuthToken"));
-  }, []);
+
+    if(token)fetchSpotifyData()
+  }, [token]);
 
   const submitReview = () => {
     const formData = new FormData();
@@ -75,6 +69,8 @@ const Register = () => {
     formData.append("spotifyUrl", spotifyURL);
     formData.append("songReview", review);
     formData.append("calification", calification);
+    formData.append("author", user);
+    formData.append("author_id", userId);
     toast.success('🚀 Successfully Added!', {
       position: "top-right",
       autoClose: 5000,
@@ -85,12 +81,11 @@ const Register = () => {
       progress: undefined,
       })
 
-    Axios.post("http://localhost:3001/api/insert", formData).then((res) => {
+    Axios.post(`${API_ENDPOINT}/api/insert`, formData).then((res) => {
       const newSongList = songList;
       res.data.calification = calification;
       newSongList.push(res.data);
       setSongList(newSongList);
-      const socket = socketIOClient(ENDPOINT);
       socket.emit("updateReviews", newSongList);
     });
   }
@@ -111,10 +106,9 @@ const Register = () => {
         });
 
         setSongList(newSongList);
-        const socket = socketIOClient(ENDPOINT);
         socket.emit("updateReviews", newSongList);
 
-        Axios.delete(`http://localhost:3001/api/delete/${id}/${image}`)
+        Axios.delete(`${API_ENDPOINT}/api/delete/${id}/${image}`)
         toast.success('🚀 Your review has been deleted!', {
           position: "top-right",
           autoClose: 5000,
@@ -129,7 +123,7 @@ const Register = () => {
   }
 
   const updateReview = () => {
-    Axios.put(`http://localhost:3001/api/update/${updateId}`, {
+    Axios.put(`${API_ENDPOINT}/api/update/${updateId}`, {
       image: newImage,
       songName: song,
       artist: artist,
@@ -151,7 +145,6 @@ const Register = () => {
       res.data.author = songList[index].author;
       newSongList[index] = res.data;
       setSongList(newSongList);
-      const socket = socketIOClient(ENDPOINT);
       socket.emit("updateReviews", newSongList);
       
       toast.success('🚀 Your review has been updated!', {
@@ -289,8 +282,9 @@ const Register = () => {
       );
 
       if (spotifyData.data.images.length > 0) {
-        setProfileImage(spotifyData.data.images[0].url);
-        setUserId(spotifyData.data.id);
+        setProfileImage(spotifyData.data.images[0].url)
+        setUserId(spotifyData.data.id)
+        setUser(spotifyData.data.display_name)
 
         const newUser = {
           nickname: spotifyData.data.display_name,
@@ -301,9 +295,23 @@ const Register = () => {
           id: spotifyData.data.id,
         };
 
-        Axios.post(`http://localhost:3001/api/newUser`, newUser).then((res) => {
-          setUsers([newUser]);
-        });
+        // Axios.post(`${API_ENDPOINT}/api/newUser`, newUser).then((res) => {
+
+          socket.emit("new user", newUser);
+
+          socket.on("usernames", (data) => {
+            console.log('nuevo usuario')
+            console.log(data)
+            setUsers(data);
+          });
+      
+          socket.on("updateReviews", (data) => {
+            console.log('se actualizan los reviewis')
+            console.log(data)
+            setSongList(data);
+          });
+
+        //})
       } else {
         setProfileImage("");
       }
@@ -394,9 +402,7 @@ const Register = () => {
 
       {token ? (
         <SpotifyApiContext.Provider value={token}>
-          {(() => {
-            fetchSpotifyData();
-          })()}
+
           <div className="main-container">
             <div className="card-container">
               {songList.length ? (
@@ -419,7 +425,7 @@ const Register = () => {
                   );
                 })
               ) : (
-                <div>Not reviews registered yet 😕</div>
+                <div>Not reviews registered yet 😕.</div>
               )}
             </div>
             <div className="contact-container">
