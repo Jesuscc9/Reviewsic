@@ -55,9 +55,9 @@ const SmartRegisterForm = (props) => {
             this.check.current.style.opacity = "0";
             this.container.current.style.display = "none";
             spotifyInputAux.style.width = "100%";
-          }, 1300);
+          }, 800);
         }, 100);
-      }, 500);
+      }, 200);
     },
     error: function () {
       this.loader.current.style.opacity = "0";

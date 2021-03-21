@@ -13,7 +13,6 @@ import SmartRegisterForm from "../components/SmartRegisterForm";
 import UpdateForm from "../components/UpdateForm";
 import Contacts from "../components/Contacts";
 import Login from "../components/Login";
-import Switch from "../components/SwitchSample";
 import Cookies from "js-cookie";
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -31,7 +30,7 @@ const socket = openSocket('http://localhost:3001')
 const Register = () => {
   const MySwal = withReactContent(Swal);
   const [song, setSong] = useState("");
-  const [image, setImage] = useState([]);
+  const [image, setImage] = useState('');
   const [review, setReview] = useState("");
   const [artist, setArtist] = useState("");
   const [spotifyURL, setSpotifyURL] = useState("");
@@ -39,7 +38,6 @@ const Register = () => {
   const [songList, setSongList] = useState([]);
   const [users, setUsers] = useState([]);
   const [updateId, setUpdateId] = useState(0);
-  const [newImage, setNewImage] = useState("");
   const [profileImage, setProfileImage] = useState("");
   const [userId, setUserId] = useState("");
   const [user, setUser] = useState("");
@@ -124,7 +122,7 @@ const Register = () => {
 
   const updateReview = () => {
     Axios.put(`${API_ENDPOINT}/api/update/${updateId}`, {
-      image: newImage,
+      image: image,
       songName: song,
       artist: artist,
       songReview: review,
@@ -163,7 +161,6 @@ const Register = () => {
     MySwal.fire({
       html: (
         <React.Fragment>
-          <Switch onChange={alert} value={true}/>
           <SmartRegisterForm
             onSongChange={(e) => {
               setSong(e);
@@ -195,41 +192,6 @@ const Register = () => {
     }).then(() => {});
   }
 
-  const alert = () => {
-    MySwal.fire({
-      html: (
-        <React.Fragment>
-          <Switch onChange={smartRegister} value={false}/>
-          <RegisterForm
-            onSongChange={(e) => {
-              setSong(e);
-            }}
-            selectImage={(e) => {
-              setImage(e);
-            }}
-            onArtistChange={(e) => {
-              setArtist(e);
-            }}
-            onCommentChange={(e) => {
-              setReview(e);
-            }}
-            onSpotifyUrlChange={(e) => {
-              setSpotifyURL(e);
-            }}
-            ratingChanged={(e) => {
-              setCalification(e);
-            }}
-            onSubmit={(e) => {
-              document.getElementById("button").click();
-              MySwal.close();
-            }}
-          />
-        </React.Fragment>
-      ),
-
-      showConfirmButton: false,
-    }).then(() => {});
-  }
 
   const alertUpdateForm = (data) => {
     MySwal.fire({
@@ -246,7 +208,7 @@ const Register = () => {
             setUpdateId(e);
           }}
           setNewImage={(e) => {
-            setNewImage(e);
+            setImage(e);
           }}
           onCommentChange={(e) => {
             setReview(e);
