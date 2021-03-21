@@ -113,7 +113,7 @@ const SmartRegisterForm = (props) => {
       reviewAlert.current.style.opacity = "0";
     }
 
-    if (review.current.value.length <= 10) {
+    if (review.current.value.length <= 1) {
       reviewAlert.current.style.opacity = "1";
       reviewAlert.current.textContent = "Please, make a longer comment!";
       review.current.classList.add("wrong-input");
@@ -123,7 +123,7 @@ const SmartRegisterForm = (props) => {
       reviewAlert.current.style.opacity = "0";
     }
 
-    if (review.current.value.length >= 85) {
+    if (review.current.value.length >= 150) {
       reviewAlert.current.textContent = "Please, make a smaller comment!";
       reviewAlert.current.style.opacity = "1";
       review.current.classList.add("wrong-input");

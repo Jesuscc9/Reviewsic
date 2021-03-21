@@ -68,6 +68,9 @@ app.post("/api/insert", async (req, res) =>{
 
   let file, image_name, url
 
+  console.log('Esto es lo que se resibe')
+  console.log(req.body.image)
+
   const data = {
     id: 0,
     image: req.body.image,
@@ -80,49 +83,18 @@ app.post("/api/insert", async (req, res) =>{
     author_id: req.body.author_id,
   }
 
-
-  if(req.files){
-    file = req.files.file;
-  }else{
-    url = req.body.file
-
-    image_name = url.slice(24, url.length - 1)
-    data.image = image_name + '.jpeg'
-  }
-
-  if(!req.files){
-    while((fs.existsSync(`${__dirname}${dir}${image_name}.jpeg`))) {
-      const random = Math.floor(Math.random() * 10);
-      image_name = `${image_name}${random}`
-    }
-    data.image = image_name + '.jpeg'
-
-    const response = await fetch(url);
-    const buffer = await response.buffer();
-
-    fs.writeFile(`${__dirname}${dir}${image_name}.jpeg`, buffer, () => {})
-
-  }else{
-    if(!(fs.existsSync(`${__dirname}${dir}${file.name}`))) {
-      file.mv(`${__dirname}${dir}${file.name}`, function (error) {
-        if (!error) {
-        }else{
-          res.send(error)
-        }
-      });
-    }else{
-      res.send('error 117')
-    }
-  }
-
   const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, spotifyUrl, calification, author, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
   db.query(sqlInsert, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, data.author, data.author_id], async (err, result) => {
     if(!err){
       data.calification = parseInt(data.calification)
       data.id = parseInt(result.insertId)
+      console.log('Se inserta: ')
+      console.log(data)
       res.send(data);
     }else{
+      console.log('Nos e inserta: ')
+      console.log(err)
       res.send(err)
     }
   })
@@ -207,7 +179,6 @@ io.on("connection", (socket) => {
 
   socket.on('disconnect', (data) => {
     if(!socket.user) return
-    console.log('Se borra')
     users[socket.user].instance--
     if(users[socket.user].instance == 0){
       delete users[socket.user];
@@ -224,9 +195,6 @@ io.on("connection", (socket) => {
     for(let i = 0; i<keys.length;i++){
       users_.push(users[keys[i]].data)
     }
-
-    console.log('Se mandan: ')
-    console.log(users_)
 
     io.sockets.emit('usernames', users_);
   }

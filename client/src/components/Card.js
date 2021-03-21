@@ -47,7 +47,7 @@ const Card = (data) => {
         <div className="card-header" ref={card}>
           <div className="image-container">
             <a  href={props.spotifyUrl} target="_blank">
-            <img alt="" src={`/images/${props.image}`} className="song-img"/>
+            <img alt="" src={props.image} className="song-img"/>
 
             </a>
           </div>

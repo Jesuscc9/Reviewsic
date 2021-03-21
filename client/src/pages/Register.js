@@ -61,8 +61,7 @@ const Register = () => {
     const formData = new FormData();
 
     formData.append("songName", song);
-    formData.append("image", image.name);
-    formData.append("file", image);
+    formData.append("image", image);
     formData.append("artist", artist);
     formData.append("spotifyUrl", spotifyURL);
     formData.append("songReview", review);
