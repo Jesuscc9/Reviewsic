@@ -115,6 +115,10 @@ body{
   color: rgb(160, 160, 160);
   position: relative;
   bottom: 0px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 170px;
 }
 
 .logo-title{
