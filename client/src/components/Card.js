@@ -17,7 +17,9 @@ const Card = (data) => {
     size: 20,
     value: props.calification,
     edit: false,
-  };
+  }
+  
+  let calc
 
   const card_options = React.useRef(null);
   const card = React.useRef(null);
@@ -30,17 +32,16 @@ const Card = (data) => {
     card_options.current.classList.add("card-options-visible")
 
     if(song_name.current){
+      if(!calc){
+        calc = (song_name.current.scrollWidth - song_name.current.offsetWidth)
+      }
       if(isElementOverflowing(song_name.current)){
-  
-        let calc = (song_name.current.scrollWidth - song_name.current.offsetWidth)
   
         if(calc > 50){
           span.current.style.transition = `${(calc / 100) * 2}s`
         }
   
-        //song_name.current.addEventListener('mouseover', () => {
           span.current.style.transform = `translateX(${calc * -1}px)`
-        //})
       }
     }
   }
