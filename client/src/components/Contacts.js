@@ -9,7 +9,7 @@ const Contacts = (props) => {
     <React.Fragment>
       <div className="contacts">
         <div className="contact-header">
-          <h1 className="contact-title">Users</h1>
+          <h1 className="contact-title">Online</h1>
         </div>
         <div className="contact-body" >
           {data.map((user) => {

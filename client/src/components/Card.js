@@ -51,6 +51,12 @@ const Card = (data) => {
 
       let calc = (song_name.current.scrollWidth - song_name.current.offsetWidth)
 
+      console.log(calc)
+
+      if(calc > 100){
+        span.current.style.transition = `${(calc / 100) * 2}s`
+      }
+
       song_name.current.addEventListener('mouseover', () => {
         span.current.style.transform = `translateX(${calc * -1}px)`
       })
