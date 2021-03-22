@@ -46,7 +46,6 @@ const SmartRegisterForm = (props) => {
       this.check.current.style.display = "none";
 
       setTimeout(() => {
-        console.log(this.check);
         this.loader.current.style.display = "none";
         this.check.current.style.display = "block";
         setTimeout(() => {
@@ -66,7 +65,6 @@ const SmartRegisterForm = (props) => {
       this.check.current.style.display = "none";
 
       setTimeout(() => {
-        console.log(this.check);
         this.loader.current.style.display = "none";
         this.check.current.style.display = "block";
 
@@ -169,20 +167,16 @@ const SmartRegisterForm = (props) => {
             );
 
             data = data.data;
-            console.log(data);
             props.onSongChange(data.name);
             props.onArtistChange(data.artists[0].name);
             props.selectImage(data.album.images[0].url);
 
             spotifyInputStatus.sucess();
           } catch (err) {
-            console.log("Hubo un error");
-            console.log(err);
             spotifyInputStatus.error();
           }
         } else {
           spotifyInputStatus.error();
-          console.log("EL URl no es valido");
         }
       }, 1500);
     }

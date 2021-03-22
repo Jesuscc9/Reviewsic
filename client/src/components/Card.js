@@ -28,10 +28,27 @@ const Card = (data) => {
 
   const handleMouseOver = () => {
     card_options.current.classList.add("card-options-visible")
+
+    if(song_name.current){
+      if(isElementOverflowing(song_name.current)){
+  
+        let calc = (song_name.current.scrollWidth - song_name.current.offsetWidth)
+  
+        if(calc > 50){
+          span.current.style.transition = `${(calc / 100) * 2}s`
+        }
+  
+        //song_name.current.addEventListener('mouseover', () => {
+          span.current.style.transform = `translateX(${calc * -1}px)`
+        //})
+      }
+    }
   }
 
   const handleMouseLeave = () => {
     card_options.current.classList.remove("card-options-visible")
+    span.current.style.transform = `translateX(${0}px)`
+
   }
 
   const handleHeartClick = () => {
@@ -44,25 +61,6 @@ const Card = (data) => {
 
   function isElementOverflowing(element) {
     return element.offsetWidth < element.scrollWidth
-  }
-
-  if(song_name.current){
-    if(isElementOverflowing(song_name.current)){
-
-      let calc = (song_name.current.scrollWidth - song_name.current.offsetWidth)
-
-      if(calc > 100){
-        span.current.style.transition = `${(calc / 100) * 2}s`
-      }
-
-      song_name.current.addEventListener('mouseover', () => {
-        span.current.style.transform = `translateX(${calc * -1}px)`
-      })
-
-      song_name.current.addEventListener('mouseout', () => {
-        span.current.style.transform = `translateX(${0}px)`
-      })
-    }
   }
 
   return (
