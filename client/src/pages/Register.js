@@ -15,22 +15,22 @@ import Contacts from "../components/Contacts";
 import Login from "../components/Login";
 import Cookies from "js-cookie";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import "../pages/styles/Register.css";
 
-const ENDPOINT = "/"
-const API_ENDPOINT = "http://localhost:3001"
+const ENDPOINT = "/";
+const API_ENDPOINT = "http://localhost:3001";
 // const socket = openSocket(ENDPOINT)
-const socket = openSocket('http://localhost:3001')
+const socket = openSocket("http://localhost:3001");
 
 const Register = () => {
   const MySwal = withReactContent(Swal);
   const [song, setSong] = useState("");
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState("");
   const [review, setReview] = useState("");
   const [artist, setArtist] = useState("");
   const [spotifyURL, setSpotifyURL] = useState("");
@@ -44,17 +44,14 @@ const Register = () => {
 
   const [token, setToken] = useState("");
 
-
   useEffect(async () => {
-
     let res = await Axios.get(`${API_ENDPOINT}/api/get`);
-    
+
     setSongList(res.data);
-  
 
     setToken(Cookies.get("spotifyAuthToken"));
 
-    if(token)fetchSpotifyData()
+    if (token) fetchSpotifyData();
   }, [token]);
 
   const submitReview = () => {
@@ -68,7 +65,7 @@ const Register = () => {
     formData.append("calification", calification);
     formData.append("author", user);
     formData.append("author_id", userId);
-    toast.success('🚀 Successfully Added!', {
+    toast.success("🚀 Successfully Added!", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: true,
@@ -76,7 +73,7 @@ const Register = () => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      })
+    });
 
     Axios.post(`${API_ENDPOINT}/api/insert`, formData).then((res) => {
       const newSongList = songList;
@@ -85,7 +82,7 @@ const Register = () => {
       setSongList(newSongList);
       socket.emit("updateReviews", newSongList);
     });
-  }
+  };
 
   const deleteReview = (id, image) => {
     Swal.fire({
@@ -105,8 +102,8 @@ const Register = () => {
         setSongList(newSongList);
         socket.emit("updateReviews", newSongList);
 
-        Axios.delete(`${API_ENDPOINT}/api/delete/${id}/`)
-        toast.success('🚀 Your review has been deleted!', {
+        Axios.delete(`${API_ENDPOINT}/api/delete/${id}/`);
+        toast.success("🚀 Your review has been deleted!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: true,
@@ -114,10 +111,10 @@ const Register = () => {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          })
+        });
       }
     });
-  }
+  };
 
   const updateReview = () => {
     Axios.put(`${API_ENDPOINT}/api/update/${updateId}`, {
@@ -143,8 +140,8 @@ const Register = () => {
       newSongList[index] = res.data;
       setSongList(newSongList);
       socket.emit("updateReviews", newSongList);
-      
-      toast.success('🚀 Your review has been updated!', {
+
+      toast.success("🚀 Your review has been updated!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: true,
@@ -152,9 +149,9 @@ const Register = () => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        })
+      });
     });
-  }
+  };
 
   const smartRegister = () => {
     MySwal.fire({
@@ -189,8 +186,7 @@ const Register = () => {
 
       showConfirmButton: false,
     }).then(() => {});
-  }
-
+  };
 
   const alertUpdateForm = (data) => {
     MySwal.fire({
@@ -227,7 +223,7 @@ const Register = () => {
 
       showConfirmButton: false,
     });
-  }
+  };
 
   const fetchSpotifyData = async () => {
     const config = {
@@ -242,96 +238,102 @@ const Register = () => {
         config
       );
 
-      if (spotifyData.data.images.length > 0) {
-        setProfileImage(spotifyData.data.images[0].url)
-        setUserId(spotifyData.data.id)
-        setUser(spotifyData.data.display_name)
+      let user_image = spotifyData.data.images.length
+        ? spotifyData.data.images[0].url
+        : "https://librenoticias.com/wp-content/uploads/2020/08/default-user-image.png";
 
-        const newUser = {
-          nickname: spotifyData.data.display_name,
-          followers: spotifyData.data.followers.total,
-          url: spotifyData.data.href,
-          type: spotifyData.data.product,
-          image: spotifyData.data.images[0].url,
-          id: spotifyData.data.id,
-        }
+      setProfileImage(user_image);
+      setUserId(spotifyData.data.id);
+      setUser(spotifyData.data.display_name);
 
-          socket.emit("new user", newUser);
+      const newUser = {
+        nickname: spotifyData.data.display_name,
+        followers: spotifyData.data.followers.total,
+        url: spotifyData.data.href,
+        type: spotifyData.data.product,
+        image: user_image,
+        id: spotifyData.data.id,
+      };
 
-          socket.on("usernames", (data) => {
-            console.log('nuevo usuario')
-            console.log(data)
-            setUsers(data);
-          });
-      
-          socket.on("updateReviews", (data) => {
-            console.log('se actualizan los reviewis')
-            console.log(data)
-            setSongList(data);
-          })
+      socket.emit("new user", newUser);
 
-      } else {
-        setProfileImage("");
-      }
+      socket.on("usernames", (data) => {
+        setUsers(data);
+      });
+
+      socket.on("updateReviews", (data) => {
+        setSongList(data);
+      });
     }
-  }
+  };
 
   const onLikeClick = async (song_name, song_id) => {
-
     const config = {
       headers: {
         Authorization: "Bearer " + token,
       },
-    }
+    };
 
-    let playlistId = 0
+    let playlistId = 0;
 
-    const playlists = await Axios.get(`https://api.spotify.com/v1/me/playlists`, config)
+    const playlists = await Axios.get(
+      `https://api.spotify.com/v1/me/playlists`,
+      config
+    );
 
     const reviewsicExists = () => {
-
-      for(var i = 0; i < (playlists.data.items).length; i++){
-        if((playlists.data.items)[i].name === 'Reviewsic'){
-          playlistId = (playlists.data.items)[i].id
-          return true
+      for (var i = 0; i < playlists.data.items.length; i++) {
+        if (playlists.data.items[i].name === "Reviewsic") {
+          playlistId = playlists.data.items[i].id;
+          return true;
         }
       }
 
-      return false
+      return false;
+    };
+
+    if (!reviewsicExists()) {
+      const createPlaylist = await Axios.post(
+        `https://api.spotify.com/v1/users/${userId}/playlists`,
+        {
+          name: "Reviewsic",
+        },
+        config
+      );
+
+      playlistId = createPlaylist.data.id;
     }
 
-    if(!reviewsicExists()){
-      const createPlaylist = await Axios.post(`https://api.spotify.com/v1/users/${userId}/playlists`, {
-        name: 'Reviewsic',
-      }, config)
+    async function songExists() {
+      const songs = await Axios.get(
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+        config
+      );
 
-      playlistId = createPlaylist.data.id
-    }
+      const song_list = songs.data.items;
 
-    async function songExists(){
-      const songs = await Axios.get(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, config)
-
-      const song_list = songs.data.items
-
-      for(var i = 0; i < song_list.length; i++){
-        if(song_list[i].track.name == song_name)return true
+      for (var i = 0; i < song_list.length; i++) {
+        if (song_list[i].track.name == song_name) return true;
       }
 
-      return false
-
+      return false;
     }
 
-    if(!(await songExists())){
-      let songUri = `spotify:track:${song_id}`
-      let uri = [songUri]
+    if (!(await songExists())) {
+      let songUri = `spotify:track:${song_id}`;
+      let uri = [songUri];
 
-      const addSong = await Axios.post(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-        uris: uri
-      }, config)
-    }else{
+      const addSong = await Axios.post(
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+        {
+          uris: uri,
+        },
+        config
+      );
+    } else {
     }
 
-    toast('🎵 Song added to your playlist!', {
+    toast("🎵 Song added to your playlist!", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: true,
@@ -339,10 +341,8 @@ const Register = () => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-    })
-
-
-  }
+    });
+  };
 
   return (
     <React.Fragment>
@@ -360,7 +360,6 @@ const Register = () => {
 
       {token ? (
         <SpotifyApiContext.Provider value={token}>
-
           <div className="main-container">
             <div className="card-container">
               {songList.length ? (
@@ -377,7 +376,7 @@ const Register = () => {
                         deleteReview(e.id, e.image);
                       }}
                       onLikeClick={(e, id) => {
-                        onLikeClick(e, id)
+                        onLikeClick(e, id);
                       }}
                     />
                   );
