@@ -69,18 +69,19 @@ body{
   padding: 0px;
   line-height: 20px;
   text-transform: capitalize;
-  max-width: 190px;
-  white-space: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
+  
+  max-width: 171px;
+  overflow: hidden;
+  height: 20px;
+  position: relative;
 }
 
-.song-name {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
-}
-.song-name::-webkit-scrollbar { 
-  display: none;  /* Safari and Chrome */
+.song-name span {
+  position: absolute;
+  white-space: nowrap;
+  transform: translateX(0);
+  transition: 1s;
+  overflow: hidden;
 }
 
 .artist-name{

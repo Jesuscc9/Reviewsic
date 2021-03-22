@@ -22,16 +22,17 @@ const Card = (data) => {
   const card_options = React.useRef(null);
   const card = React.useRef(null);
   const heart = React.useRef(null)
+  const span = React.useRef(null)
 
   const song_id = (props.spotifyUrl).slice(31, 53)
 
   const handleMouseOver = () => {
-    card_options.current.classList.add("card-options-visible");
-  };
+    card_options.current.classList.add("card-options-visible")
+  }
 
   const handleMouseLeave = () => {
-    card_options.current.classList.remove("card-options-visible");
-  };
+    card_options.current.classList.remove("card-options-visible")
+  }
 
   const handleHeartClick = () => {
     heart.current.classList.add('is_animating')
@@ -39,6 +40,25 @@ const Card = (data) => {
       heart.current.classList.remove('is_animating')
       heart.current.classList.add('clicked_heart')
     })
+  }
+
+  function isElementOverflowing(element) {
+    return element.offsetWidth < element.scrollWidth
+  }
+
+  if(song_name.current){
+    if(isElementOverflowing(song_name.current)){
+
+      let calc = (song_name.current.scrollWidth - song_name.current.offsetWidth)
+
+      song_name.current.addEventListener('mouseover', () => {
+        span.current.style.transform = `translateX(${calc * -1}px)`
+      })
+
+      song_name.current.addEventListener('mouseout', () => {
+        span.current.style.transform = `translateX(${0}px)`
+      })
+    }
   }
 
   return (
@@ -53,7 +73,9 @@ const Card = (data) => {
           </div>
         </div>
         <div className="card-body">
-          <div className="song-name" ref={song_name}>{props.songName}</div>
+
+          <div className="song-name" ref={song_name}><span ref={span}>{props.songName}</span></div>
+
           <h5 className="artist-name">{props.artist}</h5>
           <p className="comment">{props.songReview}</p>
         </div>
