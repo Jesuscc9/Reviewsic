@@ -49,7 +49,7 @@ const Register = () => {
 
     setSongList(res.data);
 
-    setToken(Cookies.get("spotifyAuthToken"));
+    setToken(localStorage.getItem("spotifyAuthToken"));
 
     if (token) fetchSpotifyData();
   }, [token]);
@@ -312,6 +312,8 @@ const Register = () => {
 
       const song_list = songs.data.items;
 
+      console.log(songs.data)
+
       for (var i = 0; i < song_list.length; i++) {
         if (song_list[i].track.name == song_name) return true;
       }
@@ -321,27 +323,28 @@ const Register = () => {
 
     if (!(await songExists())) {
       let songUri = `spotify:track:${song_id}`;
-      let uri = [songUri];
 
       const addSong = await Axios.post(
         `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
         {
-          uris: uri,
+          uris: [songUri],
         },
         config
-      );
+      )
+
+      toast("🎵 Song added to your playlist!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+
     } else {
     }
 
-    toast("🎵 Song added to your playlist!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
   };
 
   return (
@@ -359,7 +362,7 @@ const Register = () => {
       <ToastContainer />
 
       {token ? (
-        <SpotifyApiContext.Provider value={token}>
+        <SpotifyApiContext.Provider localStorage={token}>
           <div className="main-container">
             <div className="card-container">
               {songList.length ? (
