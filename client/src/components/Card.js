@@ -51,8 +51,6 @@ const Card = (data) => {
 
       let calc = (song_name.current.scrollWidth - song_name.current.offsetWidth)
 
-      console.log(calc)
-
       if(calc > 100){
         span.current.style.transition = `${(calc / 100) * 2}s`
       }

@@ -101,20 +101,16 @@ app.post("/api/insert", async (req, res) =>{
 
 })
 
-app.delete('/api/delete/:id/:image', (req, res) => {
+app.delete('/api/delete/:id', (req, res) => {
   const id = req.params.id;
-  const image = req.params.image;
-
-  const path = `${__dirname}${dir}${image}`
 
   try {
 
     const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
     db.query(sqlDelete, id, (err, result) => {
       if(err){
+        console.log(err)
       }
-
-      fs.unlinkSync(path)
     })
 
   } catch(err) {

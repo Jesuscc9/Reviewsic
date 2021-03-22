@@ -71,7 +71,7 @@ const Register = () => {
     toast.success('🚀 Successfully Added!', {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
@@ -105,11 +105,11 @@ const Register = () => {
         setSongList(newSongList);
         socket.emit("updateReviews", newSongList);
 
-        Axios.delete(`${API_ENDPOINT}/api/delete/${id}/${image}`)
+        Axios.delete(`${API_ENDPOINT}/api/delete/${id}/`)
         toast.success('🚀 Your review has been deleted!', {
           position: "top-right",
           autoClose: 5000,
-          hideProgressBar: false,
+          hideProgressBar: true,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
@@ -147,7 +147,7 @@ const Register = () => {
       toast.success('🚀 Your review has been updated!', {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
@@ -254,9 +254,7 @@ const Register = () => {
           type: spotifyData.data.product,
           image: spotifyData.data.images[0].url,
           id: spotifyData.data.id,
-        };
-
-        // Axios.post(`${API_ENDPOINT}/api/newUser`, newUser).then((res) => {
+        }
 
           socket.emit("new user", newUser);
 
@@ -270,9 +268,8 @@ const Register = () => {
             console.log('se actualizan los reviewis')
             console.log(data)
             setSongList(data);
-          });
+          })
 
-        //})
       } else {
         setProfileImage("");
       }
@@ -337,7 +334,7 @@ const Register = () => {
     toast('🎵 Song added to your playlist!', {
       position: "top-right",
       autoClose: 5000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,

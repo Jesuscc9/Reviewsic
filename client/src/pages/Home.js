@@ -111,7 +111,7 @@ const Home = () => {
       >
         {token ? (
           <div>
-            <SpotifyApiContext.Provider value={token}>
+            <SpotifyApiContext.Provider value={token} localStorage={true}>
               <Redirect to="/home"></Redirect>
             </SpotifyApiContext.Provider>
           </div>

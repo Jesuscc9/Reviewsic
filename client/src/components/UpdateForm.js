@@ -17,6 +17,7 @@ const UpdateForm = (props) =>{
     props.setNewImage(data.image)
     props.setArtist(data.artist)
     props.setUpdateId(data.id)
+    props.ratingChanged(data.calification)
   })
 
   const stars = {
@@ -26,30 +27,8 @@ const UpdateForm = (props) =>{
   }
 
 
-  const review = React.useRef(null);
-  const reviewAlert = React.useRef(null);
-  const spotifyURL = React.useRef(null);
-  const spotifyURLAlert = React.useRef(null);
-
-  const validateUrl = (spotifyUrl) =>{
-
-    const url = document.createElement('a');
-    url.href = spotifyUrl;
-
-    if(url.protocol != 'https:'){
-      return false 
-    }
-    
-    if(url.hostname != 'open.spotify.com'){
-      return false
-    }
-    
-    if(!(url.pathname).includes('/track/')){
-      return false
-    }
-  
-    return true;
-  }
+  const review = React.useRef(null)
+  const reviewAlert = React.useRef(null)
 
   function validation(){
     if((review.current.value).length <= 0){
@@ -62,7 +41,7 @@ const UpdateForm = (props) =>{
       reviewAlert.current.style.opacity = '0';
     }
 
-    if((review.current.value).length <= 10){
+    if((review.current.value).length <= 1){
       reviewAlert.current.style.opacity = '1';
       reviewAlert.current.textContent = 'Please, make a longer comment!';
       review.current.classList.add('wrong-input');
@@ -72,7 +51,7 @@ const UpdateForm = (props) =>{
       reviewAlert.current.style.opacity = '0';
     }
 
-    if((review.current.value).length >= 85){
+    if((review.current.value).length >= 150){
       reviewAlert.current.textContent = 'Please, make a smaller comment!';
       reviewAlert.current.style.opacity = '1';
       review.current.classList.add('wrong-input');
@@ -81,17 +60,6 @@ const UpdateForm = (props) =>{
       reviewAlert.current.style.opacity = '0';
       review.current.classList.remove('wrong-input');
     }
-
-    if(!validateUrl(spotifyURL.current.value)){
-      spotifyURLAlert.current.textContent = 'Please, enter a valid URL!'
-      spotifyURLAlert.current.style.opacity = '1'
-      spotifyURL.current.classList.add('wrong-input')
-      return false
-    }else{
-      spotifyURLAlert.current.style.opacity = '0'
-      spotifyURL.current.classList.remove('wrong-input')
-    }
-
     return true
   }
 
@@ -126,14 +94,6 @@ const UpdateForm = (props) =>{
         
         <p className="alert-label" ref={reviewAlert}>Please fill out this field.</p>
 
-        <p className="input-label">Spotify URL: </p>
-
-        <input type="text" className="swal2-input" value={spotifyUrlState} placeholder={data.spotifyUrl} onChange={(e)=> {
-          setSpotifyUrlState(e.target.value)
-        }} ref={spotifyURL}/>
-
-
-        <p className="alert-label" ref={spotifyURLAlert}>Please fill out this field.</p>
 
         <p className="input-label">Rating: </p>
 
