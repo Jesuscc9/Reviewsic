@@ -13,6 +13,19 @@ const Card = (data) => {
 
   const song_name = useRef(null)
 
+  const [liked, setLiked] = useState(false)
+
+  useEffect(() => {
+    (data.likedSongs).forEach((e) => {
+      if(e.track.name == props.songName){
+        setLiked(true)
+        console.log('Son iguales')
+        handleHeartClick()
+        return
+      }
+    })
+  }, [])
+
   var rating = {
     size: 20,
     value: props.calification,
@@ -27,6 +40,7 @@ const Card = (data) => {
   const span = React.useRef(null)
 
   const song_id = (props.spotifyUrl).slice(31, 53)
+
 
   const handleMouseOver = () => {
     card_options.current.classList.add("card-options-visible")
@@ -53,11 +67,16 @@ const Card = (data) => {
   }
 
   const handleHeartClick = () => {
-    heart.current.classList.add('is_animating')
-    heart.current.addEventListener('animationend', () => {
-      heart.current.classList.remove('is_animating')
-      heart.current.classList.add('clicked_heart')
-    })
+    if(!heart.current.classList.contains('clicked_heart')){
+      heart.current.classList.add('is_animating')
+      heart.current.addEventListener('animationend', () => {
+        heart.current.classList.remove('is_animating')
+        heart.current.classList.add('clicked_heart')
+      })
+    }else{
+      heart.current.classList.remove('clicked_heart')
+      handleMouseLeave()
+    }
   }
 
   function isElementOverflowing(element) {

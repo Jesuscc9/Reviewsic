@@ -59,7 +59,7 @@ const Home = () => {
       }
     }, 1500)
 
-    setToken(localStorage.getItem("spotifyAuthToken"))
+    setToken(Cookies.get('spotifyAuthToken'))
 
     return () => parallaxInstance.disable()
   }, [])
@@ -111,7 +111,7 @@ const Home = () => {
       >
         {token ? (
           <div>
-            <SpotifyApiContext.Provider localStorage={token}>
+            <SpotifyApiContext.Provider value={token}>
               <Redirect to="/home"></Redirect>
             </SpotifyApiContext.Provider>
           </div>
@@ -122,7 +122,6 @@ const Home = () => {
             redirectUri="http://localhost:3000/"
             clientID="9751c1f85b2a4684a8cc0a02f6942b91"
             scopes={[Scopes.playlistModifyPrivate, Scopes.userReadPrivate, Scopes.playlistReadCollaborative, Scopes.playlistModifyPublic]}
-            localStorage={true}
           />
         )}
       </div>

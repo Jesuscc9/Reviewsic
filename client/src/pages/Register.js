@@ -41,7 +41,7 @@ const Register = () => {
   const [profileImage, setProfileImage] = useState("");
   const [userId, setUserId] = useState("");
   const [user, setUser] = useState("");
-
+  const [likedSongs, setlikedSongs] = useState([])
   const [token, setToken] = useState("");
 
   useEffect(async () => {
@@ -49,9 +49,9 @@ const Register = () => {
 
     setSongList(res.data);
 
-    setToken(localStorage.getItem("spotifyAuthToken"));
+    setToken(Cookies.get("spotifyAuthToken"));
 
-    if (token) fetchSpotifyData();
+    if (token) fetchSpotifyData()
   }, [token]);
 
   const submitReview = () => {
@@ -225,12 +225,15 @@ const Register = () => {
     });
   };
 
+  let playlistId = 0;
+
   const fetchSpotifyData = async () => {
     const config = {
       headers: {
         Authorization: "Bearer " + token,
       },
-    };
+    }
+
 
     if (userId == "") {
       let spotifyData = await Axios.get(
@@ -240,7 +243,7 @@ const Register = () => {
 
       let user_image = spotifyData.data.images.length
         ? spotifyData.data.images[0].url
-        : "https://librenoticias.com/wp-content/uploads/2020/08/default-user-image.png";
+        : "http://dissoftec.com/NicePng_user-png_730154.jpeg";
 
       setProfileImage(user_image);
       setUserId(spotifyData.data.id);
@@ -263,89 +266,122 @@ const Register = () => {
 
       socket.on("updateReviews", (data) => {
         setSongList(data);
-      });
+      })
+
+
+      const playlists = await Axios.get(
+        `https://api.spotify.com/v1/me/playlists`,
+        config
+      );
+
+      const reviewsicExists = () => {
+        const playlists_ = playlists.data.items
+
+        for(let i = 0; i < playlists_.length; i++){
+          if(playlists_[i].name === 'Reviewsic'){
+            playlistId = playlists_[i].id
+            return true
+          }
+        }
+
+        return false;
+      }
+
+      if(reviewsicExists()){
+
+        setlikedSongs(await getAllSongs(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, []))
+
+      }else{
+
+        const createPlaylist = await Axios.post(
+          `https://api.spotify.com/v1/users/${spotifyData.data.id}/playlists`,
+          {
+            name: "Reviewsic",
+          },
+          config
+        );
+    
+        playlistId = createPlaylist.data.id;
+      }
+
+
+      async function getAllSongs(url, items) {
+        const songs = await Axios.get(url, config);
+  
+        songs.data.items.forEach((e) => {
+          items.push(e);
+        });
+  
+        if (songs.data.next === null) return items;
+  
+        return getAllSongs(songs.data.next, items);
+      }
+
+      const songs = await getAllSongs(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, [])
+
+      setlikedSongs(songs)
+
     }
   };
 
   const onLikeClick = async (song_name, song_id) => {
-    const config = {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     Authorization: "Bearer " + token,
+    //   },
+    // }
 
-    let playlistId = 0;
+    // async function getAllSongs(url, items) {
+    //   const songs = await Axios.get(url, config);
 
-    const playlists = await Axios.get(
-      `https://api.spotify.com/v1/me/playlists`,
-      config
-    );
+    //   songs.data.items.forEach((e) => {
+    //     items.push(e);
+    //   });
 
-    const reviewsicExists = () => {
-      for (var i = 0; i < playlists.data.items.length; i++) {
-        if (playlists.data.items[i].name === "Reviewsic") {
-          playlistId = playlists.data.items[i].id;
-          return true;
-        }
-      }
+    //   console.log(items)
 
-      return false;
-    };
+    //   if (songs.data.next === null) return items;
 
-    if (!reviewsicExists()) {
-      const createPlaylist = await Axios.post(
-        `https://api.spotify.com/v1/users/${userId}/playlists`,
-        {
-          name: "Reviewsic",
-        },
-        config
-      );
+    //   return getAllSongs(songs.data.next, items);
+    // }
 
-      playlistId = createPlaylist.data.id;
-    }
+    // async function songExists() {
+    //   const songs = await getAllSongs(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, [])
 
-    async function songExists() {
-      const songs = await Axios.get(
-        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
-        config
-      );
+    //   setlikedSongs(songs)
 
-      const song_list = songs.data.items;
+    //   songs.forEach((e) => {
+    //     if (e.track.name === song_name) {
+    //       return true
+    //     }
+    //   })
 
-      console.log(songs.data)
+    //   return false;
+    // }
 
-      for (var i = 0; i < song_list.length; i++) {
-        if (song_list[i].track.name == song_name) return true;
-      }
+    // if (await songExists()) {
+    //   let songUri = `spotify:track:${song_id}`;
 
-      return false;
-    }
+    //   const addSong = await Axios.post(
+    //     `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+    //     {
+    //       uris: [songUri],
+    //     },
+    //     config
+    //   )
 
-    if (!(await songExists())) {
-      let songUri = `spotify:track:${song_id}`;
+    //   toast("🎵 Song added to your playlist!", {
+    //     position: "top-right",
+    //     autoClose: 5000,
+    //     hideProgressBar: true,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //   })
+    // }
 
-      const addSong = await Axios.post(
-        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
-        {
-          uris: [songUri],
-        },
-        config
-      )
-
-      toast("🎵 Song added to your playlist!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
-
-    } else {
-    }
-
-  };
+  }
 
   return (
     <React.Fragment>
@@ -362,10 +398,10 @@ const Register = () => {
       <ToastContainer />
 
       {token ? (
-        <SpotifyApiContext.Provider localStorage={token}>
+        <SpotifyApiContext.Provider value={token}>
           <div className="main-container">
             <div className="card-container">
-              {songList.length ? (
+              {songList.length && likedSongs.length ? (
                 songList.map((item) => {
                   return (
                     <Card
@@ -381,6 +417,7 @@ const Register = () => {
                       onLikeClick={(e, id) => {
                         onLikeClick(e, id);
                       }}
+                      likedSongs={likedSongs}
                     />
                   );
                 })
