@@ -5,6 +5,8 @@ import "../components/styles/Contacts.css";
 const Contacts = (props) => {
   const data = props.users
 
+  console.log(data)
+
   return (
     <React.Fragment>
       <div className="contacts">
@@ -16,6 +18,7 @@ const Contacts = (props) => {
             return (
               <React.Fragment key={user}>
                 <div className="divisor"></div>
+                <a href={`https://open.spotify.com/user/${user.id}`} target="_blank">
                 <div className="item">
                   <div className="item-image-container">
                     <img className="profile-image" src={user.image} alt=""/>
@@ -30,6 +33,7 @@ const Contacts = (props) => {
                     <div className="status"></div>
                   </div>
                 </div>
+                </a>
               </React.Fragment>
             );
           })}
