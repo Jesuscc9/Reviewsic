@@ -8,7 +8,7 @@ import Axios from "axios";
 
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
-import RegisterForm from "../components/RegisterForm";
+import Loader from "../components/Loader";
 import SmartRegisterForm from "../components/SmartRegisterForm";
 import UpdateForm from "../components/UpdateForm";
 import Contacts from "../components/Contacts";
@@ -41,8 +41,10 @@ const Register = () => {
   const [profileImage, setProfileImage] = useState("");
   const [userId, setUserId] = useState("");
   const [user, setUser] = useState("");
-  const [likedSongs, setlikedSongs] = useState([])
+  const [likedSongs, setlikedSongs] = useState([]);
   const [token, setToken] = useState("");
+  const [reviewsicId, setReviewsicId] = useState("");
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(async () => {
     let res = await Axios.get(`${API_ENDPOINT}/api/get`);
@@ -51,7 +53,7 @@ const Register = () => {
 
     setToken(Cookies.get("spotifyAuthToken"));
 
-    if (token) fetchSpotifyData()
+    if (token) fetchSpotifyData();
   }, [token]);
 
   const submitReview = () => {
@@ -225,15 +227,14 @@ const Register = () => {
     });
   };
 
-  let playlistId = 0;
+  var playlistId = "";
 
   const fetchSpotifyData = async () => {
     const config = {
       headers: {
         Authorization: "Bearer " + token,
       },
-    }
-
+    };
 
     if (userId == "") {
       let spotifyData = await Axios.get(
@@ -266,8 +267,7 @@ const Register = () => {
 
       socket.on("updateReviews", (data) => {
         setSongList(data);
-      })
-
+      });
 
       const playlists = await Axios.get(
         `https://api.spotify.com/v1/me/playlists`,
@@ -275,24 +275,27 @@ const Register = () => {
       );
 
       const reviewsicExists = () => {
-        const playlists_ = playlists.data.items
+        const playlists_ = playlists.data.items;
 
-        for(let i = 0; i < playlists_.length; i++){
-          if(playlists_[i].name === 'Reviewsic'){
-            playlistId = playlists_[i].id
-            return true
+        for (let i = 0; i < playlists_.length; i++) {
+          if (playlists_[i].name === "Reviewsic") {
+            playlistId = playlists_[i].id;
+            console.log(playlistId);
+            return true;
           }
         }
 
         return false;
-      }
+      };
 
-      if(reviewsicExists()){
-
-        setlikedSongs(await getAllSongs(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, []))
-
-      }else{
-
+      if (reviewsicExists()) {
+        setlikedSongs(
+          await getAllSongs(
+            `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+            []
+          )
+        );
+      } else {
         const createPlaylist = await Axios.post(
           `https://api.spotify.com/v1/users/${spotifyData.data.id}/playlists`,
           {
@@ -300,88 +303,109 @@ const Register = () => {
           },
           config
         );
-    
+
         playlistId = createPlaylist.data.id;
       }
 
+      setReviewsicId(playlistId);
+      setLoaded(true);
 
       async function getAllSongs(url, items) {
         const songs = await Axios.get(url, config);
-  
+
         songs.data.items.forEach((e) => {
           items.push(e);
         });
-  
+
         if (songs.data.next === null) return items;
-  
+
         return getAllSongs(songs.data.next, items);
       }
 
-      const songs = await getAllSongs(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, [])
+      const songs = await getAllSongs(
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+        []
+      );
 
-      setlikedSongs(songs)
-
+      setlikedSongs(songs);
     }
   };
 
-  const onLikeClick = async (song_name, song_id) => {
-    // const config = {
-    //   headers: {
-    //     Authorization: "Bearer " + token,
-    //   },
-    // }
+  const onLikeClick = async (song_id, value, pos, uri) => {
+    const config = {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    };
 
-    // async function getAllSongs(url, items) {
-    //   const songs = await Axios.get(url, config);
+    const songUri = `spotify:track:${song_id}`;
 
-    //   songs.data.items.forEach((e) => {
-    //     items.push(e);
-    //   });
+    async function getAllSongs(url, items) {
+      const songs = await Axios.get(url, config);
 
-    //   console.log(items)
+      songs.data.items.forEach((e) => {
+        items.push(e);
+      });
 
-    //   if (songs.data.next === null) return items;
+      if (songs.data.next === null) return items;
 
-    //   return getAllSongs(songs.data.next, items);
-    // }
+      return getAllSongs(songs.data.next, items);
+    }
 
-    // async function songExists() {
-    //   const songs = await getAllSongs(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, [])
+    const songs = await getAllSongs(
+      `https://api.spotify.com/v1/playlists/${reviewsicId}/tracks`,
+      []
+    );
 
-    //   setlikedSongs(songs)
+    setlikedSongs(songs);
 
-    //   songs.forEach((e) => {
-    //     if (e.track.name === song_name) {
-    //       return true
-    //     }
-    //   })
+    if (!value) {
+      toast("🎵 Song added to your playlist!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
 
-    //   return false;
-    // }
+      const addSong = await Axios.post(
+        `https://api.spotify.com/v1/playlists/${reviewsicId}/tracks`,
+        {
+          uris: [songUri],
+        },
+        config
+      );
+    } else {
+      const headers = {
+        Authorization: "Bearer " + token,
+      };
 
-    // if (await songExists()) {
-    //   let songUri = `spotify:track:${song_id}`;
+      const data = {
+        tracks: [
+          {
+            uri: uri.length > 0 ? uri : songUri,
+            positions: [pos - 1],
+          },
+        ],
+      };
 
-    //   const addSong = await Axios.post(
-    //     `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
-    //     {
-    //       uris: [songUri],
-    //     },
-    //     config
-    //   )
+      let i = 0;
+      songs.forEach((e) => {
+        i++;
+        if (e.track.id == song_id) {
+          data.tracks[0].positions[0] = i - 1;
+          return;
+        }
+      });
 
-    //   toast("🎵 Song added to your playlist!", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //     hideProgressBar: true,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //   })
-    // }
-
-  }
+      const removeSong = await Axios.delete(
+        `https://api.spotify.com/v1/playlists/${reviewsicId}/tracks`,
+        { headers, data }
+      );
+    }
+  };
 
   return (
     <React.Fragment>
@@ -401,28 +425,34 @@ const Register = () => {
         <SpotifyApiContext.Provider value={token}>
           <div className="main-container">
             <div className="card-container">
-              {songList.length && likedSongs.length ? (
-                songList.map((item) => {
-                  return (
-                    <Card
-                      props={item}
-                      user={userId}
-                      key={item.id}
-                      update={() => {
-                        alertUpdateForm(item);
-                      }}
-                      delete={(e) => {
-                        deleteReview(e.id, e.image);
-                      }}
-                      onLikeClick={(e, id) => {
-                        onLikeClick(e, id);
-                      }}
-                      likedSongs={likedSongs}
-                    />
-                  );
-                })
+              {!loaded ? (
+                <Loader />
               ) : (
-                <div>Not reviews registered yet 😕.</div>
+                <React.Fragment>
+                  {songList.length && likedSongs.length ? (
+                    songList.map((item) => {
+                      return (
+                        <Card
+                          props={item}
+                          user={userId}
+                          key={item.id}
+                          update={() => {
+                            alertUpdateForm(item);
+                          }}
+                          delete={(e) => {
+                            deleteReview(e.id, e.image);
+                          }}
+                          onLikeClick={(e, id, value, pos, uri) => {
+                            onLikeClick(e, id, value, pos, uri);
+                          }}
+                          likedSongs={likedSongs}
+                        />
+                      );
+                    })
+                  ) : (
+                    <div>Not reviews registered yet 😕.</div>
+                  )}
+                </React.Fragment>
               )}
             </div>
             <div className="contact-container">

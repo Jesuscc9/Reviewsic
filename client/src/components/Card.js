@@ -14,12 +14,19 @@ const Card = (data) => {
   const song_name = useRef(null)
 
   const [liked, setLiked] = useState(false)
+  const [pos, setPos] = useState(0)
+  const [uri, setUri] = useState('')
 
   useEffect(() => {
+    console.log(props.songName)
+    let i = 0;
     (data.likedSongs).forEach((e) => {
+      i++
       if(e.track.name == props.songName){
+        console.log(e)
+        setUri(e.track.uri)
         setLiked(true)
-        console.log('Son iguales')
+        setPos(i)
         handleHeartClick()
         return
       }
@@ -135,7 +142,8 @@ const Card = (data) => {
               </button>
                 <div className="heart" ref={heart} onClick={() => {
                   handleHeartClick()
-                  data.onLikeClick(props.songName, song_id)
+                  data.onLikeClick(song_id, liked, pos, uri)
+                  setLiked(!liked)
                 }}></div>
             </div>
           </div>

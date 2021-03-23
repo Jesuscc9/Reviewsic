@@ -204,10 +204,6 @@ body{
   background-position: right;
 }
 
-.disclicked_heart {
-  background-position: left;
-}
-
 .heart:hover {
   background-position:right;
 }
