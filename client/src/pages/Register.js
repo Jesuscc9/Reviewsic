@@ -41,7 +41,7 @@ const Register = () => {
   const [profileImage, setProfileImage] = useState("");
   const [userId, setUserId] = useState("");
   const [user, setUser] = useState("");
-  const [likedSongs, setlikedSongs] = useState([]);
+  const [likedSongs, setlikedSongs] = useState(undefined);
   const [token, setToken] = useState("");
   const [reviewsicId, setReviewsicId] = useState("");
   const [loaded, setLoaded] = useState(false);
@@ -429,7 +429,7 @@ const Register = () => {
                 <Loader />
               ) : (
                 <React.Fragment>
-                  {songList.length && likedSongs.length ? (
+                  {songList.length && likedSongs != undefined ? (
                     songList.map((item) => {
                       return (
                         <Card
