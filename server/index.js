@@ -66,32 +66,17 @@ app.get("/api/get", (req, res) =>{
 
 app.post("/api/insert", async (req, res) =>{
 
-  let file, image_name, url
 
-  console.log('Esto es lo que se resibe')
-  console.log(req.body.image)
+  console.log('New: ')
+  console.log(req.body)
 
-  const data = {
-    id: 0,
-    image: req.body.image,
-    songName: req.body.songName,
-    artist: req.body.artist,
-    songReview: req.body.songReview,
-    spotifyUrl: req.body.spotifyUrl,
-    calification: req.body.calification,
-    author: req.body.author,
-    author_id: req.body.author_id,
-  }
+  const sqlInsert = "INSERT INTO song_reviews (image, song, artist, review, spotifyUrl, qualification, author, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
-  const sqlInsert = "INSERT INTO song_reviews (image, songName, artist, songReview, spotifyUrl, calification, author, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-
-  db.query(sqlInsert, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, data.author, data.author_id], async (err, result) => {
+  db.query(sqlInsert, [req.body.image, req.body.song, req.body.artist, req.body.review, req.body.spotifyUrl, req.body.qualification, req.body.author, req.body.author_id], async (err, result) => {
     if(!err){
-      data.calification = parseInt(data.calification)
-      data.id = parseInt(result.insertId)
-      console.log('Se inserta: ')
-      console.log(data)
-      res.send(data);
+      req.body.id = result.insertId
+      console.log(req.body)
+      res.send(req.body)
     }else{
       console.log('Nos e inserta: ')
       console.log(err)
@@ -121,24 +106,19 @@ app.delete('/api/delete/:id', (req, res) => {
 
 app.put('/api/update/:id', (req, res) => {
   
-  const data = {
-    id: parseInt(req.params.id),
-    image: req.body.image,
-    songName: req.body.songName,
-    artist: req.body.artist,
-    songReview: req.body.songReview,
-    spotifyUrl: req.body.spotifyUrl,
-    calification: req.body.calification,
-    author_id: req.body.author_id || 'NO se ha registrado',
-  }
-  
-  const sqlUpdate = "UPDATE song_reviews SET image = ?, songName = ?, artist = ?, songReview = ?, spotifyUrl = ?, calification = ?  WHERE id = ?";
+  const sqlUpdate = "UPDATE song_reviews SET review = ?, qualification = ?  WHERE id = ?"
 
-  db.query(sqlUpdate, [data.image, data.songName, data.artist, data.songReview, data.spotifyUrl, data.calification, data.id], (err, result) => {
-    if(!err){
-      res.send(data)
+  db.query(sqlUpdate, [req.body.review, req.body.qualification, req.params.id], (err, result) => {
+    if(err){
+      console.log('Error: ')
+      console.log(err)
+      res.send(err)
+    }else{
+      req.body.id = req.params.id
+      console.log(req.body)
+      res.send(req.body)
     }
-  });
+  })
 })
 
 // app.get('*', (req, res) => {

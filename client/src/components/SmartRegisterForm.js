@@ -147,8 +147,8 @@ const SmartRegisterForm = (props) => {
   const handleChange = (e) => {
     if (e.length > 0) {
       spotifyInputStatus.loading()
-      spotifyURLAlert.current.style.opacity = "0";
-      spotifyURL.current.classList.remove("wrong-input");
+      spotifyURLAlert.current.style.opacity = "0"
+      spotifyURL.current.classList.remove("wrong-input")
 
       setTimeout(async () => {
         if (validateUrl(spotifyURL.current.value)) {
@@ -158,7 +158,7 @@ const SmartRegisterForm = (props) => {
             headers: {
               Authorization: "Bearer " + token,
             },
-          };
+          }
 
           try {
             let data = await Axios.get(

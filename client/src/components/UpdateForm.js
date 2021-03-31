@@ -7,22 +7,17 @@ const UpdateForm = (props) =>{
 
   const data = props.data;
   
-  const [reviewState, setReviewState] = useState(data.songReview)
-  const [spotifyUrlState, setSpotifyUrlState] = useState(data.spotifyUrl)
+  const [reviewState, setReviewState] = useState(data.review)
+  const [qualification, setQualification] = useState(data.qualification)
   
   useEffect(() => {
     props.onCommentChange(reviewState)
-    props.onSpotifyUrlChange(spotifyUrlState)
-    props.setSong(data.songName)
-    props.setNewImage(data.image)
-    props.setArtist(data.artist)
-    props.setUpdateId(data.id)
-    props.ratingChanged(data.calification)
+    props.ratingChanged(qualification)
   })
 
   const stars = {
     size: 50,
-    value: data.calification,
+    value: qualification,
     isHalf: true,
   }
 
@@ -75,7 +70,7 @@ const UpdateForm = (props) =>{
         <p className="input-label">Song: </p>
 
         <input type="text" className="swal2-input input-disabled" placeholder="Name of the song..." onChange={(e) => {props.onSongChange(e.target.value);
-        }} value={data.songName} disabled/>
+        }} value={data.song} disabled/>
 
         <p className="alert-label">Please fill out this field.</p>
 
@@ -98,6 +93,7 @@ const UpdateForm = (props) =>{
         <p className="input-label">Rating: </p>
 
         <ReactStars {...stars} className="stars-calification" onChange={(e) => {
+          setQualification(e)
           props.ratingChanged(e)
         }}/>
 

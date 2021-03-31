@@ -2,40 +2,41 @@ import React, { useState, useEffect, useRef } from "react"
 import "tailwindcss/tailwind.css"
 import "../components/styles/Card.css"
 import ReactStars from "react-rating-stars-component"
+import Cookies from "js-cookie"
 
-import { faSpotify } from "@fortawesome/fontawesome-free-brands"
-import { faPen, faTrash, faHeart } from "@fortawesome/free-solid-svg-icons"
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Axios from "axios"
 
-const Card = (data) => {
-  const props = data.props;
+const Card = (props) => {
+  const data = props.data;
 
   const song_name = useRef(null)
 
   const [liked, setLiked] = useState(false)
   const [pos, setPos] = useState(0)
   const [uri, setUri] = useState('')
+  const [token, setToken] = useState('')
 
   useEffect(() => {
-    console.log(props.songName)
+    setToken(Cookies.get('spotifyAuthToken'))
     let i = 0;
-    (data.likedSongs).forEach((e) => {
-      i++
-      if(e.track.name == props.songName){
-        console.log(e)
-        setUri(e.track.uri)
-        setLiked(true)
-        setPos(i)
-        handleHeartClick()
-        return
-      }
-    })
+    // (data.likedSongs).forEach((e) => {
+    //   i++
+    //   if(e.track.name == props.song){
+    //     console.log(e)
+    //     setUri(e.track.uri)
+    //     setLiked(true)
+    //     setPos(i)
+    //     handleHeartClick()
+    //     return
+    //   }
+    // })
   }, [])
 
   var rating = {
     size: 20,
-    value: props.calification,
+    value: data.qualification,
     edit: false,
   }
   
@@ -46,7 +47,7 @@ const Card = (data) => {
   const heart = React.useRef(null)
   const span = React.useRef(null)
 
-  const song_id = (props.spotifyUrl).slice(31, 53)
+  const song_id = '23'
 
 
   const handleMouseOver = () => {
@@ -73,6 +74,82 @@ const Card = (data) => {
 
   }
 
+  const onLikeClick = async () => {
+    // const config = {
+    //   headers: {
+    //     Authorization: "Bearer " + token,
+    //   },
+    // };
+
+    // const songUri = `spotify:track:${song_id}`;
+
+    // async function getAllSongs(url, items) {
+    //   const songs = await Axios.get(url, config);
+
+    //   songs.data.items.forEach((e) => {
+    //     items.push(e);
+    //   });
+
+    //   if (songs.data.next === null) return items;
+
+    //   return getAllSongs(songs.data.next, items);
+    // }
+
+    // const songs = await getAllSongs(
+    //   `https://api.spotify.com/v1/playlists/${reviewsicId}/tracks`,
+    //   []
+    // );
+
+    // setlikedSongs(songs);
+
+    // if (!value) {
+    //   toast("🎵 Song added to your playlist!", {
+    //     position: "top-right",
+    //     autoClose: 5000,
+    //     hideProgressBar: true,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //   });
+
+    //   const addSong = await Axios.post(
+    //     `https://api.spotify.com/v1/playlists/${reviewsicId}/tracks`,
+    //     {
+    //       uris: [songUri],
+    //     },
+    //     config
+    //   );
+    // } else {
+    //   const headers = {
+    //     Authorization: "Bearer " + token,
+    //   };
+
+    //   const data = {
+    //     tracks: [
+    //       {
+    //         uri: uri.length > 0 ? uri : songUri,
+    //         positions: [pos - 1],
+    //       },
+    //     ],
+    //   };
+
+    //   let i = 0;
+    //   songs.forEach((e) => {
+    //     i++;
+    //     if (e.track.id == song_id) {
+    //       data.tracks[0].positions[0] = i - 1;
+    //       return;
+    //     }
+    //   });
+
+    //   const removeSong = await Axios.delete(
+    //     `https://api.spotify.com/v1/playlists/${reviewsicId}/tracks`,
+    //     { headers, data }
+    //   );
+    // }
+  }
+
   const handleHeartClick = () => {
     if(!heart.current.classList.contains('clicked_heart')){
       heart.current.classList.add('is_animating')
@@ -95,28 +172,28 @@ const Card = (data) => {
       <div className="card-custom" onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
         <div className="card-header" ref={card}>
           <div className="image-container">
-            <a  href={props.spotifyUrl} target="_blank">
-            <img alt="" src={props.image} className="song-img"/>
+            <a  href={data.spotifyUrl} target="_blank">
+            <img alt="" src={data.image} className="song-img"/>
 
             </a>
           </div>
         </div>
         <div className="card-body">
 
-          <div className="song-name" ref={song_name}><span ref={span}>{props.songName}</span></div>
+          <div className="song-name" ref={song_name}><span ref={span}>{data.song}</span></div>
 
-          <h5 className="artist-name">{props.artist}</h5>
-          <p className="comment">{props.songReview}</p>
+          <h5 className="artist-name">{data.artist}</h5>
+          <p className="comment">{data.review}</p>
         </div>
         <div className="card-footer">
           <ReactStars {...rating} className="stars-calification" />{" "}
-          <p className="autor">By: {props.author}</p>
+          <p className="autor">By: {data.author}</p>
           <div className="card-options" ref={card_options}>
-            {props.author_id === data.user ? 
+            {data.author_id === props.user ? 
                 (
                   <React.Fragment>
                     <div className="edit-option option-container" onClick={() => { 
-                        data.update();
+                        props.update()
                       }}>
                       <FontAwesomeIcon
                         icon={faPen}
@@ -124,7 +201,7 @@ const Card = (data) => {
                       />
                     </div>
                     <div className="edit-option option-container" onClick={(e) => {
-                        data.delete({ id: props.id, image: props.image });
+                        props.delete({id: data.id});
                       }}>
                       <FontAwesomeIcon
                         icon={faTrash}
@@ -142,7 +219,7 @@ const Card = (data) => {
               </button>
                 <div className="heart" ref={heart} onClick={() => {
                   handleHeartClick()
-                  data.onLikeClick(song_id, liked, pos, uri)
+                  //data.onLikeClick(song_id, liked, pos, uri)
                   setLiked(!liked)
                 }}></div>
             </div>
