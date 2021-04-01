@@ -22,7 +22,8 @@ export const api = {
     return upload.data
   },
   delete: async function(id, songList){
-    Swal.fire({
+
+    const deleted = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
@@ -30,27 +31,31 @@ export const api = {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-
-        Axios.delete(`${this.endpoint}/api/delete/${id}/`)
-
-        toast.success("🚀 Your review has been deleted!", {
-          position: "top-right",
-          autoClose: 2500,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-
-        return (songList.filter((e) => {
-          return e.id != id
-        }))
-
-      }
     })
+
+    console.log(deleted)
+
+    if(deleted.isConfirmed){
+      console.log('se intenta')
+      Axios.delete(`${this.endpoint}/api/delete/${id}/`)
+
+      toast.success("🚀 Your review has been deleted!", {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+
+      return (songList.filter((e) => {
+        console.log(e.id)
+        console.log(id)
+        return e.id != id
+      }))
+    }
+
   },
   update: async function(id, songList){
     const update = await Axios.put(

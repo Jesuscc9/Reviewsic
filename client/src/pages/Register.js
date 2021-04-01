@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { SpotifyApiContext } from "react-spotify-api"
 import { api } from '../data/api'
+import { spotifyApi, spotifyData } from '../data/spotifyApi'
 
 import openSocket from "socket.io-client"
 import Swal from "sweetalert2"
@@ -16,7 +17,7 @@ import Contacts from "../components/Contacts"
 import Login from "../components/Login"
 import Cookies from "js-cookie"
 
-import { ToastContainer, toast } from "react-toastify"
+import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
 import "tailwindcss/tailwind.css"
@@ -59,19 +60,51 @@ const Register = () => {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(async () => {
-    let res = await Axios.get(`${API_ENDPOINT}/api/get`)
-
-    console.log(res.data)
-
-    setSongList(res.data)
+    const songs = await Axios.get(`${API_ENDPOINT}/api/get`)
+    console.log('Se setrea')
+    setSongList(songs.data)
 
     setToken(
-      Cookies.get("spotifyAuthToken") == undefined
+      !Cookies.get("spotifyAuthToken")
         ? ""
         : Cookies.get("spotifyAuthToken")
     )
 
-    if (token) fetchSpotifyData()
+    if (token && token.length){
+      
+      spotifyApi.setConfig(token)
+      let fetch = await spotifyApi.get()
+
+      setSongData(prevState => ({
+        ...prevState,
+        author: spotifyApi.songData.author,
+        author_id: spotifyApi.songData.author_id
+      }))
+
+      fetch = await spotifyApi.playlist()
+
+      setSpotifyData(prevState => ({
+        ...prevState,
+        profileImage: spotifyApi.data.profileImage,
+        playlistId: spotifyApi.data.playlistId,
+      }))
+
+      setlikedSongs(spotifyApi.likedSongs)
+
+      socket.emit("new user", spotifyApi.user)
+
+      socket.on("usernames", (data) => {
+        setUsers(data)
+      })
+
+      socket.on("updateReviews", (data) => {
+        console.log('Se seta')
+        setSongList(data)
+      })
+
+      setLoaded(true)
+
+    }
   }, [token])
 
   api.endpoint = 'http://localhost:3001'
@@ -82,15 +115,16 @@ const Register = () => {
     setSongList(songList.push(await api.insert()))
     socket.emit("updateReviews", songList)
   }
-
-  const deleteReview = async (id) => {
-    setSongList(await api.delete(id, songList))
-    socket.emit("updateReviews", songList)
-  }
-
+  
   const updateReview = async (id) => {
     setSongList(await api.update(id, songList))
     socket.emit("updateReviews", songList)
+  }
+  
+  const deleteReview = async (id) => {
+    const data = await api.delete(id, songList)
+    setSongList(data)
+    socket.emit("updateReviews", data)
   }
 
   const smartRegister = () => {
@@ -142,7 +176,7 @@ const Register = () => {
               }))
             }}
             onSubmit={(e) => {
-              document.getElementById("button").click()
+              submitReview()
               MySwal.close()
             }}
           />
@@ -154,7 +188,6 @@ const Register = () => {
   }
 
   const alertUpdateForm = (data) => {
-    console.log(data)
     setSongData(data)
     
     MySwal.fire({
@@ -184,130 +217,16 @@ const Register = () => {
     })
   }
 
-  var playlistId = ""
-
-  const fetchSpotifyData = async () => {
-
-    const config = {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }
-
-    if (songData.author_id == "") {
-      let userSpotifyData = await Axios.get(
-        "https://api.spotify.com/v1/me",
-        config
-      )
-
-      let user_image = userSpotifyData.data.images.length
-        ? userSpotifyData.data.images[0].url
-        : "http://dissoftec.com/NicePng_user-png_730154.jpeg"
-
-      setSpotifyData((prevState) => ({
-        ...prevState,
-        image: user_image,
-      }))
-
-      setSongData((prevState) => ({
-        ...prevState,
-        author_id: userSpotifyData.data.id,
-        author: userSpotifyData.data.display_name
-      }))
-
-      const newUser = {
-        nickname: userSpotifyData.data.display_name,
-        followers: userSpotifyData.data.followers.total,
-        url: userSpotifyData.data.href,
-        type: userSpotifyData.data.product,
-        image: user_image,
-        id: userSpotifyData.data.id,
-      }
-
-      socket.emit("new user", newUser)
-
-      socket.on("usernames", (data) => {
-        setUsers(data)
-      })
-
-      socket.on("updateReviews", (data) => {
-        setSongList(data)
-      })
-
-      const playlists = await Axios.get(
-        `https://api.spotify.com/v1/me/playlists`,
-        config
-      )
-
-      const reviewsicExists = () => {
-        const playlists_ = playlists.data.items
-
-        for (let i = 0; i < playlists_.length; i++) {
-          if (playlists_[i].name === "Reviewsic") {
-            setSpotifyData((prevState) => ({
-              ...prevState,
-              playlistId: playlists_[i].id,
-            }))
-            playlistId = playlists_[i].id
-            return true
-          }
-        }
-
-        return false
-      }
-
-      if (reviewsicExists()) {
-        setlikedSongs(
-          await getAllSongs(
-            `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
-            []
-          )
-        )
-      } else {
-        const createPlaylist = await Axios.post(
-          `https://api.spotify.com/v1/users/${userSpotifyData.data.id}/playlists`,
-          {
-            name: "Reviewsic",
-          },
-          config
-        )
-        spotifyData.playlistId = createPlaylist.data.id
-      }
-
-      setLoaded(true)
-
-      async function getAllSongs(url, items) {
-        const songs = await Axios.get(url, config)
-
-        songs.data.items.forEach((e) => {
-          items.push(e)
-        })
-
-        if (songs.data.next === null) return items
-
-        return getAllSongs(songs.data.next, items)
-      }
-
-      const songs = await getAllSongs(
-        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
-        []
-      )
-
-      setlikedSongs(songs)
-    }
-  }
-
   return (
     <React.Fragment>
       <Navbar
         onAddClick={() => {
           smartRegister()
         }}
-        profileImage={spotifyData.image}
+        profileImage={spotifyData.profileImage ? spotifyData.profileImage : 'http://dissoftec.com/NicePng_user-png_730154.jpeg'}
         token={token}
       ></Navbar>
-      <button onClick={submitReview} id="button"></button>
-      <button onClick={updateReview} id="update-button"></button>
+      <br/>
 
       <ToastContainer />
 

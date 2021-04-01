@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Axios from "axios"
 
 const Card = (props) => {
-  const data = props.data;
+  const data = props.data
 
   const song_name = useRef(null)
 

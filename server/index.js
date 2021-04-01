@@ -140,6 +140,8 @@ io.on("connection", (socket) => {
   }) 
 
   socket.on('new user', (data) => {
+    console.log('Este es el recibo: ')
+    console.log(data)
     let keys = Object.keys(users)
     socket.user = data.nickname
     if(!(keys.includes(data.nickname))){
