@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { SpotifyApiContext } from "react-spotify-api"
 import { api } from '../data/api'
-import { spotifyApi, spotifyData } from '../data/spotifyApi'
+import { spotifyApi } from '../data/spotifyApi'
 
 import openSocket from "socket.io-client"
 import Swal from "sweetalert2"
@@ -32,6 +32,8 @@ const socket = openSocket("http://localhost:3001")
 const Register = () => {
   const MySwal = withReactContent(Swal)
 
+  const date = Date.now()
+
   const [songData, setSongData] = useState({
     song: "",
     image: "",
@@ -45,6 +47,7 @@ const Register = () => {
     author: "",
     author_id: "",
     spotifyUrl: "",
+    date: Date.now(),
   })
 
   const [spotifyData, setSpotifyData] = useState({
@@ -240,7 +243,10 @@ const Register = () => {
                     ) : (
                       <React.Fragment>
                         {songList.length && likedSongs != undefined ? (
-                          songList.map((item) => {
+                          
+                          (songList.sort((a, b) =>{
+                            if(a.date > b.date) return -1
+                          })).map((item) => {
                             return (
                               <Card
                                 data={item}
