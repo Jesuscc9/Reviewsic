@@ -48,7 +48,7 @@ const Register = () => {
   })
 
   const [spotifyData, setSpotifyData] = useState({
-    profileImage: "",
+    profileImage: undefined,
     playlistId: "",
   })
 
@@ -61,7 +61,6 @@ const Register = () => {
 
   useEffect(async () => {
     const songs = await Axios.get(`${API_ENDPOINT}/api/get`)
-    console.log('Se setrea')
     setSongList(songs.data)
 
     setToken(
@@ -81,15 +80,14 @@ const Register = () => {
         author_id: spotifyApi.songData.author_id
       }))
 
-      fetch = await spotifyApi.playlist()
+      console.log(spotifyApi.data.profileImage)
 
-      setSpotifyData(prevState => ({
-        ...prevState,
+      setSpotifyData({
         profileImage: spotifyApi.data.profileImage,
-        playlistId: spotifyApi.data.playlistId,
-      }))
+        playlistId: await spotifyApi.playlist.create(),
+      })
 
-      setlikedSongs(spotifyApi.likedSongs)
+      setlikedSongs(await spotifyApi.playlist.get(`https://api.spotify.com/v1/playlists/${await spotifyApi.playlist.create()}/tracks`))
 
       socket.emit("new user", spotifyApi.user)
 
@@ -98,7 +96,6 @@ const Register = () => {
       })
 
       socket.on("updateReviews", (data) => {
-        console.log('Se seta')
         setSongList(data)
       })
 
@@ -120,7 +117,7 @@ const Register = () => {
     setSongList(await api.update(id, songList))
     socket.emit("updateReviews", songList)
   }
-  
+
   const deleteReview = async (id) => {
     const data = await api.delete(id, songList)
     setSongList(data)
@@ -255,6 +252,12 @@ const Register = () => {
                                   deleteReview(e.id)
                                 }}
                                 likedSongs={likedSongs}
+                                addSong={async (songId) => {
+                                  spotifyApi.playlist.add(songId, token)
+                                }}
+                                deleteSong={async (songId, uri, pos) => {
+                                  await spotifyApi.playlist.delete(songId, uri, pos, token)
+                                }}
                               />
                             )
                           })

@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from "react"
 import "tailwindcss/tailwind.css"
 import "../components/styles/Card.css"
 import ReactStars from "react-rating-stars-component"
-import Cookies from "js-cookie"
 
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import Axios from "axios"
 
 const Card = (props) => {
   const data = props.data
@@ -16,22 +14,19 @@ const Card = (props) => {
   const [liked, setLiked] = useState(false)
   const [pos, setPos] = useState(0)
   const [uri, setUri] = useState('')
-  const [token, setToken] = useState('')
 
   useEffect(() => {
-    setToken(Cookies.get('spotifyAuthToken'))
     let i = 0;
-    // (data.likedSongs).forEach((e) => {
-    //   i++
-    //   if(e.track.name == props.song){
-    //     console.log(e)
-    //     setUri(e.track.uri)
-    //     setLiked(true)
-    //     setPos(i)
-    //     handleHeartClick()
-    //     return
-    //   }
-    // })
+    (props.likedSongs).forEach((e) => {
+      i++
+      if(e.track.name == data.song){
+        setUri(e.track.uri)
+        setLiked(true)
+        setPos(i)
+        handleHeartClick()
+        return
+      }
+    })
   }, [])
 
   var rating = {
@@ -46,9 +41,6 @@ const Card = (props) => {
   const card = React.useRef(null);
   const heart = React.useRef(null)
   const span = React.useRef(null)
-
-  const song_id = '23'
-
 
   const handleMouseOver = () => {
     card_options.current.classList.add("card-options-visible")
@@ -72,82 +64,6 @@ const Card = (props) => {
     card_options.current.classList.remove("card-options-visible")
     span.current.style.transform = `translateX(${0}px)`
 
-  }
-
-  const onLikeClick = async () => {
-    // const config = {
-    //   headers: {
-    //     Authorization: "Bearer " + token,
-    //   },
-    // };
-
-    // const songUri = `spotify:track:${song_id}`;
-
-    // async function getAllSongs(url, items) {
-    //   const songs = await Axios.get(url, config);
-
-    //   songs.data.items.forEach((e) => {
-    //     items.push(e);
-    //   });
-
-    //   if (songs.data.next === null) return items;
-
-    //   return getAllSongs(songs.data.next, items);
-    // }
-
-    // const songs = await getAllSongs(
-    //   `https://api.spotify.com/v1/playlists/${reviewsicId}/tracks`,
-    //   []
-    // );
-
-    // setlikedSongs(songs);
-
-    // if (!value) {
-    //   toast("🎵 Song added to your playlist!", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //     hideProgressBar: true,
-    //     closeOnClick: true,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //   });
-
-    //   const addSong = await Axios.post(
-    //     `https://api.spotify.com/v1/playlists/${reviewsicId}/tracks`,
-    //     {
-    //       uris: [songUri],
-    //     },
-    //     config
-    //   );
-    // } else {
-    //   const headers = {
-    //     Authorization: "Bearer " + token,
-    //   };
-
-    //   const data = {
-    //     tracks: [
-    //       {
-    //         uri: uri.length > 0 ? uri : songUri,
-    //         positions: [pos - 1],
-    //       },
-    //     ],
-    //   };
-
-    //   let i = 0;
-    //   songs.forEach((e) => {
-    //     i++;
-    //     if (e.track.id == song_id) {
-    //       data.tracks[0].positions[0] = i - 1;
-    //       return;
-    //     }
-    //   });
-
-    //   const removeSong = await Axios.delete(
-    //     `https://api.spotify.com/v1/playlists/${reviewsicId}/tracks`,
-    //     { headers, data }
-    //   );
-    // }
   }
 
   const handleHeartClick = () => {
@@ -215,11 +131,16 @@ const Card = (props) => {
               }
             <div className="edit-option option-container">
               <button href={props.spotifyUrl} target="_blank">
-                {/* <FontAwesomeIcon icon={faHeart} className="faHeart" /> */}
               </button>
                 <div className="heart" ref={heart} onClick={() => {
                   handleHeartClick()
-                  //data.onLikeClick(song_id, liked, pos, uri)
+
+                  if(liked){
+                    props.deleteSong(data.song_id, uri, pos)
+                  }else{
+                    props.addSong(data.song_id)
+                  }
+
                   setLiked(!liked)
                 }}></div>
             </div>

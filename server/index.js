@@ -70,15 +70,13 @@ app.post("/api/insert", async (req, res) =>{
   console.log('New: ')
   console.log(req.body)
 
-  const sqlInsert = "INSERT INTO song_reviews (image, song, artist, review, spotifyUrl, qualification, author, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+  const sqlInsert = "INSERT INTO song_reviews (image, song, artist, review, spotifyUrl, qualification, author, author_id, song_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
-  db.query(sqlInsert, [req.body.image, req.body.song, req.body.artist, req.body.review, req.body.spotifyUrl, req.body.qualification, req.body.author, req.body.author_id], async (err, result) => {
+  db.query(sqlInsert, [req.body.image, req.body.song, req.body.artist, req.body.review, req.body.spotifyUrl, req.body.qualification, req.body.author, req.body.author_id, req.body.song_id], async (err, result) => {
     if(!err){
       req.body.id = result.insertId
-      console.log(req.body)
       res.send(req.body)
     }else{
-      console.log('Nos e inserta: ')
       console.log(err)
       res.send(err)
     }

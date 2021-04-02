@@ -7,9 +7,8 @@ const Login = () => {
     <React.Fragment>
       <div className="login-first-container">
         <h2 className="login-title">Oops... You are not logged in.</h2>
-        <div className="login-button">
-          <Link to="/">LOGIN</Link>
-        </div>
+
+          <Link className="login-button" to="/">LOGIN</Link>
       </div>
     </React.Fragment>
   )
