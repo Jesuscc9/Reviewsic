@@ -66,10 +66,6 @@ app.get("/api/get", (req, res) =>{
 
 app.post("/api/insert", async (req, res) =>{
 
-
-  console.log('New: ')
-  console.log(req.body)
-
   const sqlInsert = "INSERT INTO song_reviews (image, song, artist, review, spotifyUrl, qualification, author, author_id, song_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
   db.query(sqlInsert, [req.body.image, req.body.song, req.body.artist, req.body.review, req.body.spotifyUrl, req.body.qualification, req.body.author, req.body.author_id, req.body.song_id], async (err, result) => {
@@ -171,6 +167,8 @@ io.on("connection", (socket) => {
     for(let i = 0; i<keys.length;i++){
       users_.push(users[keys[i]].data)
     }
+
+    console.log('SE emite')
 
     io.sockets.emit('usernames', users_);
   }

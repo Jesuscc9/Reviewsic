@@ -80,7 +80,6 @@ const Register = () => {
         author_id: spotifyApi.songData.author_id
       }))
 
-      console.log(spotifyApi.data.profileImage)
 
       setSpotifyData({
         profileImage: spotifyApi.data.profileImage,
@@ -88,6 +87,7 @@ const Register = () => {
       })
 
       setlikedSongs(await spotifyApi.playlist.get(`https://api.spotify.com/v1/playlists/${await spotifyApi.playlist.create()}/tracks`))
+
 
       socket.emit("new user", spotifyApi.user)
 
@@ -98,6 +98,7 @@ const Register = () => {
       socket.on("updateReviews", (data) => {
         setSongList(data)
       })
+
 
       setLoaded(true)
 
@@ -223,7 +224,7 @@ const Register = () => {
         profileImage={spotifyData.profileImage ? spotifyData.profileImage : 'http://dissoftec.com/NicePng_user-png_730154.jpeg'}
         token={token}
       ></Navbar>
-      <br/><br/><br/>
+      <br/>
 
       <ToastContainer />
 
@@ -235,10 +236,7 @@ const Register = () => {
                 <div className="main-container">
                   <div className="card-container">
                     {!loaded ? (
-                      <React.Fragment>
-                        <br/><br/>
-                        <Loader />
-                      </React.Fragment>
+                      <Loader />
                     ) : (
                       <React.Fragment>
                         {songList.length && likedSongs != undefined ? (

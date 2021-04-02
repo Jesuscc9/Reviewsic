@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const navbar = (props) => {
   return (
     <React.Fragment>
-      <nav className="bg-gray-800 fixed w-full">
+      <nav className="bg-gray-800 fixed w-full mb-5">
         <div className=" px-2 sm:px-6 lg:px-8">
           <div className="relative flex items-center justify-between h-16 w-100">
             <div className="flex sm:items-stretch sm:justify-start">
@@ -72,6 +72,7 @@ const navbar = (props) => {
           </div>
         </div>
       </nav>
+      <br/><br/>
     </React.Fragment>
   );
 };
