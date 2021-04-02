@@ -33,6 +33,15 @@
   outline: none !important;
 }
 
+.disabled-button{
+  opacity: 0.6 !important;
+  cursor: default !important;
+}
+
+.disabled-button:hover{
+  background-color: rgb(0, 132, 255) !important;
+}
+
 .submit-button:hover{
   background-color: rgb(0, 107, 207);
 }

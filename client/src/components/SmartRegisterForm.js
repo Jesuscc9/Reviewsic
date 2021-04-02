@@ -11,6 +11,7 @@ import Cookies from "js-cookie";
 
 const SmartRegisterForm = (props) => {
   const [token, setToken] = useState("");
+  const [disableButton, setDisableButton] = useState(true);
 
   const stars = {
     size: 50,
@@ -50,6 +51,7 @@ const SmartRegisterForm = (props) => {
         this.check.current.style.display = "block";
         setTimeout(() => {
           this.check.current.style.opacity = "1";
+          setDisableButton(false)
           setTimeout(() => {
             this.check.current.style.opacity = "0";
             this.container.current.style.display = "none";
@@ -145,6 +147,7 @@ const SmartRegisterForm = (props) => {
   }
 
   const handleChange = (e) => {
+    setDisableButton(true)
     if (e.length > 0) {
       spotifyInputStatus.loading()
       spotifyURLAlert.current.style.opacity = "0"
@@ -256,9 +259,15 @@ const SmartRegisterForm = (props) => {
           }}
         />
 
-        <button type="submit" className="submit-button">
-          UPLOAD
-        </button>
+        {disableButton ? (
+          <button disabled={true} className="submit-button disabled-button">
+            UPLOAD
+          </button>
+        ) : (
+          <button type="submit" className="submit-button">
+            UPLOAD
+          </button>
+        )}
       </form>
     </React.Fragment>
   );

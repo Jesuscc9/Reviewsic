@@ -76,7 +76,10 @@ export const api = {
       return (songList.filter((e) => {
         return e.id != id
       }))
+    }else{
+      return songList
     }
+
 
   },
 }
