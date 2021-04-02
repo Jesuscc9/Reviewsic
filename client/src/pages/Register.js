@@ -223,7 +223,7 @@ const Register = () => {
         profileImage={spotifyData.profileImage ? spotifyData.profileImage : 'http://dissoftec.com/NicePng_user-png_730154.jpeg'}
         token={token}
       ></Navbar>
-      <br/>
+      <br/><br/><br/>
 
       <ToastContainer />
 
@@ -235,7 +235,10 @@ const Register = () => {
                 <div className="main-container">
                   <div className="card-container">
                     {!loaded ? (
-                      <Loader />
+                      <React.Fragment>
+                        <br/><br/>
+                        <Loader />
+                      </React.Fragment>
                     ) : (
                       <React.Fragment>
                         {songList.length && likedSongs != undefined ? (

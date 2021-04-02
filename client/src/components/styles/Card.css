@@ -11,7 +11,7 @@ body{
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   transition: all 0.2s;
-  z-index: 1000;
+  z-index: 1;
   box-shadow: 0 0px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
   scrollbar-width: none;  /* Firefox */
