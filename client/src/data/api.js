@@ -82,4 +82,11 @@ export const api = {
 
 
   },
+  setLikes: async function(id, likes){
+    console.log('se stea')
+    this.data.likes = likes
+    const setLikes = await Axios.put(`${this.endpoint}/api/update/setLikes/${id}`, this.data)
+    console.log(setLikes.data)
+    return setLikes.data  
+  }
 }

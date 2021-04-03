@@ -116,6 +116,29 @@ app.put('/api/update/:id', (req, res) => {
   })
 })
 
+app.put('/api/update/setLikes/:id', (req, res) => {
+
+  console.log('Se recibe por params: ')
+  console.log(req.params)
+
+  console.log('Se recibe por body: ')
+  console.log(req.body)
+
+  const sqlUpdate = "UPDATE song_reviews SET likes = ?  WHERE id = ?"
+
+  db.query(sqlUpdate, [req.body.likes, req.params.id], (err, result) => {
+    if(err){
+      console.log('Error: ')
+      console.log(err)
+      res.send(err)
+    }else{
+      req.body.id = req.params.id
+      console.log(req.body)
+      res.send(req.body)
+    }
+  })
+})
+
 // app.get('*', (req, res) => {
 //   res.sendFile(path.resolve(__dirname, 'build/', 'index.html'));
 // });
