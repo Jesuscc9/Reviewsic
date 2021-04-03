@@ -15,6 +15,7 @@ import SmartRegisterForm from "../components/SmartRegisterForm"
 import UpdateForm from "../components/UpdateForm"
 import Contacts from "../components/Contacts"
 import Login from "../components/Login"
+import DropdownMenu from '../components/DropdownMenu'
 import Cookies from "js-cookie"
 
 import { ToastContainer } from "react-toastify"
@@ -242,8 +243,10 @@ const Register = () => {
                       <Loader />
                     ) : (
                       <React.Fragment>
+                        <DropdownMenu/>
                         {songList.length && likedSongs != undefined ? (
-                          
+                         
+
                           (songList.sort((a, b) =>{
                             if(a.date > b.date) return -1
                           })).map((item) => {
