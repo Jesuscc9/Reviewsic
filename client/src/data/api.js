@@ -6,6 +6,7 @@ export const api = {
   endpoint: '',
   data: {},
   insert: async function(){
+    this.data.date = Date.now()
     const upload = await Axios.post(`${this.endpoint}/api/insert`, this.data)
   
     toast.success("🚀 Successfully Added!", {
@@ -82,11 +83,18 @@ export const api = {
 
 
   },
-  setLikes: async function(id, likes){
-    console.log('se stea')
+  setLikes: async function(id, songList, likes){
     this.data.likes = likes
+
     const setLikes = await Axios.put(`${this.endpoint}/api/update/setLikes/${id}`, this.data)
-    console.log(setLikes.data)
-    return setLikes.data  
+
+    for (let i = 0; i < songList.length; i++) {
+      if (songList[i].id == id) {
+        songList[i] = this.data;
+        break
+      }
+    }
+
+    return songList  
   }
 }

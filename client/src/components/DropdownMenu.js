@@ -1,21 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "tailwindcss/tailwind.css";
 import "../components/styles/DropdownMenu.css";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const DropdownMenu = () => {
-
+const DropdownMenu = (props) => {
 
   const [show, setShow] = useState(false)
   const [value, setValue] = useState(undefined)
   
+  useEffect(() => {
+    if(!value) return
+    if(value === 'Recent'){
+      props.onDateSort()
+    }else{
+      props.onLikesSort()
+    }
+  }, [value])
 
   return (
     <React.Fragment>
       <div className="dropdown-menu-container">
         <div className="dropdown">
-          <button className="actual" onClick={() => {setShow(!show)}}>
+          <button className="actual" onClick={() => {
+            setShow(!show)
+            }}>
               {value ? (
                 <React.Fragment>
                   {show ? (

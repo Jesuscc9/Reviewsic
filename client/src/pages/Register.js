@@ -33,8 +33,6 @@ const socket = openSocket("http://localhost:3001");
 const Register = () => {
   const MySwal = withReactContent(Swal);
 
-  const date = Date.now();
-
   const [songData, setSongData] = useState({
     song: "",
     image: "",
@@ -48,7 +46,7 @@ const Register = () => {
     author: "",
     author_id: "",
     spotifyUrl: "",
-    date: Date.now(),
+    date: "",
   });
 
   const [spotifyData, setSpotifyData] = useState({
@@ -62,6 +60,12 @@ const Register = () => {
   const [likedSongs, setlikedSongs] = useState(undefined);
   const [token, setToken] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
+  const [sortType, setSortType] = useState(undefined);
+
+  const sortArray = () => {
+    const sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
+    setSongList(sorted);
+  };
 
   useEffect(async () => {
     const songs = await Axios.get(`${API_ENDPOINT}/api/get`);
@@ -71,7 +75,7 @@ const Register = () => {
       !Cookies.get("spotifyAuthToken") ? "" : Cookies.get("spotifyAuthToken")
     );
 
-    if (token && token.length) {
+    if (token && token.length && !sortType) {
       spotifyApi.setConfig(token);
       let fetch = await spotifyApi.get();
 
@@ -104,7 +108,9 @@ const Register = () => {
 
       setLoaded(true);
     }
-  }, [token]);
+
+    sortArray(sortType);
+  }, [token, sortType]);
 
   api.endpoint = "http://localhost:3001";
   api.data = songData;
@@ -113,17 +119,20 @@ const Register = () => {
   const submitReview = async () => {
     setSongList(songList.push(await api.insert()));
     socket.emit("updateReviews", songList);
+    sortArray(sortType);
   };
 
   const updateReview = async (id) => {
     setSongList(await api.update(id, songList));
     socket.emit("updateReviews", songList);
+    sortArray(sortType);
   };
 
   const deleteReview = async (id) => {
     const data = await api.delete(id, songList);
     setSongList(data);
     socket.emit("updateReviews", data);
+    sortArray(sortType);
   };
 
   const smartRegister = () => {
@@ -246,40 +255,61 @@ const Register = () => {
                       <React.Fragment>
                         {songList.length && likedSongs != undefined ? (
                           <React.Fragment>
-                            <DropdownMenu />
-                            {songList
-                              .sort((a, b) => {
-                                if (a.date > b.date) return -1;
-                              })
-                              .map((item) => {
-                                return (
-                                  <Card
-                                    data={item}
-                                    user={songData.author_id}
-                                    key={item.id}
-                                    update={() => {
-                                      alertUpdateForm(item);
-                                    }}
-                                    delete={(e) => {
-                                      deleteReview(e.id);
-                                    }}
-                                    likedSongs={likedSongs}
-                                    addSong={async (songId) => {
-                                      spotifyApi.playlist.add(songId, token);
-                                      api.setLikes(item.id, item.likes + 1);
-                                    }}
-                                    deleteSong={async (songId, uri, pos) => {
-                                      await spotifyApi.playlist.delete(
-                                        songId,
-                                        uri,
-                                        pos,
-                                        token
-                                      );
-                                      api.setLikes(item.id, item.likes - 1);
-                                    }}
-                                  />
-                                );
-                              })}
+                            <DropdownMenu
+                              onDateSort={() => {
+                                sortArray('date');
+                                setSortType('date')
+                              }}
+                              onLikesSort={() => {
+                                sortArray('likes');
+                                setSortType('likes')
+                              }}
+                            />
+                            {songList.map((item) => {
+                              return (
+                                <Card
+                                  data={item}
+                                  user={songData.id}
+                                  key={item.id}
+                                  update={() => {
+                                    alertUpdateForm(item);
+                                  }}
+                                  delete={(e) => {
+                                    deleteReview(e.id);
+                                  }}
+                                  likedSongs={likedSongs}
+                                  addSong={async (songId) => {
+                                    spotifyApi.playlist.add(songId, token);
+                                    api.data = item;
+                                    setSongList(
+                                      await api.setLikes(
+                                        item.id,
+                                        songList,
+                                        item.likes + 1
+                                      )
+                                    );
+                                    sortArray(sortType);
+                                  }}
+                                  deleteSong={async (songId, uri, pos) => {
+                                    await spotifyApi.playlist.delete(
+                                      songId,
+                                      uri,
+                                      pos,
+                                      token
+                                    );
+                                    api.data = item;
+                                    setSongList(
+                                      await api.setLikes(
+                                        item.id,
+                                        songList,
+                                        item.likes - 1
+                                      )
+                                    );
+                                    sortArray(sortType);
+                                  }}
+                                />
+                              );
+                            })}
                           </React.Fragment>
                         ) : (
                           <div>Not reviews registered yet 😕.</div>
