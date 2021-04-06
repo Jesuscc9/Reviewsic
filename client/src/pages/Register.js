@@ -132,14 +132,12 @@ const Register = () => {
   const updateReview = async (id) => {
     setSongList(await api.update(id, songList));
     socket.emit("updateReviews", songList);
-    sortArray(sortType);
   };
 
   const deleteReview = async (id) => {
     const data = await api.delete(id, songList);
     setSongList(data);
     socket.emit("updateReviews", data);
-    sortArray(sortType);
   };
 
   const smartRegister = () => {
@@ -276,7 +274,7 @@ const Register = () => {
                               return (
                                 <Card
                                   data={item}
-                                  user={songData.id}
+                                  user={songData.author_id}
                                   key={item.id}
                                   update={() => {
                                     alertUpdateForm(item);
