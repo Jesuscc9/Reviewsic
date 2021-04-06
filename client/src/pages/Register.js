@@ -62,8 +62,13 @@ const Register = () => {
   const [loaded, setLoaded] = useState(false);
   const [sortType, setSortType] = useState(undefined);
 
-  const sortArray = () => {
-    const sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
+  const sortArray = (array) => {
+    let sorted = []
+    if(array) {
+      sorted = array.sort((a, b) => b[sortType] - a[sortType]);
+    }else{
+      sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
+    }
     setSongList(sorted);
   };
 
@@ -104,12 +109,13 @@ const Register = () => {
 
       socket.on("updateReviews", (data) => {
         setSongList(data);
+        sortArray(data)
       });
 
       setLoaded(true);
     }
 
-    sortArray(sortType);
+    sortArray();
   }, [token, sortType]);
 
   api.endpoint = "http://localhost:3001";
@@ -117,9 +123,10 @@ const Register = () => {
   api.songList = songList;
 
   const submitReview = async () => {
-    setSongList(songList.push(await api.insert()));
-    socket.emit("updateReviews", songList);
-    sortArray(sortType);
+    const aux = songList
+    aux.push(await api.insert())
+    setSongList(aux);
+    socket.emit("updateReviews", aux);
   };
 
   const updateReview = async (id) => {
@@ -257,11 +264,11 @@ const Register = () => {
                           <React.Fragment>
                             <DropdownMenu
                               onDateSort={() => {
-                                sortArray('date');
+                                sortArray(songList);
                                 setSortType('date')
                               }}
                               onLikesSort={() => {
-                                sortArray('likes');
+                                sortArray(songList);
                                 setSortType('likes')
                               }}
                             />
@@ -281,31 +288,14 @@ const Register = () => {
                                   addSong={async (songId) => {
                                     spotifyApi.playlist.add(songId, token);
                                     api.data = item;
-                                    setSongList(
-                                      await api.setLikes(
-                                        item.id,
-                                        songList,
-                                        item.likes + 1
-                                      )
-                                    );
-                                    sortArray(sortType);
+                                    setSongList(await api.setLikes(item.id, songList, item.likes + 1));
+                                    sortArray()
                                   }}
                                   deleteSong={async (songId, uri, pos) => {
-                                    await spotifyApi.playlist.delete(
-                                      songId,
-                                      uri,
-                                      pos,
-                                      token
-                                    );
+                                    spotifyApi.playlist.delete(songId, uri, pos, token);
                                     api.data = item;
-                                    setSongList(
-                                      await api.setLikes(
-                                        item.id,
-                                        songList,
-                                        item.likes - 1
-                                      )
-                                    );
-                                    sortArray(sortType);
+                                    setSongList(await api.setLikes(item.id, songList, item.likes - 1));
+                                    sortArray()
                                   }}
                                 />
                               );
