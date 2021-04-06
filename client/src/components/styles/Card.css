@@ -227,11 +227,3 @@ body{
 }
 
 
-@media (max-width: 600px){
-  .stars-calification span{
-    font-size: 30px !important;
-  }
-
-}
-
-

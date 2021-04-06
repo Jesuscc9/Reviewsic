@@ -82,3 +82,21 @@
   z-index: -1;
   pointer-events: none;
 }
+
+@media (max-width: 1270px){
+  .dropdown-menu-container{
+    width: 78%;
+  }
+}
+
+@media (max-width: 1000px){
+  .dropdown-menu-container{
+    width: 86%;
+  }
+}
+
+@media (max-width: 1000px){
+  .dropdown-menu-container{
+    width: 70%;
+  }
+}

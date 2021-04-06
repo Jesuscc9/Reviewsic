@@ -270,7 +270,7 @@ const Register = () => {
                                 setSortType('likes')
                               }}
                             />
-                            {songList.map((item) => {
+                            {(songList.sort((a, b) => b[sortType] - a[sortType])).map((item) => {
                               return (
                                 <Card
                                   data={item}
