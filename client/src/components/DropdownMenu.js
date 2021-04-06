@@ -13,6 +13,8 @@ const DropdownMenu = (props) => {
     if(!value) return
     if(value === 'Recent'){
       props.onDateSort()
+    }else if(value === 'Name'){
+      props.onNameSort()
     }else{
       props.onLikesSort()
     }
@@ -48,6 +50,10 @@ const DropdownMenu = (props) => {
             <hr className="divisor dropdown-divisor"/>
             <div className="dropdown-item" onClick={() => {setShow(!show); setValue('Most Popular')}}>
               <h1>Popularity</h1>
+            </div>
+            <hr className="divisor dropdown-divisor"/>
+            <div className="dropdown-item" onClick={() => {setShow(!show); setValue('Name')}}>
+              <h1>Alphabetical</h1>
             </div>
          </div>
         </div>

@@ -65,9 +65,11 @@ const Register = () => {
   const sortArray = (array) => {
     let sorted = []
     if(array) {
-      sorted = array.sort((a, b) => b[sortType] - a[sortType]);
+      if(sortType === 'song') sorted = array.sort((a, b) => a[sortType].localeCompare(b[sortType]));
+      else sorted = array.sort((a, b) => b[sortType] - a[sortType]);
     }else{
-      sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
+      if(sortType === 'song') sorted = [...songList].sort((a, b) => a[sortType].localeCompare(b[sortType]));
+      else sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
     }
     setSongList(sorted);
   };
@@ -262,12 +264,16 @@ const Register = () => {
                           <React.Fragment>
                             <DropdownMenu
                               onDateSort={() => {
-                                sortArray(songList);
                                 setSortType('date')
+                                sortArray();
                               }}
                               onLikesSort={() => {
-                                sortArray(songList);
                                 setSortType('likes')
+                                sortArray();
+                              }}
+                              onNameSort={() => {
+                                setSortType('song')
+                                sortArray();
                               }}
                             />
                             {(songList.sort((a, b) => b[sortType] - a[sortType])).map((item) => {

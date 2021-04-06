@@ -12,6 +12,10 @@ body{
   overflow-y: auto;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .card-container{
   display: flex;
   justify-content: space-around;
