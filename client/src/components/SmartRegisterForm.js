@@ -159,34 +159,22 @@ const SmartRegisterForm = (props) => {
         if (validateUrl(spotifyURL.current.value)) {
           const track_id = e.slice(31, 53);
 
-          const config = {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          };
+          spotifyApi.setConfig(token);
 
           try {
-            let data = await Axios.get(
-              `https://api.spotify.com/v1/tracks/${track_id}`,
-              config
-            );
-
-            data = data.data;
+            const data = await spotifyApi.song.get(track_id)
             props.onSongChange(data.name);
             props.onArtistChange(data.artists[0].name);
             props.selectImage(data.album.images[0].url);
 
             spotifyInputStatus.sucess();
 
-            const genres = await (
-              await Axios.get(
-                `https://api.spotify.com/v1/artists/${data.artists[0].id}`,
-                config
-              )
-            ).data.genres;
+            const genres = await spotifyApi.song.getGenres(data.artists[0].id)
 
             setGenres(genres);
+            props.onGenreChange(genres[0])
           } catch (err) {
+            console.log(err)
             spotifyInputStatus.error();
           }
         } else {

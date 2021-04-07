@@ -161,6 +161,7 @@ const Register = () => {
               }));
             }}
             onGenreChange={(e) => {
+              console.log(e)
               setSongData((prevState) => ({
                 ...prevState,
                 genre: e,

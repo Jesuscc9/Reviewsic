@@ -160,10 +160,23 @@ export const spotifyApi = {
   
     }
   },
-  getSongGenres: async function(songId){
-    const track = await Axios.get(`https://api.spotify.com/v1/tracks/${songId}`)
-    console.log(track)
+  song: {
+    get: async (songId) => {
+      try {
+        return (await Axios.get(
+          `https://api.spotify.com/v1/tracks/${songId}`,
+          spotifyApi.config
+        )).data;
 
-    return track.data
-  }
+      } catch (err) {
+        return false
+      }
+    },
+    getGenres: async function(artistId){
+      return ((await Axios.get(
+        `https://api.spotify.com/v1/artists/${artistId}`,
+        spotifyApi.config
+      )).data.genres)
+    }
+  },
 }
