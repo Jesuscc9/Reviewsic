@@ -64,13 +64,8 @@ const Register = () => {
 
   const sortArray = (array) => {
     let sorted = []
-    if(array) {
-      if(sortType === 'song') sorted = array.sort((a, b) => a[sortType].localeCompare(b[sortType]));
-      else sorted = array.sort((a, b) => b[sortType] - a[sortType]);
-    }else{
-      if(sortType === 'song') sorted = [...songList].sort((a, b) => a[sortType].localeCompare(b[sortType]));
-      else sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
-    }
+    if(sortType === 'song') sorted = (array ? array : [...songList]).sort((a, b) => a[sortType].localeCompare(b[sortType]));
+    else sorted = (array ? array : [...songList]).sort((a, b) => b[sortType] - a[sortType]);
     setSongList(sorted);
   };
 
@@ -165,6 +160,12 @@ const Register = () => {
                 artist: e,
               }));
             }}
+            onGenreChange={(e) => {
+              setSongData((prevState) => ({
+                ...prevState,
+                genre: e,
+              }));
+            }}
             onCommentChange={(e) => {
               setSongData((prevState) => ({
                 ...prevState,
@@ -209,6 +210,7 @@ const Register = () => {
       html: (
         <UpdateForm
           data={data}
+          token={token}
           onCommentChange={(e) => {
             setSongData((prevState) => ({
               ...prevState,
@@ -231,6 +233,11 @@ const Register = () => {
       showConfirmButton: false,
     });
   };
+
+  const handleDropdown = (value) => {
+    setSortType(value)
+    sortArray()
+  }
 
   return (
     <React.Fragment>
@@ -263,20 +270,11 @@ const Register = () => {
                         {songList.length && likedSongs != undefined ? (
                           <React.Fragment>
                             <DropdownMenu
-                              onDateSort={() => {
-                                setSortType('date')
-                                sortArray();
-                              }}
-                              onLikesSort={() => {
-                                setSortType('likes')
-                                sortArray();
-                              }}
-                              onNameSort={() => {
-                                setSortType('song')
-                                sortArray();
+                              onSelect={(value) => {
+                                handleDropdown(value)
                               }}
                             />
-                            {(songList.sort((a, b) => b[sortType] - a[sortType])).map((item) => {
+                            {(sortType == 'song' ? (songList.sort((a, b) => a.song.localeCompare(b.song))) : ((songList.sort((a, b) => b[sortType] - a[sortType])))).map((item) => {
                               return (
                                 <Card
                                   data={item}

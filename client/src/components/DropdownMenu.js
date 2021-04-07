@@ -11,13 +11,7 @@ const DropdownMenu = (props) => {
   
   useEffect(() => {
     if(!value) return
-    if(value === 'Recent'){
-      props.onDateSort()
-    }else if(value === 'Name'){
-      props.onNameSort()
-    }else{
-      props.onLikesSort()
-    }
+    props.onSelect(value == 'Recent' ? 'date' : value == 'Most Popular' ? 'likes' : 'song')
   }, [value])
 
   return (

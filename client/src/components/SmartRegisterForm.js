@@ -6,12 +6,14 @@ import ReactStars from "react-rating-stars-component";
 
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { spotifyApi } from "../data/spotifyApi";
 import Axios from "axios";
 import Cookies from "js-cookie";
 
 const SmartRegisterForm = (props) => {
   const [token, setToken] = useState("");
   const [disableButton, setDisableButton] = useState(true);
+  const [genres, setGenres] = useState([]);
 
   const stars = {
     size: 50,
@@ -51,7 +53,7 @@ const SmartRegisterForm = (props) => {
         this.check.current.style.display = "block";
         setTimeout(() => {
           this.check.current.style.opacity = "1";
-          setDisableButton(false)
+          setDisableButton(false);
           setTimeout(() => {
             this.check.current.style.opacity = "0";
             this.container.current.style.display = "none";
@@ -81,7 +83,7 @@ const SmartRegisterForm = (props) => {
         }, 800);
       }, 500);
     },
-  }
+  };
 
   const validateUrl = (spotifyUrl) => {
     const url = document.createElement("a");
@@ -100,7 +102,7 @@ const SmartRegisterForm = (props) => {
     }
 
     return true;
-  }
+  };
 
   function validation() {
     if (review.current.value.length <= 0) {
@@ -147,21 +149,21 @@ const SmartRegisterForm = (props) => {
   }
 
   const handleChange = (e) => {
-    setDisableButton(true)
+    setDisableButton(true);
     if (e.length > 0) {
-      spotifyInputStatus.loading()
-      spotifyURLAlert.current.style.opacity = "0"
-      spotifyURL.current.classList.remove("wrong-input")
+      spotifyInputStatus.loading();
+      spotifyURLAlert.current.style.opacity = "0";
+      spotifyURL.current.classList.remove("wrong-input");
 
       setTimeout(async () => {
         if (validateUrl(spotifyURL.current.value)) {
-          const track_id = e.slice(31, 53)
+          const track_id = e.slice(31, 53);
 
           const config = {
             headers: {
               Authorization: "Bearer " + token,
             },
-          }
+          };
 
           try {
             let data = await Axios.get(
@@ -175,6 +177,15 @@ const SmartRegisterForm = (props) => {
             props.selectImage(data.album.images[0].url);
 
             spotifyInputStatus.sucess();
+
+            const genres = await (
+              await Axios.get(
+                `https://api.spotify.com/v1/artists/${data.artists[0].id}`,
+                config
+              )
+            ).data.genres;
+
+            setGenres(genres);
           } catch (err) {
             spotifyInputStatus.error();
           }
@@ -183,12 +194,11 @@ const SmartRegisterForm = (props) => {
         }
       }, 1500);
     }
-  }
+  };
 
   return (
     <React.Fragment>
-      <div className="display-flex justify-start">
-      </div>
+      <div className="display-flex justify-start"></div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -196,8 +206,8 @@ const SmartRegisterForm = (props) => {
             props.onSubmit();
           }
         }}
-        className="register-form">
-
+        className="register-form"
+      >
         <p className="input-label">Spotify URL: </p>
 
         <div className="spotify-link-container">
@@ -206,8 +216,8 @@ const SmartRegisterForm = (props) => {
             className="swal2-input spotify-link-input"
             placeholder="Spotify link of the song..."
             onChange={(e) => {
-              handleChange(e.target.value)
-              props.onSpotifyUrlChange(e.target.value)
+              handleChange(e.target.value);
+              props.onSpotifyUrlChange(e.target.value);
             }}
             ref={spotifyURL}
           />
@@ -232,6 +242,33 @@ const SmartRegisterForm = (props) => {
         <p className="alert-label" ref={spotifyURLAlert}>
           Please fill out this field.
         </p>
+
+        {genres.length ? (
+          <React.Fragment>
+            <p className="input-label">Genre: </p>
+
+            <select
+              className="swal2-input"
+              onChange={(e) => {
+                props.onGenreChange(e.target.value)
+              }}
+            >
+              {genres.map((genre) => {
+                return (
+                  <option value={genre} className="genre-option">
+                    {genre}
+                  </option>
+                );
+              })}
+            </select>
+
+            <p className="alert-label">
+              Please fill out this field.
+            </p>
+          </React.Fragment>
+        ) : (
+          <React.Fragment />
+        )}
 
         <p className="input-label">Review: </p>
 

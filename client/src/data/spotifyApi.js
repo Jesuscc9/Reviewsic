@@ -160,4 +160,10 @@ export const spotifyApi = {
   
     }
   },
+  getSongGenres: async function(songId){
+    const track = await Axios.get(`https://api.spotify.com/v1/tracks/${songId}`)
+    console.log(track)
+
+    return track.data
+  }
 }
