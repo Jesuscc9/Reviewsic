@@ -10,6 +10,7 @@ import Axios from "axios";
 
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
+import CardsCarousel from "../components/CardsCarousel";
 import Loader from "../components/Loader";
 import SmartRegisterForm from "../components/SmartRegisterForm";
 import UpdateForm from "../components/UpdateForm";
@@ -276,33 +277,38 @@ const Register = () => {
                               }}
                             />
                             {(sortType == 'song' ? (songList.sort((a, b) => a.song.localeCompare(b.song))) : ((songList.sort((a, b) => b[sortType] - a[sortType])))).map((item) => {
+                              // return (
+                              //   <Card
+                              //     data={item}
+                              //     user={songData.author_id}
+                              //     key={item.id}
+                              //     update={() => {
+                              //       alertUpdateForm(item);
+                              //     }}
+                              //     delete={(e) => {
+                              //       deleteReview(e.id);
+                              //     }}
+                              //     likedSongs={likedSongs}
+                              //     addSong={async (songId) => {
+                              //       spotifyApi.playlist.add(songId, token);
+                              //       api.data = item;
+                              //       setSongList(await api.setLikes(item.id, songList, item.likes + 1));
+                              //       sortArray()
+                              //     }}
+                              //     deleteSong={async (songId, uri, pos) => {
+                              //       spotifyApi.playlist.delete(songId, uri, pos, token);
+                              //       api.data = item;
+                              //       setSongList(await api.setLikes(item.id, songList, item.likes - 1));
+                              //       sortArray()
+                              //     }}
+                              //   />
+                              // );
                               return (
-                                <Card
-                                  data={item}
-                                  user={songData.author_id}
-                                  key={item.id}
-                                  update={() => {
-                                    alertUpdateForm(item);
-                                  }}
-                                  delete={(e) => {
-                                    deleteReview(e.id);
-                                  }}
-                                  likedSongs={likedSongs}
-                                  addSong={async (songId) => {
-                                    spotifyApi.playlist.add(songId, token);
-                                    api.data = item;
-                                    setSongList(await api.setLikes(item.id, songList, item.likes + 1));
-                                    sortArray()
-                                  }}
-                                  deleteSong={async (songId, uri, pos) => {
-                                    spotifyApi.playlist.delete(songId, uri, pos, token);
-                                    api.data = item;
-                                    setSongList(await api.setLikes(item.id, songList, item.likes - 1));
-                                    sortArray()
-                                  }}
-                                />
-                              );
+                                <div></div>
+                              )
+
                             })}
+                            <CardsCarousel songList={songList} likedSongs={likedSongs}></CardsCarousel>
                           </React.Fragment>
                         ) : (
                           <div>Not reviews registered yet 😕.</div>
