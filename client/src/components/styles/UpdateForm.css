@@ -1,7 +1,7 @@
 .input-disabled{
-  background-color: rgba(191, 222, 255, 0.356);
-  color: rgb(121, 121, 121);
-  cursor: text;
+  background-color: rgba(191, 222, 255, 0.356) !important;
+  color: rgb(121, 121, 121) !important;
+  cursor: text !important;
 }
 
 @media (max-width: 600px){

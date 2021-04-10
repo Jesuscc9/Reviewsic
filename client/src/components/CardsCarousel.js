@@ -4,7 +4,7 @@ import Card from '../components/Card'
 
 const CardCarousel = (props) => {
   return (
-    <Carousel itemsToShow={2} focusOnSelect={true} enableAutoPlay={5000}   renderPagination={({ pages, activePage, onClick }) => {
+    <Carousel itemsToShow={2} focusOnSelect={true} renderPagination={({ pages, activePage, onClick }) => {
       return (<div/>)
     }} renderArrow={() => {
       return <div/>

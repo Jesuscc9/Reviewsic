@@ -7,7 +7,7 @@
 
 .spotify-link-input{
   width: 100%;
-  transition: all 0.7s;
+  transition: all 0.7s !important; 
 }
 
 .spotify-link-status{
@@ -21,7 +21,7 @@
 .check-icon{
   opacity: 0;
   display: none;
-  transition: all 1s;
+  transition: all 1s !important;
 }
 
 select, select option {text-transform:capitalize !important}
