@@ -162,19 +162,19 @@ const SmartRegisterForm = (props) => {
           spotifyApi.setConfig(token);
 
           try {
-            const data = await spotifyApi.song.get(track_id)
+            const data = await spotifyApi.song.get(track_id);
             props.onSongChange(data.name);
             props.onArtistChange(data.artists[0].name);
             props.selectImage(data.album.images[0].url);
 
             spotifyInputStatus.sucess();
 
-            const genres = await spotifyApi.song.getGenres(data.artists[0].id)
+            const genres = await spotifyApi.song.getGenres(data.artists[0].id);
 
             setGenres(genres);
-            props.onGenreChange(genres[0])
+            props.onGenreChange(genres[0]);
           } catch (err) {
-            console.log(err)
+            console.log(err);
             spotifyInputStatus.error();
           }
         } else {
@@ -231,32 +231,34 @@ const SmartRegisterForm = (props) => {
           Please fill out this field.
         </p>
 
-        {genres.length ? (
-          <React.Fragment>
-            <p className="input-label">Genre: </p>
+        <div className={`genre-container ${genres.length ? 'show-genre' : 'hide-genre'}`}>
+          <p className="input-label">Genre: </p>
 
-            <select
-              className="swal2-input"
-              onChange={(e) => {
-                props.onGenreChange(e.target.value)
-              }}
-            >
-              {genres.map((genre) => {
+          <select
+            className={`swal2-input ${
+              genres.length ? "genre-input" : "genre-input-hidden"
+            }`}
+            onChange={(e) => {
+              props.onGenreChange(e.target.value);
+            }}
+          >
+            {genres.length ? (
+              genres.map((genre) => {
                 return (
                   <option value={genre} className="genre-option">
                     {genre}
                   </option>
                 );
-              })}
-            </select>
+              })
+            ) : (
+              <div />
+            )}
+          </select>
+        <p className="alert-label">
+          Please
+        </p>
+        </div>
 
-            <p className="alert-label">
-              Please fill out this field.
-            </p>
-          </React.Fragment>
-        ) : (
-          <React.Fragment />
-        )}
 
         <p className="input-label">Review: </p>
 

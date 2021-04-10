@@ -24,6 +24,30 @@
   transition: all 1s !important;
 }
 
+.genre-container{
+  transition: all 2s !important;
+}
+
+.hide-genre{
+  opacity: 0 !important;
+  max-height: 0px !important;
+}
+
+.show-genre{
+  opacity: 1 !important;
+}
+
+.genre-input{
+  transition: opacity 1s !important; 
+  transition: height 1.5s !important; 
+  height: 60px !important;
+}
+
+.genre-input-hidden{
+  transition: all 0.7s !important; 
+  height: 0px !important;
+}
+
 select, select option {text-transform:capitalize !important}
 
 .lds-ring {
