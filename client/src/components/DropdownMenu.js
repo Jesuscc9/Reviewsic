@@ -20,6 +20,8 @@ const DropdownMenu = (props) => {
         <div className="dropdown">
           <button className="actual" onClick={() => {
             setShow(!show)
+            }} onBlur={() => {
+              setShow(false)
             }}>
               {value ? (
                 <React.Fragment>
