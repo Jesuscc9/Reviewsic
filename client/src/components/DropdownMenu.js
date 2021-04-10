@@ -3,8 +3,9 @@ import "tailwindcss/tailwind.css";
 import "../components/styles/DropdownMenu.css";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import onClickOutside from "react-onclickoutside";
 
-const DropdownMenu = (props) => {
+const DropdownMenu = function(props){
 
   const [show, setShow] = useState(false)
   const [value, setValue] = useState(undefined)
@@ -14,14 +15,14 @@ const DropdownMenu = (props) => {
     props.onSelect(value == 'Recent' ? 'date' : value == 'Most Popular' ? 'likes' : 'song')
   }, [value])
 
+  DropdownMenu.handleClickOutside = () => setShow(false);
+
   return (
     <React.Fragment>
       <div className="dropdown-menu-container">
         <div className="dropdown">
           <button className="actual" onClick={() => {
             setShow(!show)
-            }} onBlur={() => {
-              setShow(false)
             }}>
               {value ? (
                 <React.Fragment>
@@ -58,4 +59,8 @@ const DropdownMenu = (props) => {
   );
 };
 
-export default DropdownMenu;
+const clickOutsideConfig = {
+  handleClickOutside: () => DropdownMenu.handleClickOutside
+};
+
+export default onClickOutside(DropdownMenu, clickOutsideConfig);

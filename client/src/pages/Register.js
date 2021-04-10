@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import { SpotifyApiContext } from "react-spotify-api";
 import { api } from "../data/api";
 import { spotifyApi } from "../data/spotifyApi";
