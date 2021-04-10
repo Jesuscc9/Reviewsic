@@ -63,22 +63,22 @@ const Register = () => {
   const [loaded, setLoaded] = useState(false);
   const [sortType, setSortType] = useState(undefined);
 
-  const sortArray = (array) => {
+  const sortArray = () => {
     let sorted = []
-    if(sortType === 'song') sorted = (array ? array : [...songList]).sort((a, b) => a[sortType].localeCompare(b[sortType]));
-    else sorted = (array ? array : [...songList]).sort((a, b) => b[sortType] - a[sortType]);
-    setSongList(sorted);
+    if(sortType === 'song') sorted = ([...songList]).sort((a, b) => a[sortType].localeCompare(b[sortType], 'en', {'sensitivity': 'base'}));
+    else sorted = ([...songList]).sort((a, b) => b[sortType] - a[sortType]);
+    return sorted
   };
 
   useEffect(async () => {
-    const songs = await Axios.get(`${API_ENDPOINT}/api/get`);
-    setSongList(songs.data);
 
     setToken(
       !Cookies.get("spotifyAuthToken") ? "" : Cookies.get("spotifyAuthToken")
     );
 
     if (token && token.length && !sortType) {
+      setSongList((await Axios.get(`${API_ENDPOINT}/api/get`)).data);
+
       spotifyApi.setConfig(token);
       let fetch = await spotifyApi.get();
 
@@ -107,14 +107,11 @@ const Register = () => {
 
       socket.on("updateReviews", (data) => {
         setSongList(data);
-        sortArray(data)
       });
 
       setLoaded(true);
     }
-
-    sortArray();
-  }, [token, sortType]);
+  }, [token]);
 
   api.endpoint = "http://localhost:3001";
   api.data = songData;
@@ -162,7 +159,6 @@ const Register = () => {
               }));
             }}
             onGenreChange={(e) => {
-              console.log(e)
               setSongData((prevState) => ({
                 ...prevState,
                 genre: e,
@@ -207,7 +203,6 @@ const Register = () => {
 
   const alertUpdateForm = (data) => {
     setSongData(data);
-
     MySwal.fire({
       html: (
         <UpdateForm
@@ -231,14 +226,13 @@ const Register = () => {
           }}
         />
       ),
-
       showConfirmButton: false,
     });
   };
 
   const handleDropdown = (value) => {
     setSortType(value)
-    sortArray()
+    setSongList([...songList])
   }
 
   return (
@@ -276,7 +270,7 @@ const Register = () => {
                                 handleDropdown(value)
                               }}
                             />
-                            {(sortType == 'song' ? (songList.sort((a, b) => a.song.localeCompare(b.song))) : ((songList.sort((a, b) => b[sortType] - a[sortType])))).map((item) => {
+                            {(sortArray()).map((item) => {
                               return (
                                 <Card
                                   data={item}
@@ -293,13 +287,11 @@ const Register = () => {
                                     spotifyApi.playlist.add(songId, token);
                                     api.data = item;
                                     setSongList(await api.setLikes(item.id, songList, item.likes + 1));
-                                    sortArray()
                                   }}
                                   deleteSong={async (songId, uri, pos) => {
                                     spotifyApi.playlist.delete(songId, uri, pos, token);
                                     api.data = item;
                                     setSongList(await api.setLikes(item.id, songList, item.likes - 1));
-                                    sortArray()
                                   }}
                                 />
                               );
@@ -308,7 +300,7 @@ const Register = () => {
                               )
 
                             })}
-                            <CardsCarousel songList={songList} likedSongs={likedSongs}></CardsCarousel>
+                            <CardsCarousel songList={sortArray()} likedSongs={likedSongs}></CardsCarousel>
                           </React.Fragment>
                         ) : (
                           <div>Not reviews registered yet 😕.</div>
