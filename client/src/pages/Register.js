@@ -62,16 +62,19 @@ const Register = () => {
   const [token, setToken] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
   const [sortType, setSortType] = useState(undefined);
+  const [cardView, setCardView] = useState("categories");
 
   const sortArray = () => {
-    let sorted = []
-    if(sortType === 'song') sorted = ([...songList]).sort((a, b) => a[sortType].localeCompare(b[sortType], 'en', {'sensitivity': 'base'}));
-    else sorted = ([...songList]).sort((a, b) => b[sortType] - a[sortType]);
-    return sorted
+    let sorted = [];
+    if (sortType === "song")
+      sorted = [...songList].sort((a, b) =>
+        a[sortType].localeCompare(b[sortType], "en", { sensitivity: "base" })
+      );
+    else sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
+    return sorted;
   };
 
   useEffect(async () => {
-
     setToken(
       !Cookies.get("spotifyAuthToken") ? "" : Cookies.get("spotifyAuthToken")
     );
@@ -118,8 +121,8 @@ const Register = () => {
   api.songList = songList;
 
   const submitReview = async () => {
-    const aux = songList
-    aux.push(await api.insert())
+    const aux = songList;
+    aux.push(await api.insert());
     setSongList(aux);
     socket.emit("updateReviews", aux);
   };
@@ -231,9 +234,9 @@ const Register = () => {
   };
 
   const handleDropdown = (value) => {
-    setSortType(value)
-    setSongList([...songList])
-  }
+    setSortType(value);
+    setSongList([...songList]);
+  };
 
   return (
     <React.Fragment>
@@ -266,41 +269,61 @@ const Register = () => {
                         {songList.length && likedSongs != undefined ? (
                           <React.Fragment>
                             <DropdownMenu
-                              onSelect={(value) => {
-                                handleDropdown(value)
-                              }}
+                              onSelect={(value) => handleDropdown(value)}
+                              onCardViewChange={(value) => setCardView(value)}
                             />
-                            {(sortArray()).map((item) => {
-                              return (
-                                <Card
-                                  data={item}
-                                  user={songData.author_id}
-                                  key={item.id}
-                                  update={() => {
-                                    alertUpdateForm(item);
-                                  }}
-                                  delete={(e) => {
-                                    deleteReview(e.id);
-                                  }}
-                                  likedSongs={likedSongs}
-                                  addSong={async (songId) => {
-                                    spotifyApi.playlist.add(songId, token);
-                                    api.data = item;
-                                    setSongList(await api.setLikes(item.id, songList, item.likes + 1));
-                                  }}
-                                  deleteSong={async (songId, uri, pos) => {
-                                    spotifyApi.playlist.delete(songId, uri, pos, token);
-                                    api.data = item;
-                                    setSongList(await api.setLikes(item.id, songList, item.likes - 1));
-                                  }}
-                                />
-                              );
-                              return (
-                                <div></div>
-                              )
-
-                            })}
-                            <CardsCarousel songList={sortArray()} likedSongs={likedSongs}></CardsCarousel>
+                            {cardView == "categories" ? (
+                              <CardsCarousel
+                                songList={sortArray()}
+                                likedSongs={likedSongs}
+                              />
+                            ) : (
+                              <React.Fragment>
+                                {sortArray().map((item) => {
+                                  return (
+                                    <Card
+                                      data={item}
+                                      user={songData.author_id}
+                                      key={item.id}
+                                      update={() => {
+                                        alertUpdateForm(item);
+                                      }}
+                                      delete={(e) => {
+                                        deleteReview(e.id);
+                                      }}
+                                      likedSongs={likedSongs}
+                                      addSong={async (songId) => {
+                                        spotifyApi.playlist.add(songId, token);
+                                        api.data = item;
+                                        setSongList(
+                                          await api.setLikes(
+                                            item.id,
+                                            songList,
+                                            item.likes + 1
+                                          )
+                                        );
+                                      }}
+                                      deleteSong={async (songId, uri, pos) => {
+                                        spotifyApi.playlist.delete(
+                                          songId,
+                                          uri,
+                                          pos,
+                                          token
+                                        );
+                                        api.data = item;
+                                        setSongList(
+                                          await api.setLikes(
+                                            item.id,
+                                            songList,
+                                            item.likes - 1
+                                          )
+                                        );
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </React.Fragment>
+                            )}
                           </React.Fragment>
                         ) : (
                           <div>Not reviews registered yet 😕.</div>
