@@ -92,7 +92,7 @@
   width: 30px;
   height: 30px;
   border-radius: 0.25rem;
-  background-color: rgba(0, 132, 255, 0.281);
+  background-color: rgba(0, 132, 255, 0.212);
   transition: all 0.1s;
   outline: none !important;
   display: flex;
@@ -128,7 +128,7 @@
 }
 
 .selected-type{
-  background-color: rgba(0, 132, 255, 0.589);
+  background-color: rgba(0, 132, 255, 0.459);
 }
 
 @media (max-width: 1270px){

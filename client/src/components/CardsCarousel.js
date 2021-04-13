@@ -1,23 +1,63 @@
 import React from "react";
-import Carousel from "react-elastic-carousel";
-import Card from '../components/Card'
+import CarouselRow from './CarouselRow'
 
 const CardCarousel = (props) => {
+
+  const genres = []
+  const splited_genres = []
+
+  const genreExist = (genre, arr) =>{
+    for(let i = 0; i<arr.length;i++){
+      if(arr[i].genre == genre){
+        return i
+      }
+    }
+    return 'false'
+  }
+
+  //Classifies all the songs by genre in an array in the propertie of an object
+  const instances = (props.songList).reduce((arr = [], song) => {
+    ((song.genre).split(" ")).forEach(element => {
+      arr.push(element)
+
+      const index = genreExist(element, splited_genres)
+
+      //This does the same, but in the subgenres of each genre (If it has it)
+      if(index != 'false'){
+        (splited_genres[index].songList).push(song)
+      }else{
+        splited_genres.push({
+          genre: element,
+          songList: [song]
+        })
+      }
+    });
+
+    const index = genreExist(song.genre, genres)
+
+    if(index != 'false'){
+      (genres[index].songList).push(song)
+    }else{
+      genres.push({
+        genre: song.genre,
+        songList: [song]
+      })
+    }
+    return arr;
+  }, [])
+
+  console.log(genres)
+
   return (
-    <Carousel itemsToShow={2} focusOnSelect={true} renderPagination={({ pages, activePage, onClick }) => {
-      return (<div/>)
-    }} renderArrow={() => {
-      return <div/>
-    }}
-      outerSpacing={20}
-    >
-      {(props.songList).map(song => {
+    <React.Fragment>
+      {genres.map((genre) => {
         return (
-          <Card data={song} likedSongs={props.likedSongs}></Card>
-        );
+        <CarouselRow data={genre} likedSongs={props.likedSongs}/>
+        )
       })}
-    </Carousel>
+    </React.Fragment>
   );
 };
+
 
 export default CardCarousel
