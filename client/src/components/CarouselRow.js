@@ -26,24 +26,28 @@ const CarouselRow = (props) => {
 
   console.log(props);
   return (
-    <div>
-      <div className="carousel-buttons">
-        <div className="buttons-container">
-          <button className="backward-button carousel-button" onClick={() => {
-              handleClick(-1)
-            }}>
-            <FontAwesomeIcon icon={faChevronLeft} className={`carousel-arrows-icon ${index > 0 ? '' : 'disabled-carousel-arrows-icon' }`}/>
-          </button>
-          <button className="forward-button carousel-button" onClick={() => {
-              handleClick(1)
-            }}>
-            <FontAwesomeIcon icon={faChevronRight} className={`carousel-arrows-icon ${index + 1 < props.data.songList.length ? '' : 'disabled-carousel-arrows-icon' }`}/>
-          </button>
+    <div className="m-auto">
+      <div className="w-100 flex justify-center">
+        <div className="carousel-buttons">
+          <h5 className="carousel-genre">{props.data.genre}</h5>
+          <div className="buttons-container">
+            <button className="backward-button carousel-button" onClick={() => {
+                handleClick(-1)
+              }}>
+              <FontAwesomeIcon icon={faChevronLeft} className={`carousel-arrows-icon ${index > 0 ? '' : 'disabled-carousel-arrows-icon' }`}/>
+            </button>
+            <button className="forward-button carousel-button" onClick={() => {
+                handleClick(1)
+              }}>
+              <FontAwesomeIcon icon={faChevronRight} className={`carousel-arrows-icon ${index + 1 < props.data.songList.length ? '' : 'disabled-carousel-arrows-icon' }`}/>
+            </button>
+          </div>
         </div>
       </div>
       <Carousel
         focusOnSelect={true}
         ref={carousel}
+        outerSpacing={10}
         // renderPagination={({ pages, activePage, onClick }) => {
         //   return (<div/>)
         // }} 

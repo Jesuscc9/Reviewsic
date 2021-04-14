@@ -1,21 +1,33 @@
 .carousel-buttons{
-  width: 100%;
+  width: 190px;
   height: 30px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .buttons-container{
-  width: 70px;
+  width: 50px;
   height: 30px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+}
+
+.carousel-genre{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(85, 85, 85);
+  text-transform: capitalize;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .rec-carousel-item{
   /* min-width: 250px;
   max-width: 250px; */
-  width: 255px;
+  width: 235px;
   display: flex;
   justify-content: center;
 }
@@ -26,28 +38,44 @@
   min-width: 250px;
   display: flex;
   justify-content: center;
-  height: 330px;
+  height: 340px;
+  margin-bottom: 0px !important;
 }
 
 .rec-carousel-wrapper{
   width: 275px !important;
-  margin-right: 50px;
   display: flex;
   justify-content: center;
+  margin-bottom: 20px;
+}
+
+.rec-pagination{
+  margin-top: 0px !important;
 }
 
 .carousel-button{
-  width: 30px;
+  width: 20px;
   height: 30px;
   outline: none !important;
 }
 
 .carousel-arrows-icon{
   color: rgba(153, 0, 255, 0.603);
+  transition: all 0.1s;
 }
 
 .disabled-carousel-arrows-icon{
   color: rgba(153, 0, 255, 0.335);
+}
+
+.rec-dot{
+  width: 7px !important;
+  height: 7px !important;
+  outline: none !important;
+}
+
+.reac-dot_active{
+  box-shadow: 0 0 1px 2px rgb(103 58 183) !important;
 }
 
 /* MIN 1278px WIDTH = 3 CARD SLOTS*/
@@ -57,10 +85,6 @@
 /* 1 CARD SLOT */
 @media (max-width: 850px){
   .carousel-buttons{
-    width: 290px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
     margin: 20px 0px 10px 0px;
   }
   

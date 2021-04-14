@@ -67,6 +67,8 @@ body{
 .card-footer{
   margin: 6px auto;
   width: 90%;
+  height: 60px;
+  margin-bottom: 0px !important;
 }
 
 .song-name{
