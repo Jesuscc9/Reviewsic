@@ -140,7 +140,7 @@ const Card = (props) => {
                   if (liked) {
                     props.deleteSong(data.song_id, uri, pos);
                   } else {
-                    props.addSong(data.song_id);
+                    props.addSong(data.song_id, data);
                   }
 
                   setLiked(!liked);

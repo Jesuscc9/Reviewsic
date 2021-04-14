@@ -66,10 +66,7 @@ const Register = () => {
 
   const sortArray = () => {
     let sorted = [];
-    if (sortType === "song")
-      sorted = [...songList].sort((a, b) =>
-        a[sortType].localeCompare(b[sortType], "en", { sensitivity: "base" })
-      );
+    if (sortType === "song") sorted = [...songList].sort((a, b) =>a[sortType].localeCompare(b[sortType], "en", { sensitivity: "base" }));
     else sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
     return sorted;
   };
@@ -137,6 +134,30 @@ const Register = () => {
     setSongList(data);
     socket.emit("updateReviews", data);
   };
+
+  const handleAddSong = async(songId, item) => {
+    spotifyApi.playlist.add(songId, token);
+    api.data = item;
+    setSongList(
+      await api.setLikes(
+        item.id,
+        songList,
+        item.likes + 1
+      )
+    );
+  };
+
+  const handleDeleteSong = async(songId, uri, pos, item) => {
+    spotifyApi.playlist.delete(songId, uri, pos, token);
+    api.data = item;
+    setSongList(
+      await api.setLikes(
+        item.id,
+        songList,
+        item.likes - 1
+      )
+    );
+  }
 
   const smartRegister = () => {
     MySwal.fire({
@@ -274,8 +295,21 @@ const Register = () => {
                             />
                             {cardView == "categories" ? (
                               <CardsCarousel
-                                songList={sortArray()}
+                                user={songData.author_id}
                                 likedSongs={likedSongs}
+                                songList={sortArray()}
+                                update={(item) => {
+                                  alertUpdateForm(item);
+                                }}
+                                delete={(e) => {
+                                  deleteReview(e.id);
+                                }}
+                                addSong={async (songId, item) => {
+                                  handleAddSong(songId, item)
+                                }}
+                                deleteSong={async (songId, uri, pos, item) => {
+                                  handleDeleteSong(songId, uri, pos, item)
+                                }}
                               />
                             ) : (
                               <React.Fragment>
@@ -292,32 +326,11 @@ const Register = () => {
                                         deleteReview(e.id);
                                       }}
                                       likedSongs={likedSongs}
-                                      addSong={async (songId) => {
-                                        spotifyApi.playlist.add(songId, token);
-                                        api.data = item;
-                                        setSongList(
-                                          await api.setLikes(
-                                            item.id,
-                                            songList,
-                                            item.likes + 1
-                                          )
-                                        );
+                                      addSong={async (songId, item) => {
+                                        handleAddSong(songId, item)
                                       }}
                                       deleteSong={async (songId, uri, pos) => {
-                                        spotifyApi.playlist.delete(
-                                          songId,
-                                          uri,
-                                          pos,
-                                          token
-                                        );
-                                        api.data = item;
-                                        setSongList(
-                                          await api.setLikes(
-                                            item.id,
-                                            songList,
-                                            item.likes - 1
-                                          )
-                                        );
+                                        handleDeleteSong(songId, uri, pos, item)
                                       }}
                                     />
                                   );

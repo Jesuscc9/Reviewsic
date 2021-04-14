@@ -48,16 +48,29 @@ const CarouselRow = (props) => {
         focusOnSelect={true}
         ref={carousel}
         outerSpacing={10}
-        // renderPagination={({ pages, activePage, onClick }) => {
-        //   return (<div/>)
-        // }} 
         renderArrow={() => {
           return <div/>
         }}
       >
         {props.data.songList.map((song) => {
           return (
-            <Card data={song} likedSongs={props.likedSongs}></Card>
+            <Card 
+            data={song} 
+            likedSongs={props.likedSongs} 
+            user={props.user}
+            update={() => {
+              props.update(song);
+            }}
+            delete={(e) => {
+              props.delete(e);
+            }}
+            addSong={async (songId, item) => {
+              props.addSong(songId, item)
+            }}
+            deleteSong={async (songId, uri, pos) => {
+              props.deleteSong(songId, uri, pos, song)
+            }}
+            ></Card>
           );
         })}
       </Carousel>
