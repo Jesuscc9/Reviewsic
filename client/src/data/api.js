@@ -86,6 +86,8 @@ export const api = {
   setLikes: async function(id, songList, likes){
     this.data.likes = likes
 
+    if(likes < -1) likes = 0
+
     const setLikes = await Axios.put(`${this.endpoint}/api/update/setLikes/${id}`, this.data)
 
     for (let i = 0; i < songList.length; i++) {
