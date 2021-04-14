@@ -1,0 +1,74 @@
+.carousel-buttons{
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.buttons-container{
+  width: 70px;
+  height: 30px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.rec-carousel-item{
+  /* min-width: 250px;
+  max-width: 250px; */
+  width: 255px;
+  display: flex;
+  justify-content: center;
+}
+
+.rec-item-wrapper{
+  /* min-width: 250px;
+  max-width: 250px; */
+  min-width: 250px;
+  display: flex;
+  justify-content: center;
+  height: 330px;
+}
+
+.rec-carousel-wrapper{
+  width: 275px !important;
+  margin-right: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.carousel-button{
+  width: 30px;
+  height: 30px;
+  outline: none !important;
+}
+
+.carousel-arrows-icon{
+  color: rgba(153, 0, 255, 0.603);
+}
+
+.disabled-carousel-arrows-icon{
+  color: rgba(153, 0, 255, 0.335);
+}
+
+/* MIN 1278px WIDTH = 3 CARD SLOTS*/
+
+/*MIN 853px WIDTH = 2 CARD SLOTS*/
+
+/* 1 CARD SLOT */
+@media (max-width: 850px){
+  .carousel-buttons{
+    width: 290px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0px 10px 0px;
+  }
+  
+  .buttons-container{
+    width: 70px;
+    height: 30px;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+}

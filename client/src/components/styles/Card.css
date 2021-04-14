@@ -2,8 +2,16 @@ body{
   background:#e6edff !important;scroll-behavior: smooth;
 }
 
+.card-container-car{
+  min-width: 250px;
+  max-width: 250px;
+  height: 330px;
+  border: 1px solid;
+}
+
 .card-custom{
-  width: 190px;
+  min-width: 190px;
+  max-width: 190px;
   height:  330px;
   margin: 0px 20px 20px;
   background: #fff;
@@ -173,6 +181,7 @@ body{
   justify-content: center;
   align-items: center;
   font-size: 14px;
+  z-index: 10;
 }
 
 .faPen{
