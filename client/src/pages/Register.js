@@ -138,25 +138,21 @@ const Register = () => {
   const handleAddSong = async(songId, item) => {
     spotifyApi.playlist.add(songId, token);
     api.data = item;
-    setSongList(
-      await api.setLikes(
-        item.id,
-        songList,
-        item.likes + 1
-      )
-    );
+    socket.emit("updateReviews", await api.setLikes(
+      item.id,
+      songList,
+      item.likes + 1
+    ));
   };
 
   const handleDeleteSong = async(songId, uri, pos, item) => {
     spotifyApi.playlist.delete(songId, uri, pos, token);
     api.data = item;
-    setSongList(
-      await api.setLikes(
-        item.id,
-        songList,
-        item.likes - 1
-      )
-    );
+    socket.emit("updateReviews", await api.setLikes(
+      item.id,
+      songList,
+      item.likes - 1
+    ))
   }
 
   const smartRegister = () => {
