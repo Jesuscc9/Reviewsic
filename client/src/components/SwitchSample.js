@@ -8,7 +8,6 @@ const SwitchSample = (props) => {
 
   useEffect(() => {
     setChecked(props.value)
-    console.log('se checkea ' + props.value)
   }, [])
 
   const handleChange = (check) => {

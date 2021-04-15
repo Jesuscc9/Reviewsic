@@ -19,19 +19,19 @@ const index = require("./routes/index");
 // const dir = '/build/images/'
 const dir = '/../client/public/images/'
 
-// const db = mysql.createPool({
-//   host: 'localhost',
-//   user: 'root',
-//   password: '',
-//   database: 'gf'
-// })
-
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'password',
-  database: 'reviewsic'
+  password: '',
+  database: 'gf'
 })
+
+// const db = mysql.createPool({
+//   host: 'localhost',
+//   user: 'root',
+//   password: 'password',
+//   database: 'reviewsic'
+// })
 
 
 //app.use(express.static(path.resolve(__dirname, 'build/')))
@@ -114,6 +114,8 @@ app.put('/api/update/:id', (req, res) => {
 })
 
 app.put('/api/update/setLikes/:id', (req, res) => {
+  
+  if(req.body.likes < 0) req.body.likes = 0
 
   const sqlUpdate = "UPDATE song_reviews SET likes = ?  WHERE id = ?"
 
@@ -146,8 +148,6 @@ io.on("connection", (socket) => {
   }) 
 
   socket.on('new user', (data) => {
-    console.log('Este es el recibo: ')
-    console.log(data)
     let keys = Object.keys(users)
     socket.user = data.nickname
     if(!(keys.includes(data.nickname))){

@@ -67,7 +67,10 @@ const Register = () => {
 
   const sortArray = () => {
     let sorted = [];
-    if (sortType === "song") sorted = [...songList].sort((a, b) =>a[sortType].localeCompare(b[sortType], "en", { sensitivity: "base" }));
+    if (sortType === "song")
+      sorted = [...songList].sort((a, b) =>
+        a[sortType].localeCompare(b[sortType], "en", { sensitivity: "base" })
+      );
     else sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
     return sorted;
   };
@@ -136,25 +139,23 @@ const Register = () => {
     socket.emit("updateReviews", data);
   };
 
-  const handleAddSong = async(songId, item) => {
+  const handleAddSong = async (songId, item) => {
     spotifyApi.playlist.add(songId, token);
     api.data = item;
-    socket.emit("updateReviews", await api.setLikes(
-      item.id,
-      songList,
-      item.likes + 1
-    ));
+    socket.emit(
+      "updateReviews",
+      await api.setLikes(item.id, songList, item.likes + 1)
+    );
   };
 
-  const handleDeleteSong = async(songId, uri, pos, item) => {
+  const handleDeleteSong = async (songId, uri, pos, item) => {
     spotifyApi.playlist.delete(songId, uri, pos, token);
     api.data = item;
-    socket.emit("updateReviews", await api.setLikes(
-      item.id,
-      songList,
-      item.likes - 1
-    ))
-  }
+    socket.emit(
+      "updateReviews",
+      await api.setLikes(item.id, songList, item.likes - 1)
+    );
+  };
 
   const smartRegister = () => {
     MySwal.fire({
@@ -278,7 +279,8 @@ const Register = () => {
           {token.length > 0 ? (
             <React.Fragment>
               <SpotifyApiContext.Provider value={token}>
-                <div className="main-container">
+                <div className="page-container">
+                  <div className="main-container">
                     {!loaded ? (
                       <Loader />
                     ) : (
@@ -301,11 +303,12 @@ const Register = () => {
                                   deleteReview(e.id);
                                 }}
                                 addSong={async (songId, item) => {
-                                  handleAddSong(songId, item)
+                                  handleAddSong(songId, item);
                                 }}
                                 deleteSong={async (songId, uri, pos, item) => {
-                                  handleDeleteSong(songId, uri, pos, item)
+                                  handleDeleteSong(songId, uri, pos, item);
                                 }}
+                                sortType={sortType}
                               />
                             ) : (
                               <React.Fragment>
@@ -323,10 +326,15 @@ const Register = () => {
                                       }}
                                       likedSongs={likedSongs}
                                       addSong={async (songId, item) => {
-                                        handleAddSong(songId, item)
+                                        handleAddSong(songId, item);
                                       }}
                                       deleteSong={async (songId, uri, pos) => {
-                                        handleDeleteSong(songId, uri, pos, item)
+                                        handleDeleteSong(
+                                          songId,
+                                          uri,
+                                          pos,
+                                          item
+                                        );
                                       }}
                                     />
                                   );
@@ -339,11 +347,12 @@ const Register = () => {
                         )}
                       </div>
                     )}
-                  <div className="contact-container">
-                    <Contacts users={users} />
+                    <div className="contact-container">
+                      <Contacts users={users} />
+                    </div>
                   </div>
+                  <Footer token={token} />
                 </div>
-                
               </SpotifyApiContext.Provider>
             </React.Fragment>
           ) : (
@@ -353,7 +362,6 @@ const Register = () => {
       ) : (
         <React.Fragment />
       )}
-      <Footer token={token}/>
     </React.Fragment>
   );
 };

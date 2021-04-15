@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CarouselRow from './CarouselRow'
 
 const CardCarousel = (props) => {
 
   var genres = []
   const splited_genres = []
+
+  const [sortType, setSortType] = useState(props.sortType)
+
+  if(sortType != props.sortType){
+    setSortType(props.sortType)
+  }
 
   const genreExist = (genre, arr) =>{
     for(let i = 0; i<arr.length;i++){
@@ -46,7 +52,8 @@ const CardCarousel = (props) => {
     return arr;
   }, [])
 
-  genres = genres.sort((a, b) =>a.genre.localeCompare(b.genre, "en", { sensitivity: "base" }))
+
+  //genres = genres.sort((a, b) =>a.genre.localeCompare(b.genre, "en", { sensitivity: "base" }))
 
   return (
     <React.Fragment>
@@ -68,6 +75,7 @@ const CardCarousel = (props) => {
           deleteSong={async (songId, uri, pos, item) => {
             props.deleteSong(songId, uri, pos, item)
           }}
+          sortType={sortType ? sortType : 'song'}
           />
         )
       })}

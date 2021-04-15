@@ -14,20 +14,33 @@ const Card = (props) => {
   const [liked, setLiked] = useState(false);
   const [pos, setPos] = useState(0);
   const [uri, setUri] = useState("");
+  const [sortType, setSortType] = useState(props.sortType)
+
+  let isInPlaylist = false
 
   useEffect(() => {
     let i = 0;
+    setLiked(false)
     props.likedSongs.forEach((e) => {
       i++;
       if (e.track.name == data.song) {
         setUri(e.track.uri);
-        setLiked(true);
+        isInPlaylist = true
+        setLiked(isInPlaylist);
         setPos(i);
         handleHeartClick();
         return;
       }
     });
-  }, []);
+
+    heart.current.classList.remove("clicked_heart");
+    handleMouseLeave();
+
+  }, [liked, sortType]);
+
+  if(sortType != props.sortType){
+    setSortType(props.sortType)
+  }
 
   var rating = {
     size: 20,

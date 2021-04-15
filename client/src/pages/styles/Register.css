@@ -3,7 +3,7 @@
 
 
 body{
-  height: 100vh;
+  height: 100%;
   margin: 0;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -12,8 +12,6 @@ body{
   overflow-y: auto;
   /* position: relative;
   min-height: calc(100vh + 130px); */
-  display: flex;
-  flex-direction: column;
 }
 
 
@@ -27,7 +25,12 @@ html {
   flex-wrap: wrap;
   width: 60%;
   max-width: 90%;
-  margin-bottom: 130px;
+  margin-bottom: 50px;
+}
+
+.page-container {
+  position: relative;
+  min-height: 100vh;
 }
 
 ::-webkit-scrollbar {
@@ -65,7 +68,7 @@ body::-webkit-scrollbar-track {
   margin: 0 auto;
   display: flex;
   justify-content: space-around;
-  min-height: 88vh;
+  padding-bottom: 80px;
 }
 
 .contact-container{

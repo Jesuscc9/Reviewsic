@@ -33,8 +33,9 @@ const Footer = (props) => {
               onClick={() => {
                 handleLogOut()
               }}>
+              Log Out&#160;&#160;
               <FontAwesomeIcon icon={faSignOutAlt}/>
-              &#160;&#160;Log Out
+              
             </button>
           </div> : <div />}
         </div>
