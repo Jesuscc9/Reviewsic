@@ -20,10 +20,10 @@ const index = require("./routes/index");
 const dir = '/../client/public/images/'
 
 const db = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'gf'
+  host: 'dissoftec.com',
+  user: 'u257375416_reviewsic',
+  password: 'ReviewsicDB9',
+  database: 'u257375416_reviewsic'
 })
 
 // const db = mysql.createPool({

@@ -171,8 +171,36 @@ const SmartRegisterForm = (props) => {
 
             const genres = await spotifyApi.song.getGenres(data.artists[0].id);
 
-            setGenres(genres);
-            props.onGenreChange(genres[0]);
+            if (genres.length > 0) {
+              setGenres(genres);
+              props.onGenreChange(genres[0]);
+            } else {
+              setGenres([
+                "country",
+                "electronic",
+                "hip-hop",
+                "jazz",
+                "metal",
+                "pop",
+                "k-pop",
+                "indie pop",
+                "bedroom pop",
+                "dance pop",
+                "rock pop",
+                "Rap",
+                "blues",
+                "eock",
+                "indie rock",
+                "hard rock",
+                "soft rock",
+                "dance rock",
+                "alternative rock",
+                "rock en espanol",
+                "trova",
+                "alternative",
+              ]);
+              props.onGenreChange('country');
+            }
           } catch (err) {
             console.log(err);
             spotifyInputStatus.error();
@@ -231,7 +259,11 @@ const SmartRegisterForm = (props) => {
           Please fill out this field.
         </p>
 
-        <div className={`genre-container ${genres.length ? 'show-genre' : 'hide-genre'}`}>
+        <div
+          className={`genre-container ${
+            genres.length ? "show-genre" : "hide-genre"
+          }`}
+        >
           <p className="input-label">Genre: </p>
 
           <select
@@ -254,11 +286,8 @@ const SmartRegisterForm = (props) => {
               <div />
             )}
           </select>
-        <p className="alert-label">
-          Please
-        </p>
+          <p className="alert-label">Please</p>
         </div>
-
 
         <p className="input-label">Review: </p>
 
