@@ -4,9 +4,15 @@ import { faGithub } from "@fortawesome/fontawesome-free-brands";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import Cookies from 'js-cookie';
+
+const handleLogOut = () => {
+  Cookies.remove('spotifyAuthToken')
+  window.location.href = '/'
+}
+
 
 const Footer = (props) => {
-  console.log(props);
 
   return (
     <Reat.Fragment>
@@ -22,9 +28,12 @@ const Footer = (props) => {
         <div className="footer-section">
           {props.token ? 
           <div className="logout-button-container">
-            <button className="logout-button">
+            <button 
+              className="logout-button" 
+              onClick={() => {
+                handleLogOut()
+              }}>
               <FontAwesomeIcon icon={faSignOutAlt}/>
-              
               &#160;&#160;Log Out
             </button>
           </div> : <div />}

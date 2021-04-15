@@ -343,7 +343,6 @@ const Register = () => {
                     <Contacts users={users} />
                   </div>
                 </div>
-                <Footer token={token}/>
                 
               </SpotifyApiContext.Provider>
             </React.Fragment>
@@ -354,6 +353,7 @@ const Register = () => {
       ) : (
         <React.Fragment />
       )}
+      <Footer token={token}/>
     </React.Fragment>
   );
 };
