@@ -5,6 +5,7 @@
   max-width: 90%;
   margin: auto;
   padding: 10px;
+  height: calc(100vh - 181px);
 }
 
 .login-button{

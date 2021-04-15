@@ -9,6 +9,7 @@ import withReactContent from "sweetalert2-react-content";
 import Axios from "axios";
 
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import Card from "../components/Card";
 import CardsCarousel from "../components/CardsCarousel";
 import Loader from "../components/Loader";
@@ -278,11 +279,10 @@ const Register = () => {
             <React.Fragment>
               <SpotifyApiContext.Provider value={token}>
                 <div className="main-container">
-                  <div className="card-container">
                     {!loaded ? (
                       <Loader />
                     ) : (
-                      <React.Fragment>
+                      <div className="card-container">
                         {songList.length && likedSongs != undefined ? (
                           <React.Fragment>
                             <DropdownMenu
@@ -337,13 +337,14 @@ const Register = () => {
                         ) : (
                           <div>Not reviews registered yet 😕.</div>
                         )}
-                      </React.Fragment>
+                      </div>
                     )}
-                  </div>
                   <div className="contact-container">
                     <Contacts users={users} />
                   </div>
                 </div>
+                <Footer token={token}/>
+                
               </SpotifyApiContext.Provider>
             </React.Fragment>
           ) : (
