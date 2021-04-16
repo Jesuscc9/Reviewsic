@@ -146,11 +146,11 @@ export const spotifyApi = {
         spotifyApi.likedSongs = await spotifyApi.playlist.get(`https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`)
       } else {
         const createPlaylist = await Axios.post(
-          `https://api.spotify.com/v1/users/${this.data.author_id}/playlists`,
+          `https://api.spotify.com/v1/users/${spotifyApi.songData.author_id}/playlists`,
           {
             name: "Reviewsic",
           },
-          (this.config)
+          (spotifyApi.config)
         )
         spotifyApi.data.playlistId = createPlaylist.data.id
       }
