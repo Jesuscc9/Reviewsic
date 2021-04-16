@@ -5,6 +5,9 @@ import Swal from "sweetalert2"
 export const api = {
   endpoint: '',
   data: {},
+  get: async function(){
+    return ((await Axios.get(`${this.endpoint}/api/get`)).data)
+  },
   insert: async function(){
     this.data.date = Date.now()
     const upload = await Axios.post(`${this.endpoint}/api/insert`, this.data)

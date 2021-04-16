@@ -13,7 +13,7 @@ import Footer from "../components/Footer";
 import Card from "../components/Card";
 import CardsCarousel from "../components/CardsCarousel";
 import Loader from "../components/Loader";
-import SmartRegisterForm from "../components/SmartRegisterForm";
+import RegisterForm from "../components/RegisterForm";
 import UpdateForm from "../components/UpdateForm";
 import Contacts from "../components/Contacts";
 import Login from "../components/Login";
@@ -27,10 +27,10 @@ import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import "../pages/styles/Register.css";
 
-const ENDPOINT = "/";
 const API_ENDPOINT = "http://localhost:3001";
-// const socket = openSocket(ENDPOINT)
+// const API_ENDPOINT = "";
 const socket = openSocket("http://localhost:3001");
+// const socket = openSocket("/")
 
 const Register = () => {
   const MySwal = withReactContent(Swal);
@@ -80,11 +80,11 @@ const Register = () => {
       !Cookies.get("spotifyAuthToken") ? "" : Cookies.get("spotifyAuthToken")
     );
 
-    if (token && token.length && !sortType) {
-      setSongList((await Axios.get(`${API_ENDPOINT}/api/get`)).data);
+    if (token && token.length) {
+      setSongList(await api.get());
 
       spotifyApi.setConfig(token);
-      let fetch = await spotifyApi.get();
+      await spotifyApi.get();
 
       setSongData((prevState) => ({
         ...prevState,
@@ -117,7 +117,7 @@ const Register = () => {
     }
   }, [token]);
 
-  api.endpoint = "http://localhost:3001";
+  api.endpoint = API_ENDPOINT;
   api.data = songData;
   api.songList = songList;
 
@@ -140,7 +140,7 @@ const Register = () => {
   };
 
   const handleAddSong = async (songId, item) => {
-    spotifyApi.playlist.add(songId, token);
+    spotifyApi.playlist.add(songId);
     api.data = item;
     socket.emit(
       "updateReviews",
@@ -149,7 +149,7 @@ const Register = () => {
   };
 
   const handleDeleteSong = async (songId, uri, pos, item) => {
-    spotifyApi.playlist.delete(songId, uri, pos, token);
+    spotifyApi.playlist.delete(songId, uri, pos);
     api.data = item;
     socket.emit(
       "updateReviews",
@@ -157,11 +157,11 @@ const Register = () => {
     );
   };
 
-  const smartRegister = () => {
+  const registerForm = () => {
     MySwal.fire({
       html: (
         <React.Fragment>
-          <SmartRegisterForm
+          <RegisterForm
             onSongChange={(e) => {
               setSongData((prevState) => ({
                 ...prevState,
@@ -261,7 +261,7 @@ const Register = () => {
     <React.Fragment>
       <Navbar
         onAddClick={() => {
-          smartRegister();
+          registerForm();
         }}
         profileImage={
           spotifyData.profileImage
@@ -285,7 +285,7 @@ const Register = () => {
                       <Loader />
                     ) : (
                       <div className="card-container">
-                        {songList.length && likedSongs != undefined ? (
+                        {songList.length ? (
                           <React.Fragment>
                             <DropdownMenu
                               onSelect={(value) => handleDropdown(value)}
@@ -356,7 +356,10 @@ const Register = () => {
               </SpotifyApiContext.Provider>
             </React.Fragment>
           ) : (
-            <Login />
+            <React.Fragment>
+              <Login />
+              <Footer token={token} />
+            </React.Fragment>
           )}
         </React.Fragment>
       ) : (

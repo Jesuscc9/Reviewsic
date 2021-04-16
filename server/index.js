@@ -16,22 +16,19 @@ const app = express()
 
 const index = require("./routes/index");
 
-// const dir = '/build/images/'
-const dir = '/../client/public/images/'
+// const db = mysql.createPool({
+//   host: 'dissoftec.com',
+//   user: 'u257375416_reviewsic',
+//   password: 'ReviewsicDB9',
+//   database: 'u257375416_reviewsic'
+// })
 
 const db = mysql.createPool({
-  host: 'dissoftec.com',
-  user: 'u257375416_reviewsic',
-  password: 'ReviewsicDB9',
-  database: 'u257375416_reviewsic'
+  host: 'localhost',
+  user: 'root',
+  password: 'password',
+  database: 'reviewsic'
 })
-
-// const db = mysql.createPool({
-//   host: 'localhost',
-//   user: 'root',
-//   password: 'password',
-//   database: 'reviewsic'
-// })
 
 
 //app.use(express.static(path.resolve(__dirname, 'build/')))
@@ -43,20 +40,11 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(fileUpload());
 
-
-app.post("/api/newUser/", (req, res) => {
-  user = req.body.nickname
-  user_id = req.body.id
-  user_data = req.body
-  res.send('success')
-})
-
 app.get("/api/get", (req, res) =>{
 
   const sqlSelect = 'SELECT * FROM song_reviews';
   db.query(sqlSelect, (err, result) => {
     if(err){
-      res.send('error 50');
       res.end();
     }else{
       res.send(result)
@@ -65,7 +53,6 @@ app.get("/api/get", (req, res) =>{
 })
 
 app.post("/api/insert", async (req, res) =>{
-  
 
   const sqlInsert = "INSERT INTO song_reviews (image, song, artist, review, genre, spotifyUrl, qualification, author, author_id, song_id, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
@@ -84,18 +71,12 @@ app.post("/api/insert", async (req, res) =>{
 app.delete('/api/delete/:id', (req, res) => {
   const id = req.params.id;
 
-  try {
-
-    const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
-    db.query(sqlDelete, id, (err, result) => {
-      if(err){
-        console.log(err)
-      }
-    })
-
-  } catch(err) {
-
-  }
+  const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
+  db.query(sqlDelete, id, (err, result) => {
+    if(err){
+      console.log(err)
+    }
+  })
 
 })
 
@@ -179,8 +160,6 @@ io.on("connection", (socket) => {
     for(let i = 0; i<keys.length;i++){
       users_.push(users[keys[i]].data)
     }
-
-    console.log('SE emite')
 
     io.sockets.emit('usernames', users_);
   }
