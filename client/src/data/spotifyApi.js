@@ -1,17 +1,17 @@
-import Axios from 'axios'
-import { toast } from "react-toastify"
+import Axios from "axios";
+import { toast } from "react-toastify";
 
 export const spotifyApi = {
   config: {},
-  token: '',
-  authorId: '',
+  token: "",
+  authorId: "",
   data: {
-    profileImage: '',
-    playlistId: '',
+    profileImage: "",
+    playlistId: "",
   },
   songData: {
-    author_id: '',
-    author: '',
+    author_id: "",
+    author: "",
   },
   likedSongs: [],
   user: {},
@@ -19,23 +19,23 @@ export const spotifyApi = {
     spotifyApi.config = {
       headers: {
         Authorization: "Bearer " + token,
-      }
-    }
+      },
+    };
   },
-  get: async function(){
-
+  get: async function () {
     const userData = await Axios.get(
-      "https://api.spotify.com/v1/me", (this.config)
-    )
+      "https://api.spotify.com/v1/me",
+      this.config
+    );
 
     const user_image = userData.data.images.length
       ? userData.data.images[0].url
-      : "http://dissoftec.com/NicePng_user-png_730154.jpeg"
+      : "http://dissoftec.com/NicePng_user-png_730154.jpeg";
 
-    this.data.profileImage = user_image
+    this.data.profileImage = user_image;
 
-    this.songData.author = userData.data.display_name
-    this.songData.author_id = userData.data.id
+    this.songData.author = userData.data.display_name;
+    this.songData.author_id = userData.data.id;
 
     this.user = {
       nickname: userData.data.display_name,
@@ -44,23 +44,22 @@ export const spotifyApi = {
       type: userData.data.product,
       image: user_image,
       id: userData.data.id,
-    }
-
+    };
   },
   playlist: {
     get: async function getAllSongs(url, items = []) {
-      const songs = await Axios.get(url, spotifyApi.config)
+      const songs = await Axios.get(url, spotifyApi.config);
 
       songs.data.items.forEach((e) => {
-        items.push(e)
-      })
+        items.push(e);
+      });
 
-      if (songs.data.next === null) return items
-
-      return getAllSongs(songs.data.next, items)
+      if (songs.data.next === null) return items;
+      
+      return getAllSongs(songs.data.next, items);
     },
     add: async (songId) => {
-      const songUri = `spotify:track:${songId}`
+      const songUri = `spotify:track:${songId}`;
 
       const addSong = await Axios.post(
         `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`,
@@ -68,7 +67,7 @@ export const spotifyApi = {
           uris: [songUri],
         },
         spotifyApi.config
-      )
+      );
 
       toast("🎵 Song added to your playlist!", {
         position: "top-right",
@@ -78,11 +77,9 @@ export const spotifyApi = {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      })
-
-    }, 
+      });
+    },
     delete: async (songId, uri, pos, token) => {
-
       const headers = {
         Authorization: "Bearer " + token,
       };
@@ -100,7 +97,7 @@ export const spotifyApi = {
       const songs = await spotifyApi.playlist.get(
         `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`,
         []
-      )
+      );
 
       let i = 0;
       songs.forEach((e) => {
@@ -109,7 +106,7 @@ export const spotifyApi = {
           data.tracks[0].positions[0] = i - 1;
           return;
         }
-      })
+      });
 
       const removeSong = await Axios.delete(
         `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`,
@@ -122,61 +119,63 @@ export const spotifyApi = {
       //   `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`,
       //   { headers, data }
       // )
-
     },
-    create: async function(){
+    create: async function () {
       let playlists = await Axios.get(
         `https://api.spotify.com/v1/me/playlists`,
-        (spotifyApi.config)
-      )
-  
+        spotifyApi.config
+      );
+
       const reviewsicExists = () => {
-        playlists = playlists.data.items
-  
+        playlists = playlists.data.items;
+
         for (let i = 0; i < playlists.length; i++) {
           if (playlists[i].name === "Reviewsic") {
-            spotifyApi.data.playlistId = playlists[i].id
-            return true
+            spotifyApi.data.playlistId = playlists[i].id;
+            return true;
           }
         }
-        return false
-      }
-  
+        return false;
+      };
+
       if (reviewsicExists()) {
-        spotifyApi.likedSongs = await spotifyApi.playlist.get(`https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`)
+        spotifyApi.likedSongs = await spotifyApi.playlist.get(
+          `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`
+        );
       } else {
         const createPlaylist = await Axios.post(
           `https://api.spotify.com/v1/users/${spotifyApi.songData.author_id}/playlists`,
           {
             name: "Reviewsic",
           },
-          (spotifyApi.config)
-        )
-        spotifyApi.data.playlistId = createPlaylist.data.id
+          spotifyApi.config
+        );
+        spotifyApi.data.playlistId = createPlaylist.data.id;
       }
 
-
-      return spotifyApi.data.playlistId
-  
-    }
+      return spotifyApi.data.playlistId;
+    },
   },
   song: {
     get: async (songId) => {
       try {
-        return (await Axios.get(
-          `https://api.spotify.com/v1/tracks/${songId}`,
-          spotifyApi.config
-        )).data;
-
+        return (
+          await Axios.get(
+            `https://api.spotify.com/v1/tracks/${songId}`,
+            spotifyApi.config
+          )
+        ).data;
       } catch (err) {
-        return false
+        return false;
       }
     },
-    getGenres: async function(artistId){
-      return ((await Axios.get(
-        `https://api.spotify.com/v1/artists/${artistId}`,
-        spotifyApi.config
-      )).data.genres)
-    }
+    getGenres: async function (artistId) {
+      return (
+        await Axios.get(
+          `https://api.spotify.com/v1/artists/${artistId}`,
+          spotifyApi.config
+        )
+      ).data.genres;
+    },
   },
-}
+};

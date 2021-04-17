@@ -2,6 +2,8 @@ import React, { useState, useEffect, Component } from "react";
 import { SpotifyApiContext } from "react-spotify-api";
 import { api } from "../data/api";
 import { spotifyApi } from "../data/spotifyApi";
+import { useDispatch, useSelector } from "react-redux";
+import userActions from "../redux/user/actions";
 
 import openSocket from "socket.io-client";
 import Swal from "sweetalert2";
@@ -65,6 +67,8 @@ const Register = () => {
   const [sortType, setSortType] = useState(undefined);
   const [cardView, setCardView] = useState("categories");
 
+  const dispatch = useDispatch()
+
   const sortArray = () => {
     let sorted = [];
     if (sortType === "song")
@@ -84,6 +88,7 @@ const Register = () => {
       setSongList(await api.get());
 
       spotifyApi.setConfig(token);
+
       await spotifyApi.get();
 
       setSongData((prevState) => ({
@@ -91,6 +96,10 @@ const Register = () => {
         author: spotifyApi.songData.author,
         author_id: spotifyApi.songData.author_id,
       }));
+
+      dispatch(userActions.setUser(spotifyApi.songData.author_id))
+
+      
 
       setSpotifyData({
         profileImage: spotifyApi.data.profileImage,

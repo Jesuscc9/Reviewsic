@@ -23,11 +23,18 @@ const index = require("./routes/index");
 //   database: 'u257375416_reviewsic'
 // })
 
+// const db = mysql.createPool({
+//   host: 'localhost',
+//   user: 'root',
+//   password: 'password',
+//   database: 'reviewsic'
+// })
+
 const db = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: 'password',
-  database: 'reviewsic'
+  password: '',
+  database: 'gf'
 })
 
 

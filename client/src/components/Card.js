@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "tailwindcss/tailwind.css";
 import "../components/styles/Card.css";
 import ReactStars from "react-rating-stars-component";
+import { useSelector } from "react-redux"
 
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +18,8 @@ const Card = (props) => {
   const [sortType, setSortType] = useState(props.sortType)
 
   let isInPlaylist = false
+
+  const author_id = useSelector((e) => e.user.author_id)
 
   useEffect(() => {
     let i = 0;
@@ -120,7 +123,7 @@ const Card = (props) => {
           <ReactStars {...rating} className="stars-calification" />{" "}
           <p className="autor">By: {data.author}</p>
           <div className="card-options" ref={card_options}>
-            {data.author_id === props.user ? (
+            {data.author_id === author_id ? (
               <React.Fragment>
                 <div
                   className="edit-option option-container"
