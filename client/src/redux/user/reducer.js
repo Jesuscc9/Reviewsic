@@ -11,7 +11,6 @@ const reducer = (state = initialState, action) => {
     case actions.LOGIN: 
       return state;
     case actions.SET_USER:
-      console.log(action)
       return {...state, author_id: payload.data};
     default: 
       return state;
