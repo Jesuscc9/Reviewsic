@@ -171,7 +171,11 @@ const Home = () => {
           </div>
         </Scene>
       </div>
-      <motion.div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+      >
         <motion.img
           style={{ position: "absolute", top: "15%", left: "25%" }}
           name="element"
