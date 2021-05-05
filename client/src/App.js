@@ -13,7 +13,7 @@ const App = () => {
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route exact path="/home" component={Register} />
+          <Route exact path={["/home", "/home:id"]} component={Register} />
           <Route exact path="/" component={Home} />
           <Route component={NotFound} />
         </Switch>

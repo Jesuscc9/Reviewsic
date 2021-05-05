@@ -1,4 +1,31 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
+
+const planetAnim1 = keyframes`
+    from { 
+      transform: rotate(0deg) translateX(150px) rotate(0deg); 
+    }
+    to { 
+      transform: rotate(360deg) translateX(150px); 
+    }
+`;
+
+const planetAnim2 = keyframes`
+    from { 
+      transform: rotate(0deg) translateX(150px); 
+    }
+    to { 
+      transform: rotate(-200deg) translateX(150px); 
+    }
+`;
+
+const planetAnim3 = keyframes`
+    from { 
+      transform: rotate(0deg) translateY(150px); 
+    }
+    to { 
+      transform: rotate(-200deg) translateY(150px); 
+    }
+`;
 
 export const GlobalStyle = createGlobalStyle`
   body {
@@ -16,11 +43,23 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .planet{
-    transition: all 0.4s;
+    transition: all 0.6s;
     cursor: pointer;
     border-radius: 50%;
     z-index: 1000;
     opacity: 0.7;
+  }
+
+  .planet1{
+    animation: ${planetAnim1} 120s linear infinite;
+  }
+
+  .planet2{
+    animation: ${planetAnim2} 120s linear infinite;
+  }
+
+  .planet3{
+    animation: ${planetAnim3} 120s linear infinite;
   }
 
   .stars {
@@ -38,7 +77,6 @@ export const GlobalStyle = createGlobalStyle`
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     z-index: 1000;
-    display: none;
   }
 
   .login-form {
@@ -93,6 +131,10 @@ export const GlobalStyle = createGlobalStyle`
     z-index: 1;
   }
 
+  .reviewsic-svg{
+    filter: drop-shadow( 3px 3px 2px rgba(106, 90, 205, .3));
+  }
+
   .try-button {
     position: relative;
     left: 300px;
@@ -105,12 +147,11 @@ export const GlobalStyle = createGlobalStyle`
     color: #ffffff;
     font-family: "Roboto", sans-serif;
     font-size: 20px;
-    opacity: 0.7;
     transition: all 0.2s;
     outline: none !important;
 
     &:hover{
-      opacity: 1;
+      opacity: 1 !important;
     }
 
 
