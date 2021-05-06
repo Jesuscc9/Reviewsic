@@ -23,7 +23,7 @@ const navbar = (props) => {
               <div className="hidden sm:block sm:ml-6">
                 <div className="flex space-x-4">
                   <a
-                    href="#"
+                    href=""
                     className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
                     Home
@@ -72,7 +72,8 @@ const navbar = (props) => {
           </div>
         </div>
       </nav>
-      <br/><br/>
+      <br />
+      <br />
     </React.Fragment>
   );
 };

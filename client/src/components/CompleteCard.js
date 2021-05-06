@@ -5,9 +5,10 @@ import ReactStars from "react-rating-stars-component";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import { Card as CardCustom } from "./styles/Card.style.js";
 
-const Card = (props) => {
+import { CardCustom, GlobalStyles } from "./styles/CompleteCard.style";
+
+const CompleteCard = (props) => {
   const { data, likedSongs } = props;
 
   const song_name = useRef(null);
@@ -107,17 +108,8 @@ const Card = (props) => {
 
   return (
     <React.Fragment>
-      <CardCustom
-        onMouseOver={handleMouseOver}
-        onMouseLeave={handleMouseLeave}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{
-          duration: 0.05,
-          delay: 0.2,
-        }}
-      >
+      <GlobalStyles />
+      <CardCustom onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
         <div className="card-header" ref={card}>
           <div className="image-container">
             {/* <a href={data.spotifyUrl} target="_blank">
@@ -188,4 +180,4 @@ const Card = (props) => {
   );
 };
 
-export default Card;
+export default CompleteCard;

@@ -1,25 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Merriweather+Sans:wght@300;600;700;800&family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600;1,700&family=Open+Sans:wght@300;400;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Merriweather+Sans:wght@300;600;700;800&family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600;1,700&family=Open+Sans:wght@300;400;600&display=swap");
 
-
-
-body{
+body {
   height: 100%;
   margin: 0;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background: rgb(223,241,255);
-  background: -webkit-gradient(linear, left top, left bottom, from(rgba(223,241,255,1)), to( rgba(222, 197, 255, 0.383))) fixed !important;
+  background: rgb(223, 241, 255);
+  background: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(rgba(223, 241, 255, 1)),
+      to(rgba(222, 197, 255, 0.383))
+    )
+    fixed;
   overflow-y: auto;
   /* position: relative;
   min-height: calc(100vh + 130px); */
 }
 
-
 html {
   scroll-behavior: smooth;
 }
 
-.card-container{
+.card-container {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -40,14 +44,14 @@ html {
 }
 
 body::-webkit-scrollbar-track {
-  background-color: #1F2937;
+  background-color: #1f2937;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: rgb(223,241,255);
+  background: rgb(223, 241, 255);
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #3d4e6b;
@@ -62,7 +66,7 @@ body::-webkit-scrollbar-track {
   transition: all 0.4s;
 }
 
-.main-container{
+.main-container {
   width: 90%;
   max-width: 90%;
   margin: 0 auto;
@@ -71,14 +75,14 @@ body::-webkit-scrollbar-track {
   padding-bottom: 80px;
 }
 
-.contact-container{
+.contact-container {
   width: 30%;
   min-width: 250px;
   max-width: 300px;
 }
 
-@media (max-width: 500px){
-  .main-container{
+@media (max-width: 500px) {
+  .main-container {
     width: 90%;
     max-width: 90%;
     margin: 0 auto;
@@ -86,14 +90,14 @@ body::-webkit-scrollbar-track {
     flex-direction: column-reverse;
   }
 
-  .contact-container{
+  .contact-container {
     width: 95%;
     min-width: 95%;
     margin: auto;
     margin-bottom: 20px;
   }
 
-  .card-container{
+  .card-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

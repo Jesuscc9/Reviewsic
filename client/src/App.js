@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
+import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
 
 import { store } from "./redux/store";
 import Home from "./pages/Home";
@@ -11,13 +12,15 @@ import NotFound from "./pages/NotFound";
 const App = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Switch>
-          <Route exact path={["/home", "/home:id"]} component={Register} />
-          <Route exact path="/" component={Home} />
-          <Route component={NotFound} />
-        </Switch>
-      </BrowserRouter>
+      <AnimateSharedLayout type="crossfade">
+        <BrowserRouter>
+          <Switch>
+            <Route exact path={["/home", "/home/:id"]} component={Register} />
+            <Route exact path="/" component={Home} />
+            <Route component={NotFound} />
+          </Switch>
+        </BrowserRouter>
+      </AnimateSharedLayout>
     </Provider>
   );
 };

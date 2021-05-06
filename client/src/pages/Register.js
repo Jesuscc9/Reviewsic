@@ -3,6 +3,7 @@ import { SpotifyApiContext } from "react-spotify-api";
 import { api } from "../data/api";
 import { spotifyApi } from "../data/spotifyApi";
 import { useDispatch, useSelector } from "react-redux";
+import { AnimatePresence, motion } from "framer-motion";
 import userActions from "../redux/user/actions";
 
 import openSocket from "socket.io-client";
@@ -13,8 +14,9 @@ import Axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Card from "../components/Card";
+import CompleteCard from "../components/CompleteCard";
 import CardsCarousel from "../components/CardsCarousel";
-import Loader from "../components/Loader";
+import Loader from "react-loader-spinner";
 import RegisterForm from "../components/RegisterForm";
 import UpdateForm from "../components/UpdateForm";
 import Contacts from "../components/Contacts";
@@ -28,10 +30,11 @@ import "react-toastify/dist/ReactToastify.css";
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import "../pages/styles/Register.css";
+import { useParams } from "react-router";
 
 const API_ENDPOINT = "http://localhost:3001";
 // const API_ENDPOINT = "";
-const socket = openSocket("http://localhost:3001");
+const socket = openSocket(API_ENDPOINT);
 // const socket = openSocket("/")
 
 const Register = () => {
@@ -60,6 +63,7 @@ const Register = () => {
 
   const [songList, setSongList] = useState([]);
   const [users, setUsers] = useState([]);
+  const [showCards, setShowCards] = useState(false);
 
   const [likedSongs, setlikedSongs] = useState(undefined);
   const [token, setToken] = useState(undefined);
@@ -67,7 +71,7 @@ const Register = () => {
   const [sortType, setSortType] = useState(undefined);
   const [cardView, setCardView] = useState("categories");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const sortArray = () => {
     let sorted = [];
@@ -97,9 +101,7 @@ const Register = () => {
         author_id: spotifyApi.songData.author_id,
       }));
 
-      dispatch(userActions.setUser(spotifyApi.songData.author_id))
-
-      
+      dispatch(userActions.setUser(spotifyApi.songData.author_id));
 
       setSpotifyData({
         profileImage: spotifyApi.data.profileImage,
@@ -123,6 +125,7 @@ const Register = () => {
       });
 
       setLoaded(true);
+      setShowCards(true);
     }
   }, [token]);
 
@@ -264,6 +267,58 @@ const Register = () => {
   const handleDropdown = (value) => {
     setSortType(value);
     setSongList([...songList]);
+    setShowCards(false);
+    setTimeout(() => {
+      setShowCards(true);
+    }, 300);
+  };
+
+  const params = useParams();
+
+  const CardCustom = ({ data }) => {
+    return (
+      <Card
+        data={data}
+        user={songData.author_id}
+        key={data.id}
+        update={() => {
+          alertUpdateForm(data);
+        }}
+        delete={(e) => {
+          deleteReview(e.id);
+        }}
+        likedSongs={likedSongs}
+        addSong={async (songId, data) => {
+          handleAddSong(songId, data);
+        }}
+        deleteSong={async (songId, uri, pos) => {
+          handleDeleteSong(songId, uri, pos, data);
+        }}
+      />
+    );
+  };
+
+  const CardCompleteCustom = ({ data }) => {
+    return (
+      <CompleteCard
+        data={data}
+        user={songData.author_id}
+        key={data.id}
+        update={() => {
+          alertUpdateForm(data);
+        }}
+        delete={(e) => {
+          deleteReview(e.id);
+        }}
+        likedSongs={likedSongs}
+        addSong={async (songId, data) => {
+          handleAddSong(songId, data);
+        }}
+        deleteSong={async (songId, uri, pos) => {
+          handleDeleteSong(songId, uri, pos, data);
+        }}
+      />
+    );
   };
 
   return (
@@ -283,97 +338,145 @@ const Register = () => {
 
       <ToastContainer />
 
-      {token != undefined ? (
-        <React.Fragment>
-          {token.length > 0 ? (
-            <React.Fragment>
-              <SpotifyApiContext.Provider value={token}>
-                <div className="page-container">
-                  <div className="main-container">
-                    {!loaded ? (
-                      <Loader />
-                    ) : (
-                      <div className="card-container">
-                        {songList.length ? (
-                          <React.Fragment>
-                            <DropdownMenu
-                              onSelect={(value) => handleDropdown(value)}
-                              onCardViewChange={(value) => setCardView(value)}
-                            />
-                            {cardView == "categories" ? (
-                              <CardsCarousel
-                                user={songData.author_id}
-                                likedSongs={likedSongs}
-                                songList={sortArray()}
-                                update={(item) => {
-                                  alertUpdateForm(item);
-                                }}
-                                delete={(e) => {
-                                  deleteReview(e.id);
-                                }}
-                                addSong={async (songId, item) => {
-                                  handleAddSong(songId, item);
-                                }}
-                                deleteSong={async (songId, uri, pos, item) => {
-                                  handleDeleteSong(songId, uri, pos, item);
-                                }}
-                                sortType={sortType}
+      <AnimatePresence>
+        {token != undefined ? (
+          <React.Fragment>
+            {token.length > 0 ? (
+              <React.Fragment>
+                <SpotifyApiContext.Provider value={token}>
+                  <div className="page-container">
+                    <div className="main-container" style={{ marginTop: 10 }}>
+                      <motion.div
+                        className="card-container"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                      >
+                        <AnimatePresence>
+                          {!loaded ? (
+                            <motion.div
+                              key="loader"
+                              initial={{ y: -200 }}
+                              animate={{ y: 0 }}
+                              exit={{ y: -200 }}
+                              style={{ position: "absolute" }}
+                            >
+                              <Loader
+                                type="Audio"
+                                color="#6c22cdc7"
+                                height={70}
+                                width={70}
+                                className="mt-5"
                               />
-                            ) : (
-                              <React.Fragment>
-                                {sortArray().map((item) => {
-                                  return (
-                                    <Card
-                                      data={item}
-                                      user={songData.author_id}
-                                      key={item.id}
-                                      update={() => {
-                                        alertUpdateForm(item);
-                                      }}
-                                      delete={(e) => {
-                                        deleteReview(e.id);
-                                      }}
-                                      likedSongs={likedSongs}
-                                      addSong={async (songId, item) => {
-                                        handleAddSong(songId, item);
-                                      }}
-                                      deleteSong={async (songId, uri, pos) => {
-                                        handleDeleteSong(
+                            </motion.div>
+                          ) : (
+                            <React.Fragment>
+                              {songList.length ? (
+                                <React.Fragment>
+                                  <DropdownMenu
+                                    onSelect={(value) => handleDropdown(value)}
+                                    onCardViewChange={(value) =>
+                                      setCardView(value)
+                                    }
+                                  />
+
+                                  <motion.div
+                                    initial={{
+                                      opacity: 0,
+                                    }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    style={{
+                                      maxWidth: "100%",
+                                      display: "flex",
+                                      justifyContent: "space-around",
+                                      flexWrap: "wrap",
+                                    }}
+                                  >
+                                    {cardView == "categories" ? (
+                                      <CardsCarousel
+                                        user={songData.author_id}
+                                        likedSongs={likedSongs}
+                                        songList={sortArray()}
+                                        update={(item) => {
+                                          alertUpdateForm(item);
+                                        }}
+                                        delete={(e) => {
+                                          deleteReview(e.id);
+                                        }}
+                                        addSong={async (songId, item) => {
+                                          handleAddSong(songId, item);
+                                        }}
+                                        deleteSong={async (
                                           songId,
                                           uri,
                                           pos,
                                           item
-                                        );
-                                      }}
-                                    />
-                                  );
-                                })}
-                              </React.Fragment>
-                            )}
-                          </React.Fragment>
-                        ) : (
-                          <div>Not reviews registered yet 😕.</div>
-                        )}
+                                        ) => {
+                                          handleDeleteSong(
+                                            songId,
+                                            uri,
+                                            pos,
+                                            item
+                                          );
+                                        }}
+                                        sortType={sortType}
+                                      />
+                                    ) : (
+                                      <AnimatePresence>
+                                        {sortArray().map((item) => {
+                                          return (
+                                            <>
+                                              <CardCustom
+                                                data={item}
+                                                key={item.id}
+                                              />
+                                              {params.id && (
+                                                <AnimatePresence>
+                                                  <CardCompleteCustom
+                                                    data={item}
+                                                    key={item}
+                                                  />
+                                                </AnimatePresence>
+                                              )}
+                                            </>
+                                          );
+                                        })}
+                                      </AnimatePresence>
+                                    )}
+                                  </motion.div>
+                                </React.Fragment>
+                              ) : (
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                >
+                                  Not reviews registered yet 😕.
+                                </motion.div>
+                              )}
+                            </React.Fragment>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+
+                      <div className="contact-container">
+                        <Contacts users={users} />
                       </div>
-                    )}
-                    <div className="contact-container">
-                      <Contacts users={users} />
                     </div>
+                    <Footer token={token} />
                   </div>
-                  <Footer token={token} />
-                </div>
-              </SpotifyApiContext.Provider>
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
-              <Login />
-              <Footer token={token} />
-            </React.Fragment>
-          )}
-        </React.Fragment>
-      ) : (
-        <React.Fragment />
-      )}
+                </SpotifyApiContext.Provider>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Login />
+                <Footer token={token} />
+              </React.Fragment>
+            )}
+          </React.Fragment>
+        ) : (
+          <React.Fragment />
+        )}
+      </AnimatePresence>
     </React.Fragment>
   );
 };

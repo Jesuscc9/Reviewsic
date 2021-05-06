@@ -1,17 +1,17 @@
-import { toast } from "react-toastify"
-import Axios from "axios"
-import Swal from "sweetalert2"
+import { toast } from "react-toastify";
+import Axios from "axios";
+import Swal from "sweetalert2";
 
 export const api = {
-  endpoint: '',
+  endpoint: "",
   data: {},
-  get: async function(){
-    return ((await Axios.get(`${this.endpoint}/api/get`)).data)
+  get: async function () {
+    return (await Axios.get(`${this.endpoint}/api/get`)).data;
   },
-  insert: async function(){
-    this.data.date = Date.now()
-    const upload = await Axios.post(`${this.endpoint}/api/insert`, this.data)
-  
+  insert: async function () {
+    this.data.date = Date.now();
+    const upload = await Axios.post(`${this.endpoint}/api/insert`, this.data);
+
     toast.success("🚀 Successfully Added!", {
       position: "top-right",
       autoClose: 2500,
@@ -20,21 +20,21 @@ export const api = {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-    })
-  
-    return upload.data
+    });
+
+    return upload.data;
   },
-  update: async function(id, songList){
+  update: async function (id, songList) {
     const update = await Axios.put(
       `${this.endpoint}/api/update/${id}`,
       this.data
-    )
+    );
 
     for (let i = 0; i < songList.length; i++) {
       if (songList[i].id == id) {
-        update.data.author = songList[i].author
-        songList[i] = update.data
-        break
+        update.data.author = songList[i].author;
+        songList[i] = update.data;
+        break;
       }
     }
 
@@ -46,13 +46,11 @@ export const api = {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-    })
+    });
 
-    return songList
-
+    return songList;
   },
-  delete: async function(id, songList){
-
+  delete: async function (id, songList) {
     const deleted = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -61,11 +59,10 @@ export const api = {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    })
+    });
 
-
-    if(deleted.isConfirmed){
-      Axios.delete(`${this.endpoint}/api/delete/${id}/`)
+    if (deleted.isConfirmed) {
+      Axios.delete(`${this.endpoint}/api/delete/${id}/`);
 
       toast.success("🚀 Your review has been deleted!", {
         position: "top-right",
@@ -75,31 +72,29 @@ export const api = {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      })
+      });
 
-      return (songList.filter((e) => {
-        return e.id != id
-      }))
-    }else{
-      return songList
+      return songList.filter((e) => {
+        return e.id != id;
+      });
+    } else {
+      return songList;
     }
-
-
   },
-  setLikes: async function(id, songList, likes){
-    this.data.likes = likes
+  setLikes: async function (id, songList, likes) {
+    this.data.likes = likes;
 
-    if(likes < -1) likes = 0
+    if (likes < -1) likes = 0;
 
-    const setLikes = await Axios.put(`${this.endpoint}/api/update/setLikes/${id}`, this.data)
+    await Axios.put(`${this.endpoint}/api/update/setLikes/${id}`, this.data);
 
     for (let i = 0; i < songList.length; i++) {
       if (songList[i].id == id) {
         songList[i] = this.data;
-        break
+        break;
       }
     }
 
-    return songList  
-  }
-}
+    return songList;
+  },
+};

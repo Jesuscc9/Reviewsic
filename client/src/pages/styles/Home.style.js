@@ -5,7 +5,7 @@ const planetAnim1 = keyframes`
       transform: rotate(0deg) translateX(150px) rotate(0deg); 
     }
     to { 
-      transform: rotate(360deg) translateX(150px); 
+      transform: rotate(360deg) translateX(180px); 
     }
 `;
 
@@ -51,15 +51,15 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .planet1{
-    animation: ${planetAnim1} 120s linear infinite;
+    animation: ${planetAnim1} 100s linear infinite;
   }
 
   .planet2{
-    animation: ${planetAnim2} 120s linear infinite;
+    animation: ${planetAnim2} 100s linear infinite;
   }
 
   .planet3{
-    animation: ${planetAnim3} 120s linear infinite;
+    animation: ${planetAnim3} 100s linear infinite;
   }
 
   .stars {

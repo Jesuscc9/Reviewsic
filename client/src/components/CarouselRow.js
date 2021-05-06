@@ -9,12 +9,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const CarouselRow = (props) => {
+import { motion } from "framer-motion";
 
+const CarouselRow = (props) => {
   const carousel = React.useRef(null);
 
   const [index, setIndex] = useState(0);
-  const [sortTypeState, setSortTypeState] = useState(props.sortType)
+  const [sortTypeState, setSortTypeState] = useState(props.sortType);
 
   const handleClick = (value) => {
     if (index + value == -1 || index + value == props.data.songList.length)
@@ -26,11 +27,11 @@ const CarouselRow = (props) => {
     if (carousel.current) carousel.current.goTo(index);
   }, [index]);
 
-  if(sortTypeState != props.sortType){
-    setSortTypeState(props.sortType)
+  if (sortTypeState != props.sortType) {
+    setSortTypeState(props.sortType);
   }
 
-  let sorted = []
+  let sorted = [];
 
   const sortType = props.sortType;
 
@@ -40,9 +41,17 @@ const CarouselRow = (props) => {
     );
   else sorted = props.data.songList.sort((a, b) => b[sortType] - a[sortType]);
 
-
   return (
-    <div className="m-auto">
+    <motion.div
+      className="m-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{
+        duration: 0.05,
+        delay: 0.2,
+      }}
+    >
       <div className="w-100 flex justify-center">
         <div className="carousel-buttons">
           <h5 className="carousel-genre">{props.data.genre}</h5>
@@ -104,12 +113,12 @@ const CarouselRow = (props) => {
               deleteSong={async (songId, uri, pos) => {
                 props.deleteSong(songId, uri, pos, song);
               }}
-              sortType={sortTypeState ? sortTypeState : 'song'}
+              sortType={sortTypeState ? sortTypeState : "song"}
             ></Card>
           );
         })}
       </Carousel>
-    </div>
+    </motion.div>
   );
 };
 

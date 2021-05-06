@@ -1,12 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Staatliches&display=swap");
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap");
 
-nav{
+nav {
   z-index: 3;
 }
 
-.add-button{
+nav,
+h2 {
+  font-size: 22px;
+  font-weight: 700;
+  width: 130px;
+  text-align: center;
+  color: #fff;
+  font-family: "Open Sans", sans-serif;
+}
+
+.add-button {
   width: 90px;
   height: 35px;
   background-color: #7e22cd;
@@ -15,15 +25,15 @@ nav{
   display: flex;
   justify-content: space-around;
   align-items: center;
-  font-size: .875rem;
+  font-size: 0.875rem;
   line-height: 1.25rem;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   outline: 0 !important;
   transition: all 0.2s;
   padding-top: 2.5px;
-} 
+}
 
-.options-container{
+.options-container {
   display: flex;
   justify-content: space-between;
   width: 150px;
@@ -31,12 +41,12 @@ nav{
   align-items: center;
 }
 
-.profile-image{
+.profile-image {
   width: 35px;
   height: 35px;
   border-radius: 50%;
 }
 
-.add-button:hover{
+.add-button:hover {
   background-color: #6b1fad;
-} 
+}

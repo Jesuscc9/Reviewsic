@@ -1,17 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@700;900&display=swap");
 
-.login-first-container{
-  width: 600px;
+.login-first-container {
+  width: 90%;
   max-width: 90%;
   margin: auto;
   padding: 10px;
   height: calc(100vh - 181px);
 }
 
-.login-button{
+.login-button {
   margin-top: 20px;
   width: 140px;
-  height: 45px; 
+  height: 45px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,13 +26,15 @@
   cursor: pointer;
 }
 
-.login-button:hover{
-  box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
+.login-button:hover {
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.login-title{
+.login-title {
   font-size: calc(1em + 1.7vw);
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 800;
   color: rgb(44, 44, 44);
+  width: 100% !important;
+  text-align: start;
 }
