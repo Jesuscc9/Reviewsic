@@ -13,7 +13,7 @@ import Axios from "axios";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import Card from "../components/Card";
+import CardsList from "../components/CardsList";
 import CompleteCard from "../components/CompleteCard";
 import CardsCarousel from "../components/CardsCarousel";
 import Loader from "react-loader-spinner";
@@ -108,11 +108,12 @@ const Register = () => {
         playlistId: await spotifyApi.playlist.create(),
       });
 
-      setlikedSongs(
-        await spotifyApi.playlist.get(
-          `https://api.spotify.com/v1/playlists/${await spotifyApi.playlist.create()}/tracks`
-        )
+      const songsLiked = await spotifyApi.playlist.get(
+        `https://api.spotify.com/v1/playlists/${await spotifyApi.playlist.create()}/tracks`
       );
+
+      setlikedSongs(songsLiked);
+      dispatch(userActions.setLikedSongs([...songsLiked]));
 
       socket.emit("new user", spotifyApi.user);
 
@@ -134,39 +135,31 @@ const Register = () => {
   api.songList = songList;
 
   const submitReview = async () => {
-    const aux = songList;
-    aux.push(await api.insert());
-    setSongList(aux);
-    socket.emit("updateReviews", aux);
+    socket.emit("updateReviews", [...songList, await api.insert()]);
   };
 
   const updateReview = async (id) => {
-    setSongList(await api.update(id, songList));
-    socket.emit("updateReviews", songList);
+    socket.emit("updateReviews", [...(await api.update(id, songList))]);
   };
 
   const deleteReview = async (id) => {
-    const data = await api.delete(id, songList);
-    setSongList(data);
-    socket.emit("updateReviews", data);
+    socket.emit("updateReviews", [...(await api.delete(id, songList))]);
   };
 
-  const handleAddSong = async (songId, item) => {
+  const handleLikeSong = async (songId, item) => {
     spotifyApi.playlist.add(songId);
-    api.data = item;
-    socket.emit(
-      "updateReviews",
-      await api.setLikes(item.id, songList, item.likes + 1)
-    );
+    // socket.emit(
+    //   "updateReviews",
+    //   await api.setLikes(item.id, songList, item.likes + 1)
+    // );
   };
 
-  const handleDeleteSong = async (songId, uri, pos, item) => {
-    spotifyApi.playlist.delete(songId, uri, pos);
-    api.data = item;
-    socket.emit(
-      "updateReviews",
-      await api.setLikes(item.id, songList, item.likes - 1)
-    );
+  const handleDeleteSong = async (songId, uri) => {
+    spotifyApi.playlist.delete(songId, uri, token);
+    // socket.emit(
+    //   "updateReviews",
+    //   await api.setLikes(item.id, songList, item.likes - 1)
+    // );
   };
 
   const registerForm = () => {
@@ -235,7 +228,7 @@ const Register = () => {
     });
   };
 
-  const alertUpdateForm = (data) => {
+  const updateModal = (data) => {
     setSongData(data);
     MySwal.fire({
       html: (
@@ -275,28 +268,24 @@ const Register = () => {
 
   const params = useParams();
 
-  const CardCustom = ({ data }) => {
-    return (
-      <Card
-        data={data}
-        user={songData.author_id}
-        key={data.id}
-        update={() => {
-          alertUpdateForm(data);
-        }}
-        delete={(e) => {
-          deleteReview(e.id);
-        }}
-        likedSongs={likedSongs}
-        addSong={async (songId, data) => {
-          handleAddSong(songId, data);
-        }}
-        deleteSong={async (songId, uri, pos) => {
-          handleDeleteSong(songId, uri, pos, data);
-        }}
-      />
-    );
+  const CardActions = {
+    update: (data) => {
+      updateModal(data);
+    },
+    delete: (data) => {
+      deleteReview(data);
+    },
+    addSong: (songId, data) => {
+      handleLikeSong(songId, data);
+    },
+    deleteSong: (songId, uri) => {
+      handleDeleteSong(songId, uri);
+    },
   };
+
+  // const CardCustom = ({ data }) => {
+  //   return <Card data={data} />;
+  // };
 
   const CardCompleteCustom = ({ data }) => {
     return (
@@ -305,14 +294,14 @@ const Register = () => {
         user={songData.author_id}
         key={data.id}
         update={() => {
-          alertUpdateForm(data);
+          updateModal(data);
         }}
         delete={(e) => {
           deleteReview(e.id);
         }}
         likedSongs={likedSongs}
         addSong={async (songId, data) => {
-          handleAddSong(songId, data);
+          handleLikeSong(songId, data);
         }}
         deleteSong={async (songId, uri, pos) => {
           handleDeleteSong(songId, uri, pos, data);
@@ -392,19 +381,19 @@ const Register = () => {
                                       flexWrap: "wrap",
                                     }}
                                   >
-                                    {cardView == "categories" ? (
+                                    {cardView != "categories" ? (
                                       <CardsCarousel
                                         user={songData.author_id}
                                         likedSongs={likedSongs}
                                         songList={sortArray()}
                                         update={(item) => {
-                                          alertUpdateForm(item);
+                                          updateModal(item);
                                         }}
                                         delete={(e) => {
                                           deleteReview(e.id);
                                         }}
                                         addSong={async (songId, item) => {
-                                          handleAddSong(songId, item);
+                                          handleLikeSong(songId, item);
                                         }}
                                         deleteSong={async (
                                           songId,
@@ -423,24 +412,17 @@ const Register = () => {
                                       />
                                     ) : (
                                       <AnimatePresence>
-                                        {sortArray().map((item) => {
-                                          return (
-                                            <>
-                                              <CardCustom
-                                                data={item}
-                                                key={item.id}
-                                              />
-                                              {params.id && (
-                                                <AnimatePresence>
-                                                  <CardCompleteCustom
-                                                    data={item}
-                                                    key={item}
-                                                  />
-                                                </AnimatePresence>
-                                              )}
-                                            </>
-                                          );
-                                        })}
+                                        <CardsList
+                                          songList={songList}
+                                          {...CardActions}
+                                        />
+                                        {params.id && (
+                                          <AnimatePresence>
+                                            <CardCompleteCustom
+                                              data={songList}
+                                            />
+                                          </AnimatePresence>
+                                        )}
                                       </AnimatePresence>
                                     )}
                                   </motion.div>

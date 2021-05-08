@@ -55,13 +55,13 @@ export const spotifyApi = {
       });
 
       if (songs.data.next === null) return items;
-      
+
       return getAllSongs(songs.data.next, items);
     },
     add: async (songId) => {
       const songUri = `spotify:track:${songId}`;
 
-      const addSong = await Axios.post(
+      await Axios.post(
         `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`,
         {
           uris: [songUri],
@@ -79,7 +79,7 @@ export const spotifyApi = {
         progress: undefined,
       });
     },
-    delete: async (songId, uri, pos, token) => {
+    delete: async (songId, uri, token) => {
       const headers = {
         Authorization: "Bearer " + token,
       };
@@ -88,37 +88,23 @@ export const spotifyApi = {
         tracks: [
           {
             uri: uri.length > 0 ? uri : `spotify:track:${songId}`,
-            //uri: songUri,
             positions: [0],
           },
         ],
       };
 
-      const songs = await spotifyApi.playlist.get(
-        `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`,
-        []
-      );
+      const songs = spotifyApi.playlist.get();
 
-      let i = 0;
-      songs.forEach((e) => {
-        i++;
-        if (e.track.id == songId) {
-          data.tracks[0].positions[0] = i - 1;
-          return;
-        }
+      data.tracks[0].positions[0] = songs.find((song) => {
+        return song.track.id == songId;
       });
 
-      const removeSong = await Axios.delete(
+      await Axios.delete(
         `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`,
         { headers, data }
       );
 
-      return 0;
-
-      // const removeSong = await Axios.delete(
-      //   `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`,
-      //   { headers, data }
-      // )
+      return;
     },
     create: async function () {
       let playlists = await Axios.get(

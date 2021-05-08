@@ -6,39 +6,27 @@ import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { Card as CardCustom } from "./styles/Card.style.js";
+import { useSelector } from "react-redux";
 
 const Card = (props) => {
-  const { data, likedSongs } = props;
+  const author_id = useSelector((state) => state.user.author_id);
+
+  const { data, isInPlaylist, uri } = props;
 
   const song_name = useRef(null);
 
   const [liked, setLiked] = useState(false);
-  const [pos, setPos] = useState(0);
-  const [uri, setUri] = useState("");
-  const [sortType, setSortType] = useState(props.sortType);
-
-  const isInPlaylist = (song) => {
-    return song.track.name === props.data.song;
-  };
 
   useEffect(() => {
-    const index = likedSongs.findIndex(isInPlaylist);
-
-    if (index > -1) {
-      setUri(likedSongs[index].track.uri);
+    if (isInPlaylist > -1) {
       setLiked(true);
-      setPos(index);
       heartActions.like();
       return;
     }
 
     heartActions.dislike();
     handleMouseLeave();
-  }, [liked, sortType]);
-
-  if (sortType != props.sortType) {
-    setSortType(props.sortType);
-  }
+  }, [liked]);
 
   var rating = {
     size: 20,
@@ -91,7 +79,7 @@ const Card = (props) => {
 
   const handleHeartClick = async () => {
     if (liked) {
-      await props.deleteSong(data.song_id, uri, pos);
+      await props.deleteSong(data.song_id, uri, isInPlaylist);
       heartActions.dislike();
     } else {
       await props.addSong(data.song_id, data);
@@ -150,12 +138,12 @@ const Card = (props) => {
           <ReactStars {...rating} className="stars-calification" />{" "}
           <p className="autor">By: {data.author}</p>
           <div className="card-options" ref={card_options}>
-            {data.author_id === props.user ? (
+            {data.author_id === author_id ? (
               <React.Fragment>
                 <div
                   className="edit-option option-container"
                   onClick={() => {
-                    props.update();
+                    props.update(props.data);
                   }}
                 >
                   <FontAwesomeIcon icon={faPen} className="faPen" />
@@ -163,7 +151,7 @@ const Card = (props) => {
                 <div
                   className="edit-option option-container"
                   onClick={(e) => {
-                    props.delete({ id: data.id });
+                    props.delete(data.id);
                   }}
                 >
                   <FontAwesomeIcon icon={faTrash} className="faTrash" />

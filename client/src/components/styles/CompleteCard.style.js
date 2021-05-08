@@ -12,7 +12,7 @@ export const CardCustom = styled.div`
   max-width: 190px;
   height: 330px;
   margin: 0px 20px 20px;
-  background: #000000;
+  background: #000000 !important;
   border-radius: 30px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
