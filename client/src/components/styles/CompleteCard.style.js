@@ -9,13 +9,16 @@ export const GlobalStyles = createGlobalStyle`
 
 const slide = keyframes`
 	0% {
-    transform:translateX(-150%) scale(2);
+    transform:translateX(-160%) scale(2);
+  }
+  10% {
+    transform:translateX(-160%) scale(2);
   }
 	20% {
-    transform:translateX(100%) scale(2);
+    transform:translateX(160%) scale(2);
   }
 	100% {
-    transform:translateX(100%) scale(2);
+    transform:translateX(160%) scale(2);
   }
 `;
 
@@ -124,12 +127,12 @@ export const Card = styled.div`
   }
 
   .card-header {
-    min-width: 170px;
-    flex-basis: 170px;
+    min-width: 26%;
+    flex-basis: 26%;
   }
 
   .card-body {
-    flex-basis: 60%;
+    flex-basis: 74%;
   }
 
   .card-footer {
@@ -155,17 +158,23 @@ export const Card = styled.div`
     box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
     overflow: hidden;
     cursor: pointer;
+    transition: background-color 0.3s;
+    outline: none;
+
+    &:hover {
+      background-color: #0ca72e !important;
+    }
 
     &:after {
       content: "";
       top: 0;
       transform: translateX(100%) rotate(190deg);
-      width: 100%;
+      width: 30px;
       height: 100%;
       border-radius: 50%;
       position: absolute;
       z-index: 1;
-      opacity: 0.5;
+      opacity: 0.7;
       animation: ${slide} 10s infinite;
 
       /* 
@@ -239,7 +248,7 @@ export const Card = styled.div`
     position: absolute;
     white-space: nowrap;
     transform: translateX(0);
-    transition: 1s;
+    transition: all 1s;
     overflow: hidden;
   }
 
@@ -299,17 +308,16 @@ export const Card = styled.div`
   }
 
   .card-options {
-    border-left: 1px solid rgba(128, 128, 128, 0.068);
     width: 30px;
     height: auto;
-    position: relative;
-    left: 180px;
+    position: absolute;
+    right: 20px;
     bottom: 90px;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
     background-color: white;
     transition: left 0.25s linear, opacity 0.3s ease-in-out;
-    opacity: 0;
+    opacity: 1;
     cursor: default;
     display: flex;
     flex-wrap: wrap;

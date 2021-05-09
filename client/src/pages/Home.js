@@ -358,7 +358,7 @@ const Home = () => {
         </motion.div>
 
         <div
-          className="login-form animate__animated animate__fadeIn"
+          className="login-form "
           ref={login}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}

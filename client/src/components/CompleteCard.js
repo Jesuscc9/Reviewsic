@@ -4,6 +4,7 @@ import ReactStars from "react-rating-stars-component";
 
 import {
   faEraser,
+  faPause,
   faPen,
   faPlay,
   faTrash,
@@ -17,7 +18,7 @@ import {
 } from "./styles/CompleteCard.style";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ColorExtractor } from "react-color-extractor";
 
 const Card = (props) => {
@@ -30,6 +31,7 @@ const Card = (props) => {
   const [liked, setLiked] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const [colors, setColors] = useState([]);
+  const [pause, setPause] = useState(true);
   const [showBg, setShowBg] = useState(false);
 
   const escFunction = useCallback((event) => {
@@ -104,8 +106,6 @@ const Card = (props) => {
   };
 
   const handleMouseOver = () => {
-    card_options.current.classList.add("card-options-visible");
-
     if (song_name.current) {
       if (!calc) {
         calc = song_name.current.scrollWidth - song_name.current.offsetWidth;
@@ -157,13 +157,7 @@ const Card = (props) => {
         }}
       />
       <CustomCard onClick={() => {}}>
-        <div
-          className="card-content-container open"
-          key={data.id}
-          onMouseOver={handleMouseOver}
-          onMouseLeave={handleMouseLeave}
-          ref={node}
-        >
+        <div className="card-content-container open" key={data.id} ref={node}>
           {/* {showBg && (
             <div
               className="white-background"
@@ -213,10 +207,31 @@ const Card = (props) => {
                     `
                     : "rgb(255, 255, 255)",
                 }}
+                onClick={() => {
+                  setPause(!pause);
+                }}
               >
-                <FontAwesomeIcon icon={faPlay} className="play-icon" />
+                <AnimatePresence>
+                  {pause ? (
+                    <motion.div
+                      initial={{ rotate: 0 }}
+                      animate={{ rotate: 360 }}
+                    >
+                      <FontAwesomeIcon icon={faPlay} className="play-icon" />
+                    </motion.div>
+                  ) : (
+                    <motion.div>
+                      <FontAwesomeIcon icon={faPause} className="play-icon" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </button>
-              <div className="song-name" ref={song_name}>
+              <div
+                className="song-name"
+                ref={song_name}
+                onMouseOver={handleMouseOver}
+                onMouseLeave={handleMouseLeave}
+              >
                 <span ref={span}>{data.song}</span>
               </div>
               <h5 className="artist-name">{data.artist}</h5>

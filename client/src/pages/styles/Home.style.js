@@ -80,7 +80,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .login-form {
-    width: 250px;
+    width: 260px;
     height: 60px !important;
     max-width: 90%;
     position: absolute;
@@ -127,12 +127,14 @@ export const GlobalStyle = createGlobalStyle`
     color: #ffffff;
     opacity: 0.7;
     transition: all 0.2s;
+    transition: opacity 0.4s !important;
     cursor: default;
     z-index: 1;
   }
 
   .reviewsic-svg{
     filter: drop-shadow( 3px 3px 2px rgba(106, 90, 205, .3));
+    transition: opacity 0.4s;
   }
 
   .try-button {
