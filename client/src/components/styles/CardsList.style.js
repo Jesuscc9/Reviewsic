@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
 export const CardsContainer = styled.div`
-  border: 1px solid black;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  z-index: 2;
 `;

@@ -56,31 +56,26 @@ const CardCarousel = (props) => {
 
   return (
     <AnimatePresence>
-      {genres
-        .sort((a, b) => b.songList.length - a.songList.length)
-        .map((genre) => {
-          return (
-            <CarouselRow
-              key={genre}
-              data={genre}
-              likedSongs={props.likedSongs}
-              user={props.user}
-              update={(item) => {
-                props.update(item);
-              }}
-              delete={(e) => {
-                props.delete(e);
-              }}
-              addSong={async (songId, item) => {
-                props.addSong(songId, item);
-              }}
-              deleteSong={async (songId, uri, pos, item) => {
-                props.deleteSong(songId, uri, pos, item);
-              }}
-              sortType={sortType ? sortType : "song"}
-            />
-          );
-        })}
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+        }}
+      >
+        {genres
+          .sort((a, b) => b.songList.length - a.songList.length)
+          .map((genre) => {
+            return (
+              <CarouselRow
+                key={genre}
+                data={genre}
+                sortType={sortType ? sortType : "song"}
+                {...props}
+              />
+            );
+          })}
+      </div>
     </AnimatePresence>
   );
 };

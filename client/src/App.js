@@ -14,11 +14,9 @@ const App = () => {
     <Provider store={store}>
       <AnimateSharedLayout type="crossfade">
         <BrowserRouter>
-          <Switch>
-            <Route exact path={["/home", "/home/:id"]} component={Register} />
-            <Route exact path="/" component={Home} />
-            <Route component={NotFound} />
-          </Switch>
+          <Route exact path={["/home", "/home/:id"]} component={Register} />
+          <Route exact path="/" component={Home} />
+          <Route component={NotFound} />
         </BrowserRouter>
       </AnimateSharedLayout>
     </Provider>

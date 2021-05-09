@@ -7,6 +7,7 @@ import ReactStars from "react-rating-stars-component";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { spotifyApi } from "../data/spotifyApi";
+import { AnimatePresence, motion } from "framer-motion";
 import Axios from "axios";
 import Cookies from "js-cookie";
 
@@ -199,7 +200,7 @@ const RegisterForm = (props) => {
                 "trova",
                 "alternative",
               ]);
-              props.onGenreChange('country');
+              props.onGenreChange("country");
             }
           } catch (err) {
             console.log(err);
@@ -259,7 +260,7 @@ const RegisterForm = (props) => {
           Please fill out this field.
         </p>
 
-        <div
+        {/* <div
           className={`genre-container ${
             genres.length ? "show-genre" : "hide-genre"
           }`}
@@ -286,8 +287,46 @@ const RegisterForm = (props) => {
               <div />
             )}
           </select>
-          <p className="alert-label">Please</p>
-        </div>
+          <p className="alert-label">.</p>
+        </div> */}
+        <AnimatePresence>
+          {genres.length && (
+            <motion.div
+              className={`genre-container show-genre`}
+              initial={{
+                scale: 0.3,
+              }}
+              animate={{ scale: 1 }}
+              transition={{
+                duration: 0.7,
+                type: "spring",
+                bounce: 0.5,
+              }}
+            >
+              <p className="input-label">Genre: </p>
+
+              <select
+                className={`swal2-input genre-input`}
+                onChange={(e) => {
+                  props.onGenreChange(e.target.value);
+                }}
+              >
+                {genres.length ? (
+                  genres.map((genre) => {
+                    return (
+                      <option value={genre} className="genre-option">
+                        {genre}
+                      </option>
+                    );
+                  })
+                ) : (
+                  <div />
+                )}
+              </select>
+              <p className="alert-label">s</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <p className="input-label">Review: </p>
 

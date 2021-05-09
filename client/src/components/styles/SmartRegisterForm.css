@@ -1,16 +1,16 @@
-.spotify-link-container{
+.spotify-link-container {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.spotify-link-input{
+.spotify-link-input {
   width: 100%;
-  transition: all 0.7s !important; 
+  transition: all 0.7s !important;
 }
 
-.spotify-link-status{
+.spotify-link-status {
   width: 30px;
   height: 30px;
   color: rgb(18, 216, 18);
@@ -18,37 +18,16 @@
   display: none;
 }
 
-.check-icon{
+.check-icon {
   opacity: 0;
   display: none;
   transition: all 1s !important;
 }
 
-.genre-container{
-  transition: all 2s !important;
+select,
+select option {
+  text-transform: capitalize !important;
 }
-
-.hide-genre{
-  opacity: 0 !important;
-  max-height: 0px !important;
-}
-
-.show-genre{
-  opacity: 1 !important;
-}
-
-.genre-input{
-  transition: opacity 1s !important; 
-  transition: height 1.5s !important; 
-  height: 60px !important;
-}
-
-.genre-input-hidden{
-  transition: all 0.7s !important; 
-  height: 0px !important;
-}
-
-select, select option {text-transform:capitalize !important}
 
 .lds-ring {
   display: inline-block;

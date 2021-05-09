@@ -8,10 +8,13 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector } from "react-redux";
 
 import { motion } from "framer-motion";
 
 const CarouselRow = (props) => {
+  const likedSongs = useSelector((state) => state.user.likedSongs);
+
   const carousel = React.useRef(null);
 
   const [index, setIndex] = useState(0);
@@ -43,7 +46,7 @@ const CarouselRow = (props) => {
 
   return (
     <motion.div
-      className="m-auto"
+      className="m-auto carousel-row"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -87,6 +90,7 @@ const CarouselRow = (props) => {
           </div>
         </div>
       </div>
+
       <Carousel
         focusOnSelect={true}
         ref={carousel}
@@ -96,23 +100,15 @@ const CarouselRow = (props) => {
         }}
       >
         {sorted.map((song) => {
+          song.isInPlaylist = likedSongs.findIndex((item) => {
+            return item.track.id == song.id;
+          });
+          if (song.isInPlaylist > -1)
+            song.uri = likedSongs[song.isInPlaylist].track.uri > -1;
           return (
             <Card
               data={song}
-              likedSongs={props.likedSongs}
-              user={props.user}
-              update={() => {
-                props.update(song);
-              }}
-              delete={(e) => {
-                props.delete(e);
-              }}
-              addSong={async (songId, item) => {
-                props.addSong(songId, item);
-              }}
-              deleteSong={async (songId, uri, pos) => {
-                props.deleteSong(songId, uri, pos, song);
-              }}
+              {...props}
               sortType={sortTypeState ? sortTypeState : "song"}
             ></Card>
           );

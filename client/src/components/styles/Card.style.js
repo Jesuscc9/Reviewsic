@@ -8,21 +8,64 @@ export const GlobalStyles = createGlobalStyle`
   }
 `;
 
-export const Card = styled(motion.div)`
-  min-width: 190px;
+export const Card = styled.div`
+  position: relative;
+  flex: 0 0 40%;
   max-width: 190px;
+  min-width: 190px;
   height: 330px;
-  margin: 0px 20px 20px;
-  background: #fff;
+  position: relative;
+  background: none;
   border-radius: 30px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+  margin: 20px;
+  padding: 0px;
   transition: all 0.2s;
   z-index: 1 !important;
-  box-shadow: 0 0px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &:hover {
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+  }
+  position: relative;
+
+  .card-content-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: block;
+    pointer-events: none;
+  }
+
+  .card-content-container.open {
+    top: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    z-index: 1;
+    overflow: hidden;
+    padding: 40px 0;
+  }
+
+  .card-content {
+    pointer-events: auto;
+    position: relative;
+    border-radius: 20px;
+    background: #fff;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+  }
+
+  .open .card-content {
+    height: auto;
+    max-width: 700px;
+    overflow: hidden;
+    pointer-events: none;
+  }
 
   .card-container-car {
     min-width: 250px;

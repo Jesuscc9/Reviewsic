@@ -1,27 +1,90 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
+import { motion } from "framer-motion";
 
 export const GlobalStyles = createGlobalStyle`
   body {
     background: #e6edff !important;
-    scroll-behavior: smooth;
   }
 `;
 
-export const CardCustom = styled.div`
-  min-width: 190px;
-  max-width: 190px;
-  height: 330px;
-  margin: 0px 20px 20px;
-  background: #000000 !important;
-  border-radius: 30px;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  transition: all 0.2s;
-  z-index: 2 !important;
-  box-shadow: 0 0px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+const slide = keyframes`
+	0% {
+    transform:translateX(-150%) scale(2);
+  }
+	20% {
+    transform:translateX(100%) scale(2);
+  }
+	100% {
+    transform:translateX(100%) scale(2);
+  }
+`;
+
+export const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 50%; /* position the top  edge of the element at the middle of the parent */
+  left: 50%; /* position the left edge of the element at the middle of the parent */
+  transform: translate(-50%, -50%);
+  height: 100%;
+  width: 100vw;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 10;
+`;
+
+export const Card = styled.div`
+  .card-content-container {
+    margin-top: 150px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: block;
+    z-index: 22;
+  }
+
+  .card-content-container.open {
+    top: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    z-index: 20;
+    overflow: hidden;
+  }
+
+  .card-content,
+  .white-background {
+    pointer-events: auto;
+    position: relative;
+    border-radius: 15px;
+    background: #fff;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+  }
+
+  .open .card-content,
+  .white-background {
+    height: auto;
+    max-width: 600px;
+    overflow: hidden;
+  }
+
+  .card-content {
+    transition: background-color 1s ease;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 13px;
+    z-index: 23;
+  }
+
+  .white-background {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 365px;
+  }
 
   .card-container-car {
     min-width: 250px;
@@ -35,21 +98,18 @@ export const CardCustom = styled.div`
   }
 
   .image-container {
-    width: 100%;
-    min-width: 100%;
-    max-width: 100%;
-    height: 110px;
-    border-radius: 20px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    min-width: 130px;
+    max-width: 130px;
+    height: 130px;
+    border-radius: 13px;
     overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
   }
 
   .song-img {
     width: 100%;
     min-width: 100%;
     max-width: 100%;
-    border-radius: 20px;
     height: auto;
     position: relative;
     left: 50%;
@@ -63,28 +123,113 @@ export const CardCustom = styled.div`
     transform: translateY(-50%) translateX(-50%) scale(1.06);
   }
 
+  .card-header {
+    min-width: 170px;
+    flex-basis: 170px;
+  }
+
   .card-body {
-    margin: 15px auto;
-    width: 90%;
+    flex-basis: 60%;
   }
 
   .card-footer {
     margin: 6px auto;
-    width: 90%;
+    width: 100%;
     height: 60px;
     margin-bottom: 0px !important;
   }
 
+  .play-button {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 110px;
+    top: 70px;
+    background-color: #0cb431;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+    overflow: hidden;
+    cursor: pointer;
+
+    &:after {
+      content: "";
+      top: 0;
+      transform: translateX(100%) rotate(190deg);
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      position: absolute;
+      z-index: 1;
+      opacity: 0.5;
+      animation: ${slide} 10s infinite;
+
+      /* 
+  CSS Gradient - complete browser support from http://www.colorzilla.com/gradient-editor/ 
+  */
+      background: -moz-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(128, 186, 232, 0) 99%,
+        rgba(125, 185, 232, 0) 100%
+      ); /* FF3.6+ */
+      background: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(0%, rgba(255, 255, 255, 0)),
+        color-stop(50%, rgba(255, 255, 255, 0.8)),
+        color-stop(99%, rgba(128, 186, 232, 0)),
+        color-stop(100%, rgba(125, 185, 232, 0))
+      ); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(128, 186, 232, 0) 99%,
+        rgba(125, 185, 232, 0) 100%
+      ); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(128, 186, 232, 0) 99%,
+        rgba(125, 185, 232, 0) 100%
+      ); /* Opera 11.10+ */
+      background: -ms-linear-gradient(
+        left,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(128, 186, 232, 0) 99%,
+        rgba(125, 185, 232, 0) 100%
+      ); /* IE10+ */
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(128, 186, 232, 0) 99%,
+        rgba(125, 185, 232, 0) 100%
+      ); /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#007db9e8',GradientType=1 );
+    }
+  }
+
   .song-name {
     font-family: "Hind", sans-serif;
-    font-size: 20px !important;
+    font-size: 24px !important;
+    color: rgb(36, 36, 36);
     color: rgb(36, 36, 36);
     font-weight: 600;
     padding: 0px;
     line-height: 20px;
     text-transform: capitalize;
 
-    max-width: 171px;
+    max-width: 100%;
     overflow: hidden;
     height: 20px;
     position: relative;
@@ -165,7 +310,6 @@ export const CardCustom = styled.div`
     background-color: white;
     transition: left 0.25s linear, opacity 0.3s ease-in-out;
     opacity: 0;
-    pointer-events: none;
     cursor: default;
     display: flex;
     flex-wrap: wrap;
@@ -176,7 +320,6 @@ export const CardCustom = styled.div`
   .card-options-visible {
     left: 180px;
     opacity: 1;
-    pointer-events: visible;
     cursor: pointer;
   }
 
@@ -244,4 +387,14 @@ export const CardCustom = styled.div`
       background-position: right;
     }
   }
+`;
+
+export const CardContent = styled(motion.div)`
+  position: relative;
+  border-radius: 20px;
+  background: #ffffff;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
 `;

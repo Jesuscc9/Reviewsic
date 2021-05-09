@@ -5,7 +5,8 @@ import ReactStars from "react-rating-stars-component";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import { Card as CardCustom } from "./styles/Card.style.js";
+import { motion } from "framer-motion";
+import { Card as CustomCard, GlobalStyles } from "./styles/Card.style.js";
 import { useSelector } from "react-redux";
 
 const Card = (props) => {
@@ -94,21 +95,23 @@ const Card = (props) => {
   }
 
   return (
-    <React.Fragment>
-      <CardCustom
-        onMouseOver={handleMouseOver}
-        onMouseLeave={handleMouseLeave}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{
-          duration: 0.05,
-          delay: 0.2,
-        }}
-      >
-        <div className="card-header" ref={card}>
-          <div className="image-container">
-            {/* <a href={data.spotifyUrl} target="_blank">
+    <>
+      <GlobalStyles />
+      <CustomCard>
+        <div className="card-content-container">
+          <motion.div
+            className="card-content"
+            key={data.id}
+            onMouseOver={handleMouseOver}
+            onMouseLeave={handleMouseLeave}
+            layoutId={`card-container-${data.id}`}
+          >
+            <div className="card-header" ref={card}>
+              <div
+                className="image-container"
+                layoutId={`card-image-container-${data.id}`}
+              >
+                {/* <a href={data.spotifyUrl} target="_blank">
               <img
                 alt=""
                 src={data.image}
@@ -116,63 +119,65 @@ const Card = (props) => {
                 loading="lazy"
               />
             </a> */}
-            <Link to={`/home/${data.id}`}>
-              <img
-                alt=""
-                src={data.image}
-                className="song-img"
-                loading="lazy"
-              />
-            </Link>
-          </div>
-        </div>
-        <div className="card-body">
-          <div className="song-name" ref={song_name}>
-            <span ref={span}>{data.song}</span>
-          </div>
-
-          <h5 className="artist-name">{data.artist}</h5>
-          <p className="comment">{data.review}</p>
-        </div>
-        <div className="card-footer">
-          <ReactStars {...rating} className="stars-calification" />{" "}
-          <p className="autor">By: {data.author}</p>
-          <div className="card-options" ref={card_options}>
-            {data.author_id === author_id ? (
-              <React.Fragment>
-                <div
-                  className="edit-option option-container"
-                  onClick={() => {
-                    props.update(props.data);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faPen} className="faPen" />
-                </div>
-                <div
-                  className="edit-option option-container"
-                  onClick={(e) => {
-                    props.delete(data.id);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faTrash} className="faTrash" />
-                </div>
-              </React.Fragment>
-            ) : (
-              <React.Fragment></React.Fragment>
-            )}
-            <div className="edit-option option-container">
-              <div
-                className="heart"
-                ref={heart}
-                onClick={() => {
-                  handleHeartClick();
-                }}
-              ></div>
+                <Link to={`/home/${data.id}`}>
+                  <img
+                    alt=""
+                    src={data.image}
+                    className="song-img"
+                    loading="lazy"
+                  />
+                </Link>
+              </div>
             </div>
-          </div>
+            <div className="card-body">
+              <div className="song-name" ref={song_name}>
+                <span ref={span}>{data.song}</span>
+              </div>
+
+              <h5 className="artist-name">{data.artist}</h5>
+              <p className="comment">{data.review}</p>
+            </div>
+            <div className="card-footer">
+              <ReactStars {...rating} className="stars-calification" />{" "}
+              <p className="autor">By: {data.author}</p>
+              <div className="card-options" ref={card_options}>
+                {data.author_id === author_id ? (
+                  <React.Fragment>
+                    <div
+                      className="edit-option option-container"
+                      onClick={() => {
+                        props.update(props.data);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faPen} className="faPen" />
+                    </div>
+                    <div
+                      className="edit-option option-container"
+                      onClick={(e) => {
+                        props.delete(data.id);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTrash} className="faTrash" />
+                    </div>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment></React.Fragment>
+                )}
+                <div className="edit-option option-container">
+                  <div
+                    className="heart"
+                    ref={heart}
+                    onClick={() => {
+                      handleHeartClick();
+                    }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </CardCustom>
-    </React.Fragment>
+      </CustomCard>
+    </>
   );
 };
 

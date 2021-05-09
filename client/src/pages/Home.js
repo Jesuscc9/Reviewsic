@@ -7,7 +7,6 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import "../assets/animate.css";
 import "react-spotify-auth/dist/index.css";
-import "./styles/Home.css";
 
 import Parallax from "parallax-js";
 import Stars from "../assets/img/star.svg";

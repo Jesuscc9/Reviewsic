@@ -13,11 +13,11 @@ const PORT = 3001;
 const app = express();
 
 // const db = mysql.createPool({
-//   host: 'dissoftec.com',
-//   user: 'u257375416_reviewsic',
-//   password: 'ReviewsicDB9',
-//   database: 'u257375416_reviewsic'
-// })
+//   host: "dissoftec.com",
+//   user: "u257375416_reviewsic",
+//   password: "ReviewsicDB9",
+//   database: "u257375416_reviewsic",
+// });
 
 // const db = mysql.createPool({
 //   host: 'localhost',

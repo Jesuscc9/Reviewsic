@@ -2,14 +2,13 @@ import React, { useState, useEffect, Component } from "react";
 import { SpotifyApiContext } from "react-spotify-api";
 import { api } from "../data/api";
 import { spotifyApi } from "../data/spotifyApi";
-import { useDispatch, useSelector } from "react-redux";
-import { AnimatePresence, motion } from "framer-motion";
+import { useDispatch } from "react-redux";
 import userActions from "../redux/user/actions";
+import { AnimatePresence, motion } from "framer-motion";
 
 import openSocket from "socket.io-client";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import Axios from "axios";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -30,6 +29,12 @@ import "react-toastify/dist/ReactToastify.css";
 import "tailwindcss/tailwind.css";
 import "../assets/main.css";
 import "../pages/styles/Register.css";
+import {
+  GlobalStyles,
+  PageContainer,
+  MainContainer,
+  ContentContainer,
+} from "./styles/Register.style";
 import { useParams } from "react-router";
 
 const API_ENDPOINT = "http://localhost:3001";
@@ -287,179 +292,125 @@ const Register = () => {
   //   return <Card data={data} />;
   // };
 
-  const CardCompleteCustom = ({ data }) => {
-    return (
-      <CompleteCard
-        data={data}
-        user={songData.author_id}
-        key={data.id}
-        update={() => {
-          updateModal(data);
-        }}
-        delete={(e) => {
-          deleteReview(e.id);
-        }}
-        likedSongs={likedSongs}
-        addSong={async (songId, data) => {
-          handleLikeSong(songId, data);
-        }}
-        deleteSong={async (songId, uri, pos) => {
-          handleDeleteSong(songId, uri, pos, data);
-        }}
-      />
-    );
-  };
-
   return (
-    <React.Fragment>
+    <>
+      <GlobalStyles />
       <Navbar
         onAddClick={() => {
           registerForm();
         }}
-        profileImage={
-          spotifyData.profileImage
-            ? spotifyData.profileImage
-            : "http://dissoftec.com/NicePng_user-png_730154.jpeg"
-        }
+        profileImage={spotifyData.profileImage}
         token={token}
       ></Navbar>
       <br />
 
       <ToastContainer />
 
-      <AnimatePresence>
-        {token != undefined ? (
-          <React.Fragment>
-            {token.length > 0 ? (
-              <React.Fragment>
-                <SpotifyApiContext.Provider value={token}>
-                  <div className="page-container">
-                    <div className="main-container" style={{ marginTop: 10 }}>
+      {token && token.length ? (
+        <SpotifyApiContext.Provider value={token}>
+          <PageContainer>
+            <MainContainer>
+              <>
+                <AnimatePresence>
+                  {!loaded ? (
+                    <ContentContainer
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
                       <motion.div
-                        className="card-container"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                        key="loader"
+                        initial={{ y: -200 }}
+                        animate={{ y: 0 }}
+                        exit={{ y: -200 }}
+                        style={{ position: "absolute" }}
                       >
+                        <Loader
+                          type="Audio"
+                          color="#6c22cdc7"
+                          height={70}
+                          width={70}
+                          className="mt-5"
+                        />
+                      </motion.div>
+                    </ContentContainer>
+                  ) : (
+                    <React.Fragment>
+                      {songList.length ? (
                         <AnimatePresence>
-                          {!loaded ? (
-                            <motion.div
-                              key="loader"
-                              initial={{ y: -200 }}
-                              animate={{ y: 0 }}
-                              exit={{ y: -200 }}
-                              style={{ position: "absolute" }}
+                          {cardView != "categories" ? (
+                            <ContentContainer
+                              initial={{ x: -200 }}
+                              animate={{ x: 0 }}
+                              exit={{ x: -200 }}
                             >
-                              <Loader
-                                type="Audio"
-                                color="#6c22cdc7"
-                                height={70}
-                                width={70}
-                                className="mt-5"
+                              <DropdownMenu
+                                onSelect={(value) => handleDropdown(value)}
+                                onCardViewChange={(value) => setCardView(value)}
                               />
-                            </motion.div>
+                              <CardsCarousel
+                                {...CardActions}
+                                songList={songList}
+                                sortType={sortType}
+                              />
+                            </ContentContainer>
                           ) : (
-                            <React.Fragment>
-                              {songList.length ? (
-                                <React.Fragment>
-                                  <DropdownMenu
-                                    onSelect={(value) => handleDropdown(value)}
-                                    onCardViewChange={(value) =>
-                                      setCardView(value)
-                                    }
+                            <ContentContainer
+                              initial={{ x: -200 }}
+                              animate={{ x: 0 }}
+                              exit={{ x: -200 }}
+                            >
+                              <DropdownMenu
+                                onSelect={(value) => handleDropdown(value)}
+                                onCardViewChange={(value) => setCardView(value)}
+                              />
+                              <CardsList songList={songList} {...CardActions} />
+                              <AnimatePresence>
+                                {params.id && (
+                                  <CompleteCard
+                                    data={songList.find((song) => {
+                                      return song.id == params.id;
+                                    })}
+                                    {...CardActions}
+                                    key="item"
                                   />
-
-                                  <motion.div
-                                    initial={{
-                                      opacity: 0,
-                                    }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    style={{
-                                      maxWidth: "100%",
-                                      display: "flex",
-                                      justifyContent: "space-around",
-                                      flexWrap: "wrap",
-                                    }}
-                                  >
-                                    {cardView != "categories" ? (
-                                      <CardsCarousel
-                                        user={songData.author_id}
-                                        likedSongs={likedSongs}
-                                        songList={sortArray()}
-                                        update={(item) => {
-                                          updateModal(item);
-                                        }}
-                                        delete={(e) => {
-                                          deleteReview(e.id);
-                                        }}
-                                        addSong={async (songId, item) => {
-                                          handleLikeSong(songId, item);
-                                        }}
-                                        deleteSong={async (
-                                          songId,
-                                          uri,
-                                          pos,
-                                          item
-                                        ) => {
-                                          handleDeleteSong(
-                                            songId,
-                                            uri,
-                                            pos,
-                                            item
-                                          );
-                                        }}
-                                        sortType={sortType}
-                                      />
-                                    ) : (
-                                      <AnimatePresence>
-                                        <CardsList
-                                          songList={songList}
-                                          {...CardActions}
-                                        />
-                                        {params.id && (
-                                          <AnimatePresence>
-                                            <CardCompleteCustom
-                                              data={songList}
-                                            />
-                                          </AnimatePresence>
-                                        )}
-                                      </AnimatePresence>
-                                    )}
-                                  </motion.div>
-                                </React.Fragment>
-                              ) : (
-                                <motion.div
-                                  initial={{ opacity: 0 }}
-                                  animate={{ opacity: 1 }}
-                                >
-                                  Not reviews registered yet 😕.
-                                </motion.div>
-                              )}
-                            </React.Fragment>
+                                )}
+                              </AnimatePresence>
+                            </ContentContainer>
                           )}
                         </AnimatePresence>
-                      </motion.div>
+                      ) : (
+                        <ContentContainer
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                        >
+                          <p
+                            style={{
+                              textAlign: "center",
+                            }}
+                          >
+                            Not reviews registered yet 😕.
+                          </p>
+                        </ContentContainer>
+                      )}
+                    </React.Fragment>
+                  )}
+                </AnimatePresence>
+              </>
 
-                      <div className="contact-container">
-                        <Contacts users={users} />
-                      </div>
-                    </div>
-                    <Footer token={token} />
-                  </div>
-                </SpotifyApiContext.Provider>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                <Login />
-                <Footer token={token} />
-              </React.Fragment>
-            )}
-          </React.Fragment>
-        ) : (
-          <React.Fragment />
-        )}
-      </AnimatePresence>
-    </React.Fragment>
+              <Contacts users={users} />
+            </MainContainer>
+            <Footer token={token} />
+          </PageContainer>
+        </SpotifyApiContext.Provider>
+      ) : (
+        <>
+          {token != undefined && !token.length && <Login />}
+          <Footer />
+        </>
+      )}
+    </>
   );
 };
 

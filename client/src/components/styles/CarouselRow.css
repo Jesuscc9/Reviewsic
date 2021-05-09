@@ -1,4 +1,12 @@
-.carousel-buttons{
+.carousel-row {
+  max-width: 280px;
+  min-width: 280px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.carousel-buttons {
   width: 190px;
   height: 30px;
   display: flex;
@@ -6,15 +14,15 @@
   align-items: center;
 }
 
-.buttons-container{
+.buttons-container {
   width: 50px;
   height: 30px;
   display: flex;
   justify-content: space-between;
 }
 
-.carousel-genre{
-  font-family: 'Montserrat', sans-serif;
+.carousel-genre {
+  font-family: "Montserrat", sans-serif;
   font-size: 16px;
   font-weight: 600;
   color: rgb(85, 85, 85);
@@ -24,7 +32,7 @@
   overflow: hidden;
 }
 
-.rec-carousel-item{
+.rec-carousel-item {
   /* min-width: 250px;
   max-width: 250px; */
   width: 235px;
@@ -32,7 +40,7 @@
   justify-content: center;
 }
 
-.rec-item-wrapper{
+.rec-item-wrapper {
   /* min-width: 250px;
   max-width: 250px; */
   min-width: 250px;
@@ -42,39 +50,39 @@
   margin-bottom: 0px !important;
 }
 
-.rec-carousel-wrapper{
+.rec-carousel-wrapper {
   width: 275px !important;
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
 }
 
-.rec-pagination{
+.rec-pagination {
   margin-top: 0px !important;
 }
 
-.carousel-button{
+.carousel-button {
   width: 20px;
   height: 30px;
   outline: none !important;
 }
 
-.carousel-arrows-icon{
+.carousel-arrows-icon {
   color: rgba(153, 0, 255, 0.603);
   transition: all 0.1s;
 }
 
-.disabled-carousel-arrows-icon{
+.disabled-carousel-arrows-icon {
   color: rgba(153, 0, 255, 0.335);
 }
 
-.rec-dot{
+.rec-dot {
   width: 7px !important;
   height: 7px !important;
   outline: none !important;
 }
 
-.rec-dot_active{
+.rec-dot_active {
   box-shadow: 0 0 1px 2px rgb(103 58 183) !important;
 }
 
@@ -83,16 +91,15 @@
 /*MIN 853px WIDTH = 2 CARD SLOTS*/
 
 /* 1 CARD SLOT */
-@media (max-width: 850px){
-  .carousel-buttons{
+@media (max-width: 850px) {
+  .carousel-buttons {
     margin: 20px 0px 10px 0px;
   }
-  
-  .buttons-container{
+
+  .buttons-container {
     width: 70px;
     height: 30px;
     display: flex;
     justify-content: space-around;
   }
-  
 }

@@ -1,26 +1,29 @@
-.contacts{
+.contacts {
   width: 100%;
   background-color: #ffffff;
-  max-height: 500px;
+  max-height: 330px;
   min-height: 330px;
+  min-width: 250px;
+  max-width: 300px;
   border-radius: 30px;
-  box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-.contact-title{
-  font-family: 'Hind', sans-serif;
+.contact-title {
+  font-family: "Hind", sans-serif;
   font-size: 24px;
   color: #202a37;
   font-weight: 600;
 }
 
-.contact-header{
+.contact-header {
   width: 90%;
   margin: auto;
   padding-top: 10px;
 }
 
-.divisor{
+.divisor {
   width: 92%;
   height: 1px;
   background-color: rgba(160, 159, 159, 0.315);
@@ -28,24 +31,23 @@
   margin: 6px auto;
 }
 
-.item{
+.item {
   width: 90%;
   height: 40px;
   margin: auto;
   display: flex;
 }
 
-.item-image-container{
+.item-image-container {
   width: 55px;
 }
 
-
-.item-info{
+.item-info {
   width: 90%;
 }
 
-.item-name{
-  font-family: 'Montserrat', sans-serif;
+.item-name {
+  font-family: "Montserrat", sans-serif;
   font-size: 16px;
   color: rgb(48, 48, 48);
   font-weight: 100;
@@ -58,8 +60,8 @@
   width: 170px;
 }
 
-.item-info-status{
-  font-family: 'Hind', sans-serif;
+.item-info-status {
+  font-family: "Hind", sans-serif;
   font-size: 14px;
   height: 14px;
   font-weight: 500;
@@ -67,30 +69,31 @@
   letter-spacing: 0.2px;
 }
 
-.item-status{
+.item-status {
   width: 5%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.status{
+.status {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background-color: green;
 }
 
-@media (max-width: 500px){
-  .contacts{
-    width: 100%;
+@media (max-width: 500px) {
+  .contacts {
+    width: 95%;
     background-color: #ffffff;
     min-height: 130px;
     border-radius: 30px;
-    box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
-  .contacts ::-webkit-scrollbar{
+  .contacts ::-webkit-scrollbar {
     width: 3px !important;
     height: 5px;
     padding: 3px !important;
@@ -101,39 +104,39 @@
     background: rgb(255, 255, 255) !important;
   }
 
-  .item-image-container{
+  .item-image-container {
     width: 40px;
   }
 
-  .item{
+  .item {
     width: auto;
     border-left: 1px solid rgba(160, 159, 159, 0.315);
     border-right: 1px solid rgba(160, 159, 159, 0.315);
     padding: 0px 10px;
   }
-  
-  .item-info{
+
+  .item-info {
     display: none;
   }
 
-  .item-info-status{
+  .item-info-status {
     display: none;
   }
 
-  .item-name{
+  .item-name {
     font-size: 12px;
     word-break: break-all;
   }
-  
-  .item-status{
+
+  .item-status {
     width: 20px;
   }
 
-  .divisor{
+  .divisor {
     visibility: hidden;
   }
 
-  .contact-body{
+  .contact-body {
     display: flex;
     width: 98%;
     margin: auto;
@@ -143,5 +146,4 @@
     overflow-y: hidden;
     padding-top: 5px;
   }
-
 }
