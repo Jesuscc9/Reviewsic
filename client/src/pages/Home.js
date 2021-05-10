@@ -6,7 +6,7 @@ import { SpotifyApiContext } from "react-spotify-api";
 import { AnimatePresence, motion } from "framer-motion";
 
 import "../assets/animate.css";
-import "react-spotify-auth/dist/index.css";
+import "react-spotify-auth/dist/index.css?v=2";
 
 import Parallax from "parallax-js";
 import Stars from "../assets/img/star.svg";
@@ -28,6 +28,7 @@ import { Scene, GlobalStyle } from "./styles/Home.style";
 const Home = () => {
   const [showSvg, setShowSvg] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
+
   let endedAnim = false;
 
   const pathVariants = {
@@ -380,6 +381,9 @@ const Home = () => {
                 Scopes.playlistReadCollaborative,
                 Scopes.playlistModifyPublic,
               ]}
+              onAccessToken={() => {
+                window.location = "/home";
+              }}
             />
           )}
         </div>

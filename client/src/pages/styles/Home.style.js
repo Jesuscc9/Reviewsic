@@ -80,9 +80,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .login-form {
-    width: 260px;
+    min-width: 250px !important;
     height: 60px !important;
-    max-width: 90%;
     position: absolute;
     top: 20%;
     left: 50%;
@@ -93,6 +92,11 @@ export const GlobalStyle = createGlobalStyle`
     flex-wrap: wrap;
     justify-content: center;
     display: none;
+  }
+
+  .login-container{
+    width: 100%;
+    height: 100%;
   }
 
   .login-form ::placeholder {
@@ -134,7 +138,6 @@ export const GlobalStyle = createGlobalStyle`
 
   .reviewsic-svg{
     filter: drop-shadow( 3px 3px 2px rgba(106, 90, 205, .3));
-    transition: opacity 0.4s;
   }
 
   .try-button {

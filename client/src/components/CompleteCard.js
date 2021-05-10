@@ -79,7 +79,7 @@ const Card = (props) => {
   }, []);
 
   var rating = {
-    size: 20,
+    size: 25,
     value: data.qualification,
     edit: false,
   };
@@ -176,7 +176,7 @@ const Card = (props) => {
             }}
           >
             <div className="card-header" ref={card}>
-              <div
+              <motion.div
                 className="image-container"
                 layoutId={`card-image-container-${data.id}`}
               >
@@ -188,15 +188,15 @@ const Card = (props) => {
                 loading="lazy"
               />
             </a> */}
-                <Link to={`/home/${data.id}`}>
+                <a href={data.spotifyUrl} target="_blank">
                   <img
                     alt=""
                     src={data.image}
                     className="song-img"
                     loading="lazy"
                   />
-                </Link>
-              </div>
+                </a>
+              </motion.div>
             </div>
             <div className="card-body">
               <button
@@ -238,8 +238,24 @@ const Card = (props) => {
               <p className="comment">{data.review}</p>
             </div>
             <div className="card-footer">
-              <ReactStars {...rating} className="stars-calification" />{" "}
-              <p className="autor">By: {data.author}</p>
+              <motion.div init={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <p className="author-rate">Author Rating</p>
+                <ReactStars {...rating} className="stars-calification" />
+              </motion.div>
+              <motion.div
+                init={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="users-rate-container"
+              >
+                <p className="author-rate users-rate">Average Rating</p>
+                <ReactStars
+                  {...rating}
+                  className="stars-calification"
+                  value="3"
+                />
+              </motion.div>
+              <p className="author">By: {data.author}</p>
+              <p className="author date">2 minutes ago</p>
               <div className="card-options" ref={card_options}>
                 {data.author_id === author_id ? (
                   <React.Fragment>

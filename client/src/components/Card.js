@@ -107,7 +107,7 @@ const Card = (props) => {
             layoutId={`card-container-${data.id}`}
           >
             <div className="card-header" ref={card}>
-              <div
+              <motion.div
                 className="image-container"
                 layoutId={`card-image-container-${data.id}`}
               >
@@ -125,9 +125,10 @@ const Card = (props) => {
                     src={data.image}
                     className="song-img"
                     loading="lazy"
+                    layoutId={`card-image-${data.image}`}
                   />
                 </Link>
-              </div>
+              </motion.div>
             </div>
             <div className="card-body">
               <div className="song-name" ref={song_name}>

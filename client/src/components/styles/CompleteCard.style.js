@@ -14,7 +14,7 @@ const slide = keyframes`
   10% {
     transform:translateX(-160%) scale(2);
   }
-	20% {
+	15% {
     transform:translateX(160%) scale(2);
   }
 	100% {
@@ -35,6 +35,8 @@ export const Overlay = styled(motion.div)`
 `;
 
 export const Card = styled.div`
+  height: 400px;
+
   .card-content-container {
     margin-top: 150px;
     width: 100%;
@@ -57,7 +59,7 @@ export const Card = styled.div`
   .white-background {
     pointer-events: auto;
     position: relative;
-    border-radius: 15px;
+    border-radius: 17px;
     background: #fff;
     overflow: hidden;
     width: 100%;
@@ -78,15 +80,8 @@ export const Card = styled.div`
     justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
-    padding: 13px;
+    padding: 20px;
     z-index: 23;
-  }
-
-  .white-background {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 365px;
   }
 
   .card-container-car {
@@ -118,6 +113,7 @@ export const Card = styled.div`
     left: 50%;
     top: 50%;
     transform: translateY(-50%) translateX(-50%);
+    /* transform: scale(1.06); */
     transition: all 0.3s;
     cursor: pointer;
   }
@@ -127,27 +123,31 @@ export const Card = styled.div`
   }
 
   .card-header {
-    min-width: 26%;
-    flex-basis: 26%;
+    min-width: 29%;
+    flex-basis: 29%;
   }
 
   .card-body {
-    flex-basis: 74%;
+    flex-basis: 60%;
+    position: relative;
   }
 
   .card-footer {
-    margin: 6px auto;
+    margin: 20px auto;
+    padding-left: 3px;
     width: 100%;
-    height: 60px;
+    height: 70px;
     margin-bottom: 0px !important;
   }
 
   .play-button {
-    width: 50px;
-    height: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    min-height: 50px;
+    max-height: 50px;
     position: absolute;
-    left: 110px;
-    top: 70px;
+    left: -65px;
+    top: 55px;
     background-color: #0cb431;
     border-radius: 50%;
     color: white;
@@ -175,7 +175,7 @@ export const Card = styled.div`
       position: absolute;
       z-index: 1;
       opacity: 0.7;
-      animation: ${slide} 10s infinite;
+      animation: ${slide} 20s infinite;
 
       /* 
   CSS Gradient - complete browser support from http://www.colorzilla.com/gradient-editor/ 
@@ -234,13 +234,12 @@ export const Card = styled.div`
     color: rgb(36, 36, 36);
     color: rgb(36, 36, 36);
     font-weight: 600;
-    padding: 0px;
+    padding-top: 1px;
     line-height: 20px;
     text-transform: capitalize;
-
-    max-width: 100%;
     overflow: hidden;
-    height: 20px;
+    max-width: 100%;
+    height: 25px;
     position: relative;
   }
 
@@ -249,7 +248,6 @@ export const Card = styled.div`
     white-space: nowrap;
     transform: translateX(0);
     transition: all 1s;
-    overflow: hidden;
   }
 
   .artist-name {
@@ -284,18 +282,22 @@ export const Card = styled.div`
     width: 2px !important;
   }
 
-  .autor {
+  .author {
     font-family: "Open Sans", sans-serif;
     font-size: 13px;
     font-weight: 600;
     font-style: italic;
     color: rgb(160, 160, 160);
     position: relative;
-    bottom: 0px;
+    bottom: 35px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    width: 170px;
+  }
+
+  .date {
+    bottom: 55px;
+    left: 470px;
   }
 
   .logo-title {
@@ -329,6 +331,35 @@ export const Card = styled.div`
     left: 180px;
     opacity: 1;
     cursor: pointer;
+  }
+
+  .author-rate {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: rgb(87, 87, 87);
+    font-size: 13px;
+    text-shadow: 1px 1px 4px #d4d4d4;
+    position: relative;
+    left: 3px;
+  }
+
+  .users-rate-container {
+    position: relative;
+    bottom: 45px;
+    left: 150px;
+  }
+
+  .stars-calification {
+    font-size: 12px;
+    height: 25px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 120px;
+    padding: 0px;
+    position: relative;
+    top: -5px;
+    text-shadow: 0.5px 0.5px 4px #cfcfcf;
   }
 
   .option-container {
