@@ -21,7 +21,7 @@ export const Card = styled.div`
   border-top-right-radius: 20px;
   margin: 20px;
   padding: 0px;
-  transition: all 0.2s;
+  transition: all 0.4s;
   z-index: 1 !important;
   -ms-overflow-style: none;
   scrollbar-width: none;

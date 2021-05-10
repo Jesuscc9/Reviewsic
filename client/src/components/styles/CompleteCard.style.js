@@ -7,6 +7,15 @@ export const GlobalStyles = createGlobalStyle`
   }
 `;
 
+const rotate = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+`;
+
 const slide = keyframes`
 	0% {
     transform:translateX(-160%) scale(2);
@@ -88,7 +97,6 @@ export const Card = styled.div`
     min-width: 250px;
     max-width: 250px;
     height: 330px;
-    border: 1px solid;
   }
 
   .card-custom::-webkit-scrollbar {
@@ -164,7 +172,9 @@ export const Card = styled.div`
     &:hover {
       background-color: #0ca72e !important;
     }
+  }
 
+  .shine {
     &:after {
       content: "";
       top: 0;
@@ -278,6 +288,51 @@ export const Card = styled.div`
     overflow-x: auto;
   }
 
+  .ratings {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    .average {
+      margin-left: 30px;
+    }
+  }
+
+  .card-data {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-between;
+    width: 87%;
+  }
+  .star {
+    transition: all 0.3s;
+  }
+
+  .rate-button {
+    width: 85px;
+    height: 30px;
+    background: rgba(255, 215, 0, 1);
+    padding: 3px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: rgb(87, 87, 87);
+    margin-left: 30px;
+    transition: all 0.3s;
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      background: #f4c800;
+      transform: scale(1.03);
+      .star {
+        animation: ${rotate} 2s linear infinite;
+      }
+    }
+  }
+
   .comment ::-webkit-scrollbar {
     width: 2px !important;
   }
@@ -288,16 +343,8 @@ export const Card = styled.div`
     font-weight: 600;
     font-style: italic;
     color: rgb(160, 160, 160);
-    position: relative;
-    bottom: 35px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
-  }
-
-  .date {
-    bottom: 55px;
-    left: 470px;
   }
 
   .logo-title {
@@ -311,12 +358,12 @@ export const Card = styled.div`
 
   .card-options {
     width: 30px;
+    min-height: 90%;
+    margin: auto;
     height: auto;
     position: absolute;
     right: 20px;
-    bottom: 90px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
+    top: 5%;
     background-color: white;
     transition: left 0.25s linear, opacity 0.3s ease-in-out;
     opacity: 1;
@@ -324,13 +371,43 @@ export const Card = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: flex-end;
+    align-content: space-between;
   }
 
-  .card-options-visible {
-    left: 180px;
-    opacity: 1;
-    cursor: pointer;
+  .card-actions {
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-between;
+    height: 70px;
+
+    div {
+      border-radius: 5px;
+    }
+
+    .heart {
+      position: relative;
+      bottom: 8px;
+    }
+
+    img {
+      position: relative;
+      bottom: 20px;
+      transform: scale(0.7);
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .delete-option {
+      background-color: rgba(199, 25, 25, 0.1);
+    }
+
+    .edit-option {
+      background-color: rgba(255, 203, 34, 0.2);
+    }
   }
 
   .author-rate {
@@ -380,19 +457,6 @@ export const Card = styled.div`
   .faTrash {
     color: rgb(199, 25, 25);
     cursor: pointer;
-  }
-
-  .faHeart {
-    color: #7e22cd;
-    cursor: pointer;
-    font-size: 16px;
-    opacity: 0.4;
-    transition: all 0.3s;
-  }
-
-  .faHeart:hover {
-    color: #7e22cd;
-    opacity: 0.6;
   }
 
   .heart {

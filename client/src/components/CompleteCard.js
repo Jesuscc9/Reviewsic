@@ -7,6 +7,7 @@ import {
   faPause,
   faPen,
   faPlay,
+  faStar,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,6 +21,7 @@ import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ColorExtractor } from "react-color-extractor";
+import PlaylistIcon from "../assets/img/PlaylistIcon.png";
 
 const Card = (props) => {
   const author_id = useSelector((state) => state.user.author_id);
@@ -86,7 +88,6 @@ const Card = (props) => {
 
   let calc;
 
-  const card_options = React.useRef(null);
   const card = React.useRef(null);
   const heart = React.useRef(null);
   const span = React.useRef(null);
@@ -121,7 +122,6 @@ const Card = (props) => {
   };
 
   const handleMouseLeave = () => {
-    card_options.current.classList.remove("card-options-visible");
     span.current.style.transform = `translateX(${0}px)`;
   };
 
@@ -153,41 +153,19 @@ const Card = (props) => {
         maxColors={3}
         getColors={(colors) => {
           setColors(colors);
-          console.log(colors);
         }}
       />
       <CustomCard onClick={() => {}}>
         <div className="card-content-container open" key={data.id} ref={node}>
-          {/* {showBg && (
-            <div
-              className="white-background"
-              layoutId={`card-white-background-${data.id}`}
-            />
-          )} */}
           <motion.div
             className="card-content"
             layoutId={`card-container-${data.id}`}
-            style={{
-              backgroundColor:
-                colors.length && showBg && false
-                  ? `#1DB954
-                  `
-                  : "#fff",
-            }}
           >
             <div className="card-header" ref={card}>
               <motion.div
                 className="image-container"
                 layoutId={`card-image-container-${data.id}`}
               >
-                {/* <a href={data.spotifyUrl} target="_blank">
-              <img
-                alt=""
-                src={data.image}
-                className="song-img"
-                loading="lazy"
-              />
-            </a> */}
                 <a href={data.spotifyUrl} target="_blank">
                   <img
                     alt=""
@@ -200,13 +178,7 @@ const Card = (props) => {
             </div>
             <div className="card-body">
               <button
-                className="play-button"
-                style={{
-                  backgroundColor: colors.length
-                    ? `#1DB954
-                    `
-                    : "rgb(255, 255, 255)",
-                }}
+                className={`play-button ${pause ? "shine" : ""}`}
                 onClick={() => {
                   setPause(!pause);
                 }}
@@ -238,27 +210,55 @@ const Card = (props) => {
               <p className="comment">{data.review}</p>
             </div>
             <div className="card-footer">
-              <motion.div init={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <p className="author-rate">Author Rating</p>
-                <ReactStars {...rating} className="stars-calification" />
-              </motion.div>
-              <motion.div
-                init={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="users-rate-container"
-              >
-                <p className="author-rate users-rate">Average Rating</p>
-                <ReactStars
-                  {...rating}
-                  className="stars-calification"
-                  value="3"
-                />
-              </motion.div>
-              <p className="author">By: {data.author}</p>
-              <p className="author date">2 minutes ago</p>
-              <div className="card-options" ref={card_options}>
-                {data.author_id === author_id ? (
-                  <React.Fragment>
+              <div className="ratings">
+                <div className="rating-container">
+                  <p className="author-rate">Author Rating</p>
+                  <ReactStars {...rating} className="stars-calification" />
+                </div>
+
+                <div className="rating-container average">
+                  <p className="author-rate users-rate">Average Rating</p>
+                  <ReactStars
+                    {...rating}
+                    className="stars-calification"
+                    value="3"
+                  />
+                </div>
+                <button className="rate-button">
+                  <FontAwesomeIcon icon={faStar} className="star" />
+                  &nbsp;&nbsp;Rate it!
+                </button>
+              </div>
+              <div className="card-data">
+                <p className="author">
+                  By:{" "}
+                  <Link to={`/user/${data.author}`} target="_blank">
+                    <u>{data.author}</u>
+                  </Link>
+                </p>
+                <p className="author date">2 minutes ago</p>
+              </div>
+              <div className="card-options">
+                <div className="card-actions">
+                  <div
+                    className="heart"
+                    ref={heart}
+                    onClick={() => {
+                      handleHeartClick();
+                    }}
+                  ></div>
+                  <div
+                    className="playlist"
+                    onClick={() => {
+                      handleClick();
+                    }}
+                  >
+                    <img src={PlaylistIcon} alt="" />
+                  </div>
+                </div>
+
+                {data.author_id === author_id && (
+                  <div className="card-actions">
                     <div
                       className="edit-option option-container"
                       onClick={() => {
@@ -268,26 +268,15 @@ const Card = (props) => {
                       <FontAwesomeIcon icon={faPen} className="faPen" />
                     </div>
                     <div
-                      className="edit-option option-container"
+                      className="delete-option option-container"
                       onClick={(e) => {
                         props.delete(data.id);
                       }}
                     >
                       <FontAwesomeIcon icon={faTrash} className="faTrash" />
                     </div>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment></React.Fragment>
+                  </div>
                 )}
-                <div className="edit-option option-container">
-                  <div
-                    className="heart"
-                    ref={heart}
-                    onClick={() => {
-                      handleHeartClick();
-                    }}
-                  ></div>
-                </div>
               </div>
             </div>
           </motion.div>

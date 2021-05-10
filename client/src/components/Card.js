@@ -111,14 +111,6 @@ const Card = (props) => {
                 className="image-container"
                 layoutId={`card-image-container-${data.id}`}
               >
-                {/* <a href={data.spotifyUrl} target="_blank">
-              <img
-                alt=""
-                src={data.image}
-                className="song-img"
-                loading="lazy"
-              />
-            </a> */}
                 <Link to={`/home/${data.id}`}>
                   <img
                     alt=""
