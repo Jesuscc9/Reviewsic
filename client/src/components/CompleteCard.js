@@ -10,6 +10,7 @@ import {
   faStar,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import { faSpotify } from "@fortawesome/fontawesome-free-brands";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import {
@@ -205,6 +206,7 @@ const Card = (props) => {
                 onMouseLeave={handleMouseLeave}
               >
                 <span ref={span}>{data.song}</span>
+                <div className="fake-shadow"></div>
               </div>
               <h5 className="artist-name">{data.artist}</h5>
               <p className="comment">{data.review}</p>
@@ -232,7 +234,7 @@ const Card = (props) => {
               <div className="card-data">
                 <p className="author">
                   By:{" "}
-                  <Link to={`/user/${data.author}`} target="_blank">
+                  <Link to={`/user/${data.author_id}`} target="_blank">
                     <u>{data.author}</u>
                   </Link>
                 </p>
@@ -241,24 +243,29 @@ const Card = (props) => {
               <div className="card-options">
                 <div className="card-actions">
                   <div
-                    className="heart"
-                    ref={heart}
+                    className="likes-container"
                     onClick={() => {
                       handleHeartClick();
                     }}
-                  ></div>
+                  >
+                    <p>21 </p>
+                    <div className="heart-container">
+                      <div className="heart" ref={heart}></div>
+                    </div>
+                  </div>
                   <div
-                    className="playlist"
+                    className="playlist-container"
                     onClick={() => {
                       handleClick();
                     }}
                   >
-                    <img src={PlaylistIcon} alt="" />
+                    <p>Save</p>
+                    <FontAwesomeIcon icon={faSpotify} className="spotify" />
                   </div>
                 </div>
 
                 {data.author_id === author_id && (
-                  <div className="card-actions">
+                  <div className="card-actions register-options">
                     <div
                       className="edit-option option-container"
                       onClick={() => {

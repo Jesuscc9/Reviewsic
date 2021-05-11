@@ -198,7 +198,6 @@ export const Card = styled.div`
   }
 
   .card-options {
-    border-left: 1px solid rgba(128, 128, 128, 0.068);
     width: 30px;
     height: auto;
     position: relative;

@@ -136,7 +136,8 @@ export const Card = styled.div`
   }
 
   .card-body {
-    flex-basis: 60%;
+    flex-basis: 55%;
+    border-radius: 10px;
     position: relative;
   }
 
@@ -251,6 +252,7 @@ export const Card = styled.div`
     max-width: 100%;
     height: 25px;
     position: relative;
+    padding: 5px 0px;
   }
 
   .song-name span {
@@ -303,7 +305,7 @@ export const Card = styled.div`
     display: flex;
     margin-top: 10px;
     justify-content: space-between;
-    width: 87%;
+    width: 100%;
   }
   .star {
     transition: all 0.3s;
@@ -357,47 +359,99 @@ export const Card = styled.div`
   }
 
   .card-options {
-    width: 30px;
-    min-height: 90%;
+    width: 75px;
+    min-height: 71%;
     margin: auto;
     height: auto;
     position: absolute;
     right: 20px;
-    top: 5%;
+    top: 20px;
     background-color: white;
     transition: left 0.25s linear, opacity 0.3s ease-in-out;
     opacity: 1;
     cursor: default;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-end;
     align-content: space-between;
   }
 
   .card-actions {
     overflow: hidden;
+    height: 70px;
+
+    flex-basis: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     align-content: space-between;
-    height: 70px;
 
     div {
       border-radius: 5px;
+      max-width: 30px;
     }
 
-    .heart {
-      position: relative;
-      bottom: 8px;
-    }
+    .likes-container {
+      min-width: 100%;
+      background: rgba(199, 25, 25, 0.1);
+      display: flex;
+      justify-content: space-around;
+      padding: 0px 2px;
+      align-items: center;
+      cursor: pointer;
 
-    img {
-      position: relative;
-      bottom: 20px;
-      transform: scale(0.7);
+      p {
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        color: #e24867;
+        margin-left: 3px;
+        font-size: 15px;
+      }
 
       &:hover {
-        cursor: pointer;
+        .heart {
+          background-position: right;
+        }
+      }
+
+      .heart-container {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+
+        .heart {
+          position: relative;
+          bottom: 10px;
+        }
+      }
+    }
+
+    .playlist-container {
+      min-width: 100%;
+      height: 30px;
+      background: rgba(12, 180, 49, 0.1);
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      justify-content: space-around;
+
+      img {
+        width: 26px;
+        height: 26px;
+        transform: scale(0.65);
+      }
+
+      p {
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        color: #0cb431;
+        margin-left: 3px;
+        font-size: 13px;
+      }
+
+      .spotify {
+        color: rgb(170, 184, 193);
       }
     }
 
@@ -408,6 +462,10 @@ export const Card = styled.div`
     .edit-option {
       background-color: rgba(255, 203, 34, 0.2);
     }
+  }
+
+  .card-actions.register-options {
+    max-width: 30px;
   }
 
   .author-rate {
@@ -447,6 +505,7 @@ export const Card = styled.div`
     align-items: center;
     font-size: 14px;
     z-index: 10;
+    cursor: pointer;
   }
 
   .faPen {
@@ -471,10 +530,6 @@ export const Card = styled.div`
   }
 
   .clicked_heart {
-    background-position: right;
-  }
-
-  .heart:hover {
     background-position: right;
   }
 
