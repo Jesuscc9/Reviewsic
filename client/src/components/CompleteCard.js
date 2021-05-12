@@ -3,7 +3,7 @@ import "tailwindcss/tailwind.css";
 import ReactStars from "react-rating-stars-component";
 
 import {
-  faEraser,
+  faCheck,
   faPause,
   faPen,
   faPlay,
@@ -21,27 +21,53 @@ import {
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ColorExtractor } from "react-color-extractor";
-import PlaylistIcon from "../assets/img/PlaylistIcon.png";
+import { useDispatch } from "react-redux";
+import userActions from "../redux/user/actions";
+import { spotifyApi } from "../data/spotifyApi";
+import { Palette } from "react-palette";
+import Clairo from "../assets/img/clairo.png";
 
 const Card = (props) => {
-  const author_id = useSelector((state) => state.user.author_id);
+  const { likedSongs, author_id, playlist_id } = useSelector(
+    (state) => state.user
+  );
 
-  const { data, isInPlaylist, uri } = props;
+  console.log(likedSongs);
+  console.log(author_id);
+  console.log(playlist_id);
+
+  var { data, uri = "" } = props;
 
   const song_name = useRef(null);
 
   const [liked, setLiked] = useState(false);
   const [redirect, setRedirect] = useState(false);
-  const [colors, setColors] = useState([]);
   const [pause, setPause] = useState(true);
-  const [showBg, setShowBg] = useState(false);
+  const [addAnim, setAddAnim] = useState(false);
+  const [isInPlaylist, setIsInPlaylist] = useState(
+    likedSongs.findIndex((item) => {
+      return item.track.id == data.song_id;
+    })
+  );
+
+  const dispatch = useDispatch();
+
+  console.log(likedSongs);
+
+  if (isInPlaylist > -1) uri = likedSongs[isInPlaylist].track.uri;
 
   const escFunction = useCallback((event) => {
     if (event.keyCode === 27) {
       setRedirect(true);
     }
   }, []);
+
+  const handleOutsideClick = (e) => {
+    if (node.current.innerHTML == e.target.innerHTML) {
+      setRedirect(true);
+      return;
+    }
+  };
 
   useEffect(() => {
     if (isInPlaylist > -1) {
@@ -52,9 +78,6 @@ const Card = (props) => {
 
     heartActions.dislike();
     handleMouseLeave();
-    setTimeout(() => {
-      setShowBg(true);
-    }, 500);
   }, [liked]);
 
   useEffect(() => {
@@ -65,19 +88,10 @@ const Card = (props) => {
     };
   });
 
-  const handleClick = (e) => {
-    if (node.current.innerHTML == e.target.innerHTML) {
-      setRedirect(true);
-      return;
-    }
-  };
-
   useEffect(() => {
-    // add when mounted
-    document.addEventListener("mousedown", handleClick);
-    // return function to be called when unmounted
+    document.addEventListener("mousedown", handleOutsideClick);
     return () => {
-      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
@@ -88,7 +102,6 @@ const Card = (props) => {
   };
 
   let calc;
-
   const card = React.useRef(null);
   const heart = React.useRef(null);
   const span = React.useRef(null);
@@ -105,6 +118,25 @@ const Card = (props) => {
       heart.current.classList.remove("clicked_heart");
       handleMouseLeave();
     },
+  };
+
+  const addToPlaylist = async () => {
+    if (isInPlaylist > -1) {
+      setIsInPlaylist(-1);
+    } else {
+      if (!addAnim) {
+        setAddAnim(true);
+        setTimeout(async () => {
+          setAddAnim(false);
+          dispatch(
+            userActions.setLikedSongs(
+              await spotifyApi.playlist.add(data.song_id, playlist_id)
+            )
+          );
+          // setIsInPlaylist(await props.addSong(data.song_id, data));
+        }, 1000);
+      }
+    }
   };
 
   const handleMouseOver = () => {
@@ -126,16 +158,15 @@ const Card = (props) => {
     span.current.style.transform = `translateX(${0}px)`;
   };
 
-  const handleHeartClick = async () => {
-    if (liked) {
-      await props.deleteSong(data.song_id, uri, isInPlaylist);
-      heartActions.dislike();
-    } else {
-      await props.addSong(data.song_id, data);
-      heartActions.like();
-    }
-
-    setLiked(!liked);
+  const handleLikeSong = async () => {
+    // if (liked) {
+    //   await props.deleteSong(data.song_id, uri, isInPlaylist);
+    //   heartActions.dislike();
+    // } else {
+    //   await props.addSong(data.song_id, data);
+    //   heartActions.like();
+    // }
+    // setLiked(!liked);
   };
 
   function isElementOverflowing(element) {
@@ -144,18 +175,21 @@ const Card = (props) => {
 
   const node = useRef();
 
+  const imageUrl = data.image;
+
+  const hexToRgb = (hex = "fff") => {
+    hex = hex.substring(1);
+    var bigint = parseInt(hex, 16);
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    return r + "," + g + "," + b;
+  };
+
   return (
     <React.Fragment>
       {redirect && <Redirect to="/home" />}
       <GlobalStyles />
-      <ColorExtractor
-        rgb
-        src={data.image}
-        maxColors={3}
-        getColors={(colors) => {
-          setColors(colors);
-        }}
-      />
       <CustomCard onClick={() => {}}>
         <div className="card-content-container open" key={data.id} ref={node}>
           <motion.div
@@ -163,19 +197,31 @@ const Card = (props) => {
             layoutId={`card-container-${data.id}`}
           >
             <div className="card-header" ref={card}>
-              <motion.div
-                className="image-container"
-                layoutId={`card-image-container-${data.id}`}
-              >
-                <a href={data.spotifyUrl} target="_blank">
-                  <img
-                    alt=""
-                    src={data.image}
-                    className="song-img"
-                    loading="lazy"
-                  />
-                </a>
-              </motion.div>
+              <Palette src={data.image}>
+                {({ data, loading, error }) => {
+                  console.log(data);
+                  return (
+                    <motion.div
+                      className="image-container"
+                      layoutId={`card-image-container-${props.data.id}`}
+                      style={{
+                        boxShadow: `rgba(${hexToRgb(
+                          data.vibrant
+                        )},0.6) 2px 2px 50px 1px`,
+                      }}
+                    >
+                      <a href={props.data.spotifyUrl} target="_blank">
+                        <img
+                          alt=""
+                          src={imageUrl}
+                          className="song-img"
+                          loading="lazy"
+                        />
+                      </a>
+                    </motion.div>
+                  );
+                }}
+              </Palette>
             </div>
             <div className="card-body">
               <button
@@ -206,7 +252,6 @@ const Card = (props) => {
                 onMouseLeave={handleMouseLeave}
               >
                 <span ref={span}>{data.song}</span>
-                <div className="fake-shadow"></div>
               </div>
               <h5 className="artist-name">{data.artist}</h5>
               <p className="comment">{data.review}</p>
@@ -245,7 +290,7 @@ const Card = (props) => {
                   <div
                     className="likes-container"
                     onClick={() => {
-                      handleHeartClick();
+                      handleLikeSong();
                     }}
                   >
                     <p>21 </p>
@@ -256,11 +301,49 @@ const Card = (props) => {
                   <div
                     className="playlist-container"
                     onClick={() => {
-                      handleClick();
+                      addToPlaylist();
                     }}
                   >
-                    <p>Save</p>
-                    <FontAwesomeIcon icon={faSpotify} className="spotify" />
+                    <AnimatePresence>
+                      {addAnim && isInPlaylist < 0 ? (
+                        <motion.div
+                          key="success"
+                          initial={{ scale: 0, display: "none" }}
+                          animate={{ scale: 1, display: "flex" }}
+                          exit={{ scale: 0, display: "none" }}
+                          transition={{
+                            type: "spring",
+                            bounce: 0.7,
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faCheck} className="check" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="spotify"
+                          initial={{ opacity: 0, display: "none" }}
+                          animate={{ opacity: 1, display: "flex" }}
+                          exit={{ opacity: 0, display: "none" }}
+                          className="playlist-add-container"
+                        >
+                          {isInPlaylist < 0 ? (
+                            <>
+                              <p>Add</p>
+                              <FontAwesomeIcon
+                                icon={faSpotify}
+                                className="spotify"
+                              />
+                            </>
+                          ) : (
+                            <>
+                              <p style={{ width: "100%", textAlign: "center" }}>
+                                Saved!
+                              </p>
+                            </>
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
 
@@ -292,7 +375,6 @@ const Card = (props) => {
       <Overlay
         onClick={() => {
           setRedirect(true);
-          setShowBg(false);
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

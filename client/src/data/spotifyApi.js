@@ -58,11 +58,11 @@ export const spotifyApi = {
 
       return getAllSongs(songs.data.next, items);
     },
-    add: async (songId) => {
+    add: async (songId, playlistId) => {
       const songUri = `spotify:track:${songId}`;
 
       await Axios.post(
-        `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`,
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
         {
           uris: [songUri],
         },
@@ -78,6 +78,12 @@ export const spotifyApi = {
         draggable: true,
         progress: undefined,
       });
+
+      const res = await spotifyApi.playlist.get();
+
+      console.log(res);
+
+      return res;
     },
     delete: async (songId, uri, token) => {
       const headers = {

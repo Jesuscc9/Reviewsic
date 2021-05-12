@@ -106,18 +106,22 @@ const Register = () => {
         author_id: spotifyApi.songData.author_id,
       }));
 
+      const playlistId = await spotifyApi.playlist.create();
+
+      console.log(playlistId);
+
       dispatch(userActions.setUser(spotifyApi.songData.author_id));
+      dispatch(userActions.setPlaylistId(playlistId));
 
       setSpotifyData({
         profileImage: spotifyApi.data.profileImage,
-        playlistId: await spotifyApi.playlist.create(),
+        playlistId,
       });
 
       const songsLiked = await spotifyApi.playlist.get(
-        `https://api.spotify.com/v1/playlists/${await spotifyApi.playlist.create()}/tracks`
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
       );
 
-      setlikedSongs(songsLiked);
       dispatch(userActions.setLikedSongs([...songsLiked]));
 
       socket.emit("new user", spotifyApi.user);
@@ -152,7 +156,7 @@ const Register = () => {
   };
 
   const handleLikeSong = async (songId, item) => {
-    spotifyApi.playlist.add(songId);
+    return spotifyApi.playlist.add(songId);
     // socket.emit(
     //   "updateReviews",
     //   await api.setLikes(item.id, songList, item.likes + 1)
@@ -280,8 +284,8 @@ const Register = () => {
     delete: (data) => {
       deleteReview(data);
     },
-    addSong: (songId, data) => {
-      handleLikeSong(songId, data);
+    addSong: (songId) => {
+      return spotifyApi.playlist.add(songId);
     },
     deleteSong: (songId, uri) => {
       handleDeleteSong(songId, uri);

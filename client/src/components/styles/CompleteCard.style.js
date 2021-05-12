@@ -405,6 +405,8 @@ export const Card = styled.div`
         color: #e24867;
         margin-left: 3px;
         font-size: 15px;
+        width: 50%;
+        text-align: center;
       }
 
       &:hover {
@@ -423,6 +425,7 @@ export const Card = styled.div`
         .heart {
           position: relative;
           bottom: 10px;
+          width: 50%;
         }
       }
     }
@@ -442,16 +445,34 @@ export const Card = styled.div`
         transform: scale(0.65);
       }
 
+      .playlist-add-container {
+        min-width: 100%;
+        display: flex;
+      }
+
       p {
         font-family: "Poppins", sans-serif;
         font-weight: 600;
         color: #0cb431;
         margin-left: 3px;
         font-size: 13px;
+        width: 50%;
+        text-align: center;
       }
 
       .spotify {
         color: rgb(170, 184, 193);
+        width: 50%;
+      }
+
+      &:hover {
+        .spotify {
+          color: rgb(12, 180, 49);
+        }
+      }
+
+      .check {
+        color: rgb(12, 180, 49);
       }
     }
 

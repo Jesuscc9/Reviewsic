@@ -2,6 +2,7 @@ import actions from "./actions";
 
 const initialState = {
   author_id: "",
+  playlist_id: "",
   likedSongs: [],
 };
 
@@ -13,6 +14,8 @@ const reducer = (state = initialState, action) => {
       return state;
     case actions.SET_USER:
       return { ...state, author_id: payload.data };
+    case actions.SET_PLAYLIST_ID:
+      return { ...state, playlist_id: payload.data };
     case actions.SET_LIKED_SONGS:
       return { ...state, likedSongs: [...payload] };
     default:
