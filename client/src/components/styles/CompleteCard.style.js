@@ -109,7 +109,6 @@ export const Card = styled.div`
     height: 130px;
     border-radius: 13px;
     overflow: hidden;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
   }
 
   .song-img {

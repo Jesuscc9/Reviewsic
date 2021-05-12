@@ -21,13 +21,14 @@ export const Card = styled.div`
   border-top-right-radius: 20px;
   margin: 20px;
   padding: 0px;
-  transition: all 0.4s;
+  transition: all 0.2s;
   z-index: 1 !important;
   -ms-overflow-style: none;
   scrollbar-width: none;
 
   &:hover {
-    box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+    box-shadow: rgba(0, 0, 0, 0.1) 5px 7px 25px -5px,
+      rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
   }
   position: relative;
 
@@ -58,6 +59,8 @@ export const Card = styled.div`
     width: 100%;
     height: 100%;
     margin: 0 auto;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 15px -3px,
+      rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
   }
 
   .open .card-content {
@@ -101,10 +104,6 @@ export const Card = styled.div`
     transform: translateY(-50%) translateX(-50%);
     transition: all 0.3s;
     cursor: pointer;
-  }
-
-  .song-img:hover {
-    transform: translateY(-50%) translateX(-50%) scale(1.06);
   }
 
   .card-body {

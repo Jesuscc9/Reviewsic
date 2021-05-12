@@ -97,21 +97,21 @@ const Card = (props) => {
   return (
     <>
       <GlobalStyles />
-      <CustomCard>
-        <div className="card-content-container">
-          <motion.div
-            className="card-content"
-            key={data.id}
-            onMouseOver={handleMouseOver}
-            onMouseLeave={handleMouseLeave}
-            layoutId={`card-container-${data.id}`}
-          >
-            <div className="card-header" ref={card}>
-              <motion.div
-                className="image-container"
-                layoutId={`card-image-container-${data.id}`}
-              >
-                <Link to={`/home/${data.id}`}>
+      <Link to={`/home/${data.id}`}>
+        <CustomCard>
+          <div className="card-content-container">
+            <motion.div
+              className="card-content"
+              key={data.id}
+              onMouseOver={handleMouseOver}
+              onMouseLeave={handleMouseLeave}
+              layoutId={`card-container-${data.id}`}
+            >
+              <div className="card-header" ref={card}>
+                <motion.div
+                  className="image-container"
+                  layoutId={`card-image-container-${data.id}`}
+                >
                   <img
                     alt=""
                     src={data.image}
@@ -119,57 +119,57 @@ const Card = (props) => {
                     loading="lazy"
                     layoutId={`card-image-${data.image}`}
                   />
-                </Link>
-              </motion.div>
-            </div>
-            <div className="card-body">
-              <div className="song-name" ref={song_name}>
-                <span ref={span}>{data.song}</span>
+                </motion.div>
               </div>
+              <div className="card-body">
+                <div className="song-name" ref={song_name}>
+                  <span ref={span}>{data.song}</span>
+                </div>
 
-              <h5 className="artist-name">{data.artist}</h5>
-              <p className="comment">{data.review}</p>
-            </div>
-            <div className="card-footer">
-              <ReactStars {...rating} className="stars-calification" />{" "}
-              <p className="autor">By: {data.author}</p>
-              <div className="card-options" ref={card_options}>
-                {data.author_id === author_id ? (
-                  <React.Fragment>
+                <h5 className="artist-name">{data.artist}</h5>
+                <p className="comment">{data.review}</p>
+              </div>
+              <div className="card-footer">
+                <ReactStars {...rating} className="stars-calification" />{" "}
+                <p className="autor">By: {data.author}</p>
+                <div className="card-options" ref={card_options}>
+                  {data.author_id === author_id ? (
+                    <React.Fragment>
+                      <div
+                        className="edit-option option-container"
+                        onClick={() => {
+                          props.update(props.data);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faPen} className="faPen" />
+                      </div>
+                      <div
+                        className="edit-option option-container"
+                        onClick={(e) => {
+                          props.delete(data.id);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrash} className="faTrash" />
+                      </div>
+                    </React.Fragment>
+                  ) : (
+                    <React.Fragment></React.Fragment>
+                  )}
+                  <div className="edit-option option-container">
                     <div
-                      className="edit-option option-container"
+                      className="heart"
+                      ref={heart}
                       onClick={() => {
-                        props.update(props.data);
+                        handleHeartClick();
                       }}
-                    >
-                      <FontAwesomeIcon icon={faPen} className="faPen" />
-                    </div>
-                    <div
-                      className="edit-option option-container"
-                      onClick={(e) => {
-                        props.delete(data.id);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faTrash} className="faTrash" />
-                    </div>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment></React.Fragment>
-                )}
-                <div className="edit-option option-container">
-                  <div
-                    className="heart"
-                    ref={heart}
-                    onClick={() => {
-                      handleHeartClick();
-                    }}
-                  ></div>
+                    ></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      </CustomCard>
+            </motion.div>
+          </div>
+        </CustomCard>
+      </Link>
     </>
   );
 };

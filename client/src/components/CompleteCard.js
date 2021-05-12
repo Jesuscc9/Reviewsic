@@ -207,7 +207,7 @@ const Card = (props) => {
                       style={{
                         boxShadow: `rgba(${hexToRgb(
                           data.vibrant
-                        )},0.6) 2px 2px 50px 1px`,
+                        )},0.5) 2px 4px 40px 1px`,
                       }}
                     >
                       <a href={props.data.spotifyUrl} target="_blank">
