@@ -32,10 +32,6 @@ const Card = (props) => {
     (state) => state.user
   );
 
-  console.log(likedSongs);
-  console.log(author_id);
-  console.log(playlist_id);
-
   var { data, uri = "" } = props;
 
   const song_name = useRef(null);
@@ -51,8 +47,6 @@ const Card = (props) => {
   );
 
   const dispatch = useDispatch();
-
-  console.log(likedSongs);
 
   if (isInPlaylist > -1) uri = likedSongs[isInPlaylist].track.uri;
 
@@ -123,17 +117,24 @@ const Card = (props) => {
   const addToPlaylist = async () => {
     if (isInPlaylist > -1) {
       setIsInPlaylist(-1);
+      const songs = await spotifyApi.playlist.delete(
+        data.song_id,
+        playlist_id,
+        isInPlaylist,
+        uri
+      );
+      dispatch(userActions.setLikedSongs([...songs]));
     } else {
       if (!addAnim) {
         setAddAnim(true);
         setTimeout(async () => {
-          setAddAnim(false);
-          dispatch(
-            userActions.setLikedSongs(
-              await spotifyApi.playlist.add(data.song_id, playlist_id)
-            )
+          const { songs, insertedId } = await spotifyApi.playlist.add(
+            data.song_id,
+            playlist_id
           );
-          // setIsInPlaylist(await props.addSong(data.song_id, data));
+          setAddAnim(false);
+          dispatch(userActions.setLikedSongs(songs));
+          setIsInPlaylist(insertedId);
         }, 1000);
       }
     }
@@ -199,7 +200,6 @@ const Card = (props) => {
             <div className="card-header" ref={card}>
               <Palette src={data.image}>
                 {({ data, loading, error }) => {
-                  console.log(data);
                   return (
                     <motion.div
                       className="image-container"

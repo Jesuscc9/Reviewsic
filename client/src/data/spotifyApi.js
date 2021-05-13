@@ -1,9 +1,17 @@
 import Axios from "axios";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+
+import Cookies from "js-cookie";
+
+const token = Cookies.get("spotifyAuthToken");
 
 export const spotifyApi = {
-  config: {},
-  token: "",
+  config: {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  },
   authorId: "",
   data: {
     profileImage: "",
@@ -15,13 +23,6 @@ export const spotifyApi = {
   },
   likedSongs: [],
   user: {},
-  setConfig: (token) => {
-    spotifyApi.config = {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    };
-  },
   get: async function () {
     const userData = await Axios.get(
       "https://api.spotify.com/v1/me",
@@ -79,13 +80,17 @@ export const spotifyApi = {
         progress: undefined,
       });
 
-      const res = await spotifyApi.playlist.get();
+      const songs = await spotifyApi.playlist.get(
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
+      );
 
-      console.log(res);
+      const insertedId = songs.findIndex((item) => {
+        return item.track.id == songId;
+      });
 
-      return res;
+      return { songs, insertedId };
     },
-    delete: async (songId, uri, token) => {
+    delete: async (songId, playlistId, pos, uri) => {
       const headers = {
         Authorization: "Bearer " + token,
       };
@@ -94,23 +99,23 @@ export const spotifyApi = {
         tracks: [
           {
             uri: uri.length > 0 ? uri : `spotify:track:${songId}`,
-            positions: [0],
+            positions: [pos],
           },
         ],
       };
 
-      const songs = spotifyApi.playlist.get();
-
-      data.tracks[0].positions[0] = songs.find((song) => {
-        return song.track.id == songId;
-      });
-
       await Axios.delete(
-        `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`,
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
         { headers, data }
       );
 
-      return;
+      const songs = await spotifyApi.playlist.get(
+        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
+      );
+
+      console.log(songs);
+
+      return songs;
     },
     create: async function () {
       let playlists = await Axios.get(

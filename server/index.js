@@ -12,12 +12,12 @@ const PORT = 3001;
 
 const app = express();
 
-// const db = mysql.createPool({
-//   host: "dissoftec.com",
-//   user: "u257375416_reviewsic",
-//   password: "ReviewsicDB9",
-//   database: "u257375416_reviewsic",
-// });
+const db = mysql.createPool({
+  host: "dissoftec.com",
+  user: "u257375416_reviewsic",
+  password: "ReviewsicDB9",
+  database: "u257375416_reviewsic",
+});
 
 // const db = mysql.createPool({
 //   host: 'localhost',
@@ -26,12 +26,12 @@ const app = express();
 //   database: 'reviewsic'
 // })
 
-const db = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "gf",
-});
+// const db = mysql.createPool({
+//   host: "localhost",
+//   user: "root",
+//   password: "",
+//   database: "gf",
+// });
 
 //app.use(express.static(path.resolve(__dirname, 'build/')))
 app.use(express.static("public"));

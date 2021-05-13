@@ -96,7 +96,7 @@ const Register = () => {
     if (token && token.length) {
       setSongList(await api.get());
 
-      spotifyApi.setConfig(token);
+      dispatch(userActions.setToken(token));
 
       await spotifyApi.get();
 
@@ -107,8 +107,6 @@ const Register = () => {
       }));
 
       const playlistId = await spotifyApi.playlist.create();
-
-      console.log(playlistId);
 
       dispatch(userActions.setUser(spotifyApi.songData.author_id));
       dispatch(userActions.setPlaylistId(playlistId));

@@ -1,6 +1,7 @@
 const actions = {
   LOGIN: "USER/LOGIN",
   SET_USER: "USER/SET_USER",
+  SET_TOKEN: "USER/SET_TOKEN",
   SET_PLAYLIST_ID: "USER/SET_PLAYLIST_ID",
   SET_LIKED_SONGS: "USER/SET_LIKED_SONGS",
 
@@ -9,6 +10,10 @@ const actions = {
   }),
   setUser: (data) => ({
     type: actions.SET_USER,
+    payload: { data },
+  }),
+  setToken: (data) => ({
+    type: actions.SET_TOKEN,
     payload: { data },
   }),
   setPlaylistId: (data) => ({
