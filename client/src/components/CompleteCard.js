@@ -25,7 +25,7 @@ import { useDispatch } from "react-redux";
 import userActions from "../redux/user/actions";
 import { spotifyApi } from "../data/spotifyApi";
 import { Palette } from "react-palette";
-import Clairo from "../assets/img/clairo.png";
+import ReactTooltip from "react-tooltip";
 
 const Card = (props) => {
   const { likedSongs, author_id, playlist_id } = useSelector(
@@ -160,14 +160,14 @@ const Card = (props) => {
   };
 
   const handleLikeSong = async () => {
-    // if (liked) {
-    //   await props.deleteSong(data.song_id, uri, isInPlaylist);
-    //   heartActions.dislike();
-    // } else {
-    //   await props.addSong(data.song_id, data);
-    //   heartActions.like();
-    // }
-    // setLiked(!liked);
+    if (liked) {
+      // await props.deleteSong(data.song_id, uri, isInPlaylist);
+      heartActions.dislike();
+    } else {
+      // await props.addSong(data.song_id, data);
+      heartActions.like();
+    }
+    setLiked(!liked);
   };
 
   function isElementOverflowing(element) {
@@ -189,8 +189,9 @@ const Card = (props) => {
 
   return (
     <React.Fragment>
+      <ReactTooltip effect="solid" />
+
       {redirect && <Redirect to="/home" />}
-      <GlobalStyles />
       <CustomCard onClick={() => {}}>
         <div className="card-content-container open" key={data.id} ref={node}>
           <motion.div
@@ -207,7 +208,7 @@ const Card = (props) => {
                       style={{
                         boxShadow: `rgba(${hexToRgb(
                           data.vibrant
-                        )},0.5) 2px 4px 40px 1px`,
+                        )},0.3) 2px 4px 40px 0px`,
                       }}
                     >
                       <a href={props.data.spotifyUrl} target="_blank">
@@ -264,17 +265,29 @@ const Card = (props) => {
                 </div>
 
                 <div className="rating-container average">
-                  <p className="author-rate users-rate">Average Rating</p>
+                  <p className="author-rate users-rate">Users Rating</p>
                   <ReactStars
                     {...rating}
                     className="stars-calification"
                     value="3"
                   />
                 </div>
-                <button className="rate-button">
+
+                <div className="rating-container average">
+                  <button
+                    className="rate-button rated-button"
+                    data-tip="Your rating"
+                  >
+                    <span className="qualification">&nbsp;2.6</span>
+                    &nbsp;&nbsp;
+                    <FontAwesomeIcon icon={faStar} className="star" />
+                    &nbsp;
+                  </button>
+                </div>
+                {/* <button className="rate-button">
                   <FontAwesomeIcon icon={faStar} className="star" />
                   &nbsp;&nbsp;Rate it!
-                </button>
+                </button> */}
               </div>
               <div className="card-data">
                 <p className="author">

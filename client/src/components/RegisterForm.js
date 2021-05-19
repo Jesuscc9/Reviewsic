@@ -12,7 +12,6 @@ import Axios from "axios";
 import Cookies from "js-cookie";
 
 const RegisterForm = (props) => {
-  const [token, setToken] = useState("");
   const [disableButton, setDisableButton] = useState(true);
   const [genres, setGenres] = useState([]);
 
@@ -21,10 +20,6 @@ const RegisterForm = (props) => {
     value: 0,
     isHalf: true,
   };
-
-  useEffect(() => {
-    setToken(Cookies.get("spotifyAuthToken"));
-  });
 
   const review = React.useRef(null);
   const reviewAlert = React.useRef(null);
@@ -159,8 +154,6 @@ const RegisterForm = (props) => {
       setTimeout(async () => {
         if (validateUrl(spotifyURL.current.value)) {
           const track_id = e.slice(31, 53);
-
-          spotifyApi.setConfig(token);
 
           try {
             const data = await spotifyApi.song.get(track_id);

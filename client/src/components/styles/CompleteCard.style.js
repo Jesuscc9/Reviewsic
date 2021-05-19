@@ -1,12 +1,6 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import { motion } from "framer-motion";
 
-export const GlobalStyles = createGlobalStyle`
-  body {
-    background: #e6edff !important;
-  }
-`;
-
 const rotate = keyframes`
   0% {
     transform: rotate(0deg);
@@ -44,8 +38,6 @@ export const Overlay = styled(motion.div)`
 `;
 
 export const Card = styled.div`
-  height: 400px;
-
   .card-content-container {
     margin-top: 150px;
     width: 100%;
@@ -331,6 +323,20 @@ export const Card = styled.div`
       .star {
         animation: ${rotate} 2s linear infinite;
       }
+    }
+  }
+
+  .rated-button {
+    width: auto;
+    padding: 0 5px;
+    position: relative;
+    left: -20px;
+    font-size: 14px;
+    background-color: rgba(255, 203, 34, 0.2);
+    color: #f5c800;
+
+    &:hover {
+      background-color: rgba(255, 203, 34, 0.2);
     }
   }
 
