@@ -70,11 +70,12 @@ const Register = () => {
   const [users, setUsers] = useState([]);
   const [showCards, setShowCards] = useState(false);
 
-  const [likedSongs, setlikedSongs] = useState(undefined);
   const [token, setToken] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
   const [sortType, setSortType] = useState(undefined);
   const [cardView, setCardView] = useState("categories");
+
+  const [likes, setLikes] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -95,6 +96,7 @@ const Register = () => {
 
     if (token && token.length) {
       setSongList(await api.get());
+      setLikes(await api.getLikes());
 
       dispatch(userActions.setToken(token));
 
@@ -132,6 +134,10 @@ const Register = () => {
         setSongList(data);
       });
 
+      socket.on("updateLikes", (data) => {
+        setLikes(data);
+      });
+
       setLoaded(true);
       setShowCards(true);
     }
@@ -151,22 +157,6 @@ const Register = () => {
 
   const deleteReview = async (id) => {
     socket.emit("updateReviews", [...(await api.delete(id, songList))]);
-  };
-
-  const handleLikeSong = async (songId, item) => {
-    return spotifyApi.playlist.add(songId);
-    // socket.emit(
-    //   "updateReviews",
-    //   await api.setLikes(item.id, songList, item.likes + 1)
-    // );
-  };
-
-  const handleDeleteSong = async (songId, uri) => {
-    spotifyApi.playlist.delete(songId, uri, token);
-    // socket.emit(
-    //   "updateReviews",
-    //   await api.setLikes(item.id, songList, item.likes - 1)
-    // );
   };
 
   const registerForm = () => {
@@ -282,17 +272,10 @@ const Register = () => {
     delete: (data) => {
       deleteReview(data);
     },
-    addSong: (songId) => {
-      return spotifyApi.playlist.add(songId);
-    },
-    deleteSong: (songId, uri) => {
-      handleDeleteSong(songId, uri);
+    like: async (data) => {
+      socket.emit("updateLikes", [...likes, await api.setLikes(data)]);
     },
   };
-
-  // const CardCustom = ({ data }) => {
-  //   return <Card data={data} />;
-  // };
 
   return (
     <>
@@ -367,13 +350,18 @@ const Register = () => {
                                 onSelect={(value) => handleDropdown(value)}
                                 onCardViewChange={(value) => setCardView(value)}
                               />
-                              <CardsList songList={songList} {...CardActions} />
+                              <CardsList
+                                songList={songList}
+                                likes={likes}
+                                {...CardActions}
+                              />
                               <AnimatePresence>
                                 {params.id && (
                                   <CompleteCard
                                     data={songList.find((song) => {
                                       return song.id == params.id;
                                     })}
+                                    likes={likes}
                                     {...CardActions}
                                     key="item"
                                   />

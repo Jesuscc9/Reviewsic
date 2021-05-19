@@ -81,20 +81,16 @@ export const api = {
       return songList;
     }
   },
-  setLikes: async function (id, songList, likes) {
-    this.data.likes = likes;
+  getLikes: async function () {
+    return (await Axios.get(`${this.endpoint}/api/likes/get`)).data;
+  },
+  setLikes: async function ({ author_id, review_id, like }) {
+    await Axios.post(`${this.endpoint}/api/likes/setLikes`, {
+      author_id,
+      review_id,
+      like,
+    });
 
-    if (likes < -1) likes = 0;
-
-    await Axios.put(`${this.endpoint}/api/update/setLikes/${id}`, this.data);
-
-    for (let i = 0; i < songList.length; i++) {
-      if (songList[i].id == id) {
-        songList[i] = this.data;
-        break;
-      }
-    }
-
-    return songList;
+    return { author_id, review_id, like };
   },
 };

@@ -53,8 +53,6 @@ app.post("/api/insert", async (req, res) => {
   const sqlInsert =
     "INSERT INTO song_reviews (image, song, artist, review, genre, spotifyUrl, qualification, author, author_id, song_id, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-  console.log(Object.keys(req.body));
-
   db.query(
     sqlInsert,
     [
@@ -75,7 +73,6 @@ app.post("/api/insert", async (req, res) => {
         req.body.id = result.insertId;
         res.send(req.body);
       } else {
-        console.log(err);
         res.send(err);
       }
     }
@@ -88,7 +85,6 @@ app.delete("/api/delete/:id", (req, res) => {
   const sqlDelete = "DELETE FROM song_reviews WHERE id = ?";
   db.query(sqlDelete, id, (err, result) => {
     if (err) {
-      console.log(err);
     }
   });
 });
@@ -111,19 +107,57 @@ app.put("/api/update/:id", (req, res) => {
   );
 });
 
-app.put("/api/update/setLikes/:id", (req, res) => {
-  if (req.body.likes < 0) req.body.likes = 0;
-
-  const sqlUpdate = "UPDATE song_reviews SET likes = ?  WHERE id = ?";
-
-  db.query(sqlUpdate, [req.body.likes, req.params.id], (err, result) => {
+app.get("/api/likes/get", (req, res) => {
+  const sqlSelect = "SELECT * FROM likes";
+  db.query(sqlSelect, (err, result) => {
     if (err) {
-      res.send(err);
+      res.end();
     } else {
-      req.body.id = req.params.id;
-      res.send(req.body);
+      res.send(result);
     }
   });
+});
+
+app.post("/api/likes/setLikes", (req, res) => {
+  const sqlSelect = "SELECT * FROM likes WHERE author_id = ? AND review_id = ?";
+  db.query(
+    sqlSelect,
+    [req.body.author_id, req.body.review_id],
+    (err, result) => {
+      const likes = result;
+      if (likes.length) {
+        const sqlUpdate =
+          "UPDATE likes SET isLike = ? WHERE author_id = ? AND review_id = ?";
+
+        db.query(
+          sqlUpdate,
+          [req.body.like, req.body.author_id, req.body.review_id],
+          (err, result) => {
+            if (err) {
+              res.send(err);
+            } else {
+              res.send(result);
+            }
+          }
+        );
+      } else {
+        const sqlInsert =
+          "INSERT INTO likes (author_id, review_id, isLike) VALUES(?, ?, ?)";
+
+        db.query(
+          sqlInsert,
+          [req.body.author_id, req.body.review_id, req.body.like],
+          (err, result) => {
+            if (err) {
+              res.send(err);
+            } else {
+              res.send(result);
+            }
+          }
+        );
+      }
+    }
+  );
 });
 
 // app.get('*', (req, res) => {
@@ -139,6 +173,9 @@ let users = {};
 io.on("connection", (socket) => {
   socket.on("updateReviews", (data) => {
     io.sockets.emit("updateReviews", data);
+  });
+  socket.on("updateLikes", (data) => {
+    io.sockets.emit("updateLikes", data);
   });
 
   socket.on("new user", (data) => {

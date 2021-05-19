@@ -36,7 +36,18 @@ const Card = (props) => {
 
   const song_name = useRef(null);
 
-  const [liked, setLiked] = useState(false);
+  const likes = props.likes.reduce((sum, like) => {
+    return like.review_id == data.id && like.isLike ? sum + 1 : sum;
+  }, 0);
+
+  const [liked, setLiked] = useState(
+    props.likes.find((like) => {
+      return like.review_id == data.id && like.author_id == author_id;
+    })?.isLike
+      ? true
+      : false
+  );
+
   const [redirect, setRedirect] = useState(false);
   const [pause, setPause] = useState(true);
   const [addAnim, setAddAnim] = useState(false);
@@ -64,14 +75,11 @@ const Card = (props) => {
   };
 
   useEffect(() => {
-    if (isInPlaylist > -1) {
-      setLiked(true);
+    if (liked) {
       heartActions.like();
-      return;
+    } else {
+      heartActions.dislike();
     }
-
-    heartActions.dislike();
-    handleMouseLeave();
   }, [liked]);
 
   useEffect(() => {
@@ -161,10 +169,10 @@ const Card = (props) => {
 
   const handleLikeSong = async () => {
     if (liked) {
-      // await props.deleteSong(data.song_id, uri, isInPlaylist);
+      await props.like({ author_id, review_id: data.id, like: 0 });
       heartActions.dislike();
     } else {
-      // await props.addSong(data.song_id, data);
+      await props.like({ author_id, review_id: data.id, like: 1 });
       heartActions.like();
     }
     setLiked(!liked);
@@ -265,7 +273,7 @@ const Card = (props) => {
                 </div>
 
                 <div className="rating-container average">
-                  <p className="author-rate users-rate">Users Rating</p>
+                  <p className="author-rate users-rate">Average Rating</p>
                   <ReactStars
                     {...rating}
                     className="stars-calification"
@@ -306,7 +314,7 @@ const Card = (props) => {
                       handleLikeSong();
                     }}
                   >
-                    <p>21 </p>
+                    <p>{likes}</p>
                     <div className="heart-container">
                       <div className="heart" ref={heart}></div>
                     </div>
