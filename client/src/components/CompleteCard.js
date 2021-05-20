@@ -75,7 +75,7 @@ const Card = (props) => {
       ? true
       : false;
     if (userLiked) {
-      heartActions.like();
+      heartActions.clicked();
     } else {
       heartActions.dislike();
     }
@@ -119,6 +119,9 @@ const Card = (props) => {
     dislike: () => {
       heart.current.classList.remove("clicked_heart");
       handleMouseLeave();
+    },
+    clicked: () => {
+      heart.current.classList.add("clicked_heart");
     },
   };
 
