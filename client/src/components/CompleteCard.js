@@ -192,7 +192,8 @@ const Card = (props) => {
     var r = (bigint >> 16) & 255;
     var g = (bigint >> 8) & 255;
     var b = bigint & 255;
-    return r + "," + g + "," + b;
+    var a = r > 180 ? 0.2 : 0.4;
+    return r + "," + g + "," + b + "," + a;
   };
 
   return (
@@ -216,7 +217,7 @@ const Card = (props) => {
                       style={{
                         boxShadow: `rgba(${hexToRgb(
                           data.vibrant
-                        )},0.3) 2px 4px 40px 0px`,
+                        )}) 2px 4px 40px 0px`,
                       }}
                     >
                       <a href={props.data.spotifyUrl} target="_blank">
