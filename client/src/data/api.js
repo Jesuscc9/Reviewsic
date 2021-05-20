@@ -21,7 +21,6 @@ export const api = {
       draggable: true,
       progress: undefined,
     });
-
     return upload.data;
   },
   update: async function (id, songList) {

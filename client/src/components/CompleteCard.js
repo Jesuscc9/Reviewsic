@@ -28,21 +28,24 @@ import { Palette } from "react-palette";
 import ReactTooltip from "react-tooltip";
 
 const Card = (props) => {
+  const [redirect, setRedirect] = useState(false);
   const { likedSongs, author_id, playlist_id } = useSelector(
     (state) => state.user
   );
 
   var { data, uri = "" } = props;
 
+  if (!data) setRedirect(true);
+
   const song_name = useRef(null);
 
   const likes = props.likes.reduce((sum, like) => {
+    console.log(like);
     return like.review_id == data.id && like.isLike ? sum + 1 : sum;
   }, 0);
 
   const [liked, setLiked] = useState(false);
 
-  const [redirect, setRedirect] = useState(false);
   const [pause, setPause] = useState(true);
   const [addAnim, setAddAnim] = useState(false);
   const [isInPlaylist, setIsInPlaylist] = useState(

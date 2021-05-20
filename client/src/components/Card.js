@@ -97,7 +97,7 @@ const Card = (props) => {
   return (
     <>
       <GlobalStyles />
-      <Link to={`/home/${data.id}`}>
+      <Link to={`/home/${data.id}`} id={data.id}>
         <CustomCard>
           <div className="card-content-container">
             <motion.div

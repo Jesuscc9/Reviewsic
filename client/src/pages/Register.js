@@ -5,6 +5,7 @@ import { spotifyApi } from "../data/spotifyApi";
 import { useDispatch } from "react-redux";
 import userActions from "../redux/user/actions";
 import { AnimatePresence, motion } from "framer-motion";
+import { Redirect } from "react-router-dom";
 
 import openSocket from "socket.io-client";
 import Swal from "sweetalert2";
@@ -68,6 +69,7 @@ const Register = () => {
 
   const [songList, setSongList] = useState([]);
   const [users, setUsers] = useState([]);
+  const [redirect, setRedirect] = useState(false);
   const [showCards, setShowCards] = useState(false);
 
   const [token, setToken] = useState(undefined);
@@ -131,6 +133,7 @@ const Register = () => {
       });
 
       socket.on("updateReviews", (data) => {
+        console.log(data);
         setSongList(data);
       });
 
@@ -157,6 +160,7 @@ const Register = () => {
 
   const deleteReview = async (id) => {
     socket.emit("updateReviews", [...(await api.delete(id, songList))]);
+    setRedirect(true);
   };
 
   const registerForm = () => {
@@ -279,6 +283,7 @@ const Register = () => {
 
   return (
     <>
+      {redirect && <Redirect to="/home" />}
       <GlobalStyles />
       <Navbar
         onAddClick={() => {
