@@ -40,13 +40,7 @@ const Card = (props) => {
     return like.review_id == data.id && like.isLike ? sum + 1 : sum;
   }, 0);
 
-  const [liked, setLiked] = useState(
-    props.likes.find((like) => {
-      return like.review_id == data.id && like.author_id == author_id;
-    })?.isLike
-      ? true
-      : false
-  );
+  const [liked, setLiked] = useState(false);
 
   const [redirect, setRedirect] = useState(false);
   const [pause, setPause] = useState(true);
@@ -75,12 +69,18 @@ const Card = (props) => {
   };
 
   useEffect(() => {
-    if (liked) {
+    const userLiked = props.likes.find((like) => {
+      return like.review_id == data.id && like.author_id == author_id;
+    })?.isLike
+      ? true
+      : false;
+    if (userLiked) {
       heartActions.like();
     } else {
       heartActions.dislike();
     }
-  }, [liked]);
+    setLiked(userLiked);
+  }, [likes]);
 
   useEffect(() => {
     document.addEventListener("keydown", escFunction, false);

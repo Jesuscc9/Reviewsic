@@ -90,7 +90,6 @@ export const api = {
       review_id,
       like,
     });
-
-    return { author_id, review_id, like };
+    return this.getLikes();
   },
 };

@@ -273,7 +273,7 @@ const Register = () => {
       deleteReview(data);
     },
     like: async (data) => {
-      socket.emit("updateLikes", [...likes, await api.setLikes(data)]);
+      socket.emit("updateLikes", [...(await api.setLikes(data))]);
     },
   };
 
