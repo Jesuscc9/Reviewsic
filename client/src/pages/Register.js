@@ -133,7 +133,6 @@ const Register = () => {
       });
 
       socket.on("updateReviews", (data) => {
-        console.log(data);
         setSongList(data);
       });
 
@@ -300,99 +299,79 @@ const Register = () => {
         <SpotifyApiContext.Provider value={token}>
           <PageContainer>
             <MainContainer>
-              <>
-                <AnimatePresence>
-                  {!loaded ? (
-                    <ContentContainer
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
+              <AnimatePresence>
+                {!loaded ? (
+                  <ContentContainer
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <motion.div
+                      key="loader"
+                      initial={{ y: -200 }}
+                      animate={{ y: 0 }}
+                      exit={{ y: -200 }}
+                      style={{ position: "absolute" }}
                     >
-                      <motion.div
-                        key="loader"
-                        initial={{ y: -200 }}
-                        animate={{ y: 0 }}
-                        exit={{ y: -200 }}
-                        style={{ position: "absolute" }}
-                      >
-                        <Loader
-                          type="Audio"
-                          color="#6c22cdc7"
-                          height={70}
-                          width={70}
-                          className="mt-5"
-                        />
-                      </motion.div>
-                    </ContentContainer>
-                  ) : (
-                    <React.Fragment>
-                      {songList.length ? (
-                        <AnimatePresence>
-                          {cardView != "categories" ? (
-                            <ContentContainer
-                              initial={{ x: -200 }}
-                              animate={{ x: 0 }}
-                              exit={{ x: -200 }}
-                            >
-                              <DropdownMenu
-                                onSelect={(value) => handleDropdown(value)}
-                                onCardViewChange={(value) => setCardView(value)}
-                              />
-                              <CardsCarousel
-                                {...CardActions}
-                                songList={songList}
-                                sortType={sortType}
-                              />
-                            </ContentContainer>
-                          ) : (
-                            <ContentContainer
-                              initial={{ x: -200 }}
-                              animate={{ x: 0 }}
-                              exit={{ x: -200 }}
-                            >
-                              <DropdownMenu
-                                onSelect={(value) => handleDropdown(value)}
-                                onCardViewChange={(value) => setCardView(value)}
-                              />
-                              <CardsList
-                                songList={songList}
+                      <Loader
+                        type="Audio"
+                        color="#6c22cdc7"
+                        height={70}
+                        width={70}
+                        className="mt-5"
+                      />
+                    </motion.div>
+                  </ContentContainer>
+                ) : (
+                  <React.Fragment>
+                    {songList.length ? (
+                      <AnimatePresence>
+                        <ContentContainer
+                          initial={{ x: -200 }}
+                          animate={{ x: 0 }}
+                          exit={{ x: -200 }}
+                        >
+                          <DropdownMenu
+                            onSelect={(value) => handleDropdown(value)}
+                            onCardViewChange={(value) => setCardView(value)}
+                          />
+                          <CardsList
+                            songList={songList}
+                            likes={likes}
+                            {...CardActions}
+                          />
+                          <AnimatePresence>
+                            {params.id && (
+                              <CompleteCard
+                                data={songList.find((song) => {
+                                  return song.id == params.id;
+                                })}
                                 likes={likes}
                                 {...CardActions}
+                                key="item"
                               />
-                              <AnimatePresence>
-                                {params.id && (
-                                  <CompleteCard
-                                    data={songList.find((song) => {
-                                      return song.id == params.id;
-                                    })}
-                                    likes={likes}
-                                    {...CardActions}
-                                    key="item"
-                                  />
-                                )}
-                              </AnimatePresence>
-                            </ContentContainer>
-                          )}
-                        </AnimatePresence>
-                      ) : (
-                        <ContentContainer
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                        >
-                          <p
-                            style={{
-                              textAlign: "center",
-                            }}
-                          >
-                            Not reviews registered yet 😕.
-                          </p>
+                            )}
+                          </AnimatePresence>
                         </ContentContainer>
-                      )}
-                    </React.Fragment>
-                  )}
-                </AnimatePresence>
-              </>
+                      </AnimatePresence>
+                    ) : (
+                      <ContentContainer
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                      >
+                        <p
+                          style={{
+                            textAlign: "center",
+                          }}
+                        >
+                          Not reviews registered yet 😕.
+                        </p>
+                      </ContentContainer>
+                    )}
+                  </React.Fragment>
+                )}
+              </AnimatePresence>
 
               <Contacts users={users} />
             </MainContainer>

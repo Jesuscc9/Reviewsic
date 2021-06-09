@@ -7,14 +7,14 @@ const cors = require("cors");
 const mysql = require("mysql");
 const fileUpload = require("express-fileupload");
 
-const { Mac, Windows, Remote } = require("./Connection");
+const { Mac, Windows, Remote } = require("../server/Conection");
 
 //const PORT = process.env.PORT || 3001;
 const PORT = 3001;
 
 const app = express();
 
-const db = mysql.createPool(Windows);
+const db = mysql.createPool(Mac);
 
 //app.use(express.static(path.resolve(__dirname, 'build/')))
 app.use(express.static("public"));
@@ -25,8 +25,10 @@ app.get("/api/get", (req, res) => {
   const sqlSelect = "SELECT * FROM song_reviews";
   db.query(sqlSelect, (err, result) => {
     if (err) {
+      console.log(err);
       res.end();
     } else {
+      console.log(result);
       res.send(result);
     }
   });

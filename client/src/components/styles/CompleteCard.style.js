@@ -502,6 +502,7 @@ export const Card = styled.div`
     text-shadow: 1px 1px 4px #d4d4d4;
     position: relative;
     left: 3px;
+    margin-bottom: 5px;
   }
 
   .users-rate-container {
