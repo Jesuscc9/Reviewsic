@@ -91,4 +91,7 @@ export const api = {
     });
     return this.getLikes();
   },
+  getQualifications: async function () {
+    return (await Axios.get(`${this.endpoint}/api/qualifications/get`)).data;
+  },
 };

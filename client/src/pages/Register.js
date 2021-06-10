@@ -67,7 +67,6 @@ const Register = () => {
     playlistId: "",
   });
 
-  const [songList, setSongList] = useState([]);
   const [users, setUsers] = useState([]);
   const [redirect, setRedirect] = useState(false);
   const [showCards, setShowCards] = useState(false);
@@ -78,6 +77,8 @@ const Register = () => {
   const [cardView, setCardView] = useState("categories");
 
   const [likes, setLikes] = useState([]);
+  const [songList, setSongList] = useState([]);
+  const [qualifications, setQualifications] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -99,6 +100,7 @@ const Register = () => {
     if (token && token.length) {
       setSongList(await api.get());
       setLikes(await api.getLikes());
+      setQualifications(await api.getQualifications());
 
       dispatch(userActions.setToken(token));
 
@@ -138,6 +140,10 @@ const Register = () => {
 
       socket.on("updateLikes", (data) => {
         setLikes(data);
+      });
+
+      socket.on("updateQualifications", (data) => {
+        setQualifications(data);
       });
 
       setLoaded(true);
@@ -348,6 +354,7 @@ const Register = () => {
                                   return song.id == params.id;
                                 })}
                                 likes={likes}
+                                qualifications={qualifications}
                                 {...CardActions}
                                 key="item"
                               />

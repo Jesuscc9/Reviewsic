@@ -40,14 +40,38 @@ const Card = (props) => {
   const song_name = useRef(null);
 
   const likes = props.likes.reduce((sum, like) => {
-    console.log(like);
     return like.review_id == data.id && like.isLike ? sum + 1 : sum;
   }, 0);
+
+  const qualification = props.qualifications.find((e) => {
+    return e.review_id == data.id && e.author_id == author_id;
+  });
+
+  let qual_cant = 0;
+
+  console.log(data.qualification);
+
+  const average =
+    [
+      ...props.qualifications,
+      {
+        review_id: data.id,
+        qualification: data.qualification,
+      },
+    ].reduce((sum, e) => {
+      if (e && e.review_id == data.id) {
+        qual_cant++;
+        return sum + e.qualification;
+      } else {
+        return 0;
+      }
+    }) / qual_cant;
 
   const [liked, setLiked] = useState(false);
 
   const [pause, setPause] = useState(true);
   const [addAnim, setAddAnim] = useState(false);
+
   const [isInPlaylist, setIsInPlaylist] = useState(
     likedSongs.findIndex((item) => {
       return item.track.id == data.song_id;
@@ -283,26 +307,31 @@ const Card = (props) => {
                   <p className="author-rate users-rate">Average Rating</p>
                   <ReactStars
                     {...rating}
+                    value={average}
                     className="stars-calification"
-                    value="3"
                   />
                 </div>
 
-                <div className="rating-container average">
-                  <button
-                    className="rate-button rated-button"
-                    data-tip="Your rating"
-                  >
-                    <span className="qualification">&nbsp;2.6</span>
-                    &nbsp;&nbsp;
+                {qualification ? (
+                  <div className="rating-container average">
+                    <button
+                      className="rate-button rated-button"
+                      data-tip="Your rating"
+                    >
+                      <span className="qualification">
+                        &nbsp;{qualification.qualification}
+                      </span>
+                      &nbsp;&nbsp;
+                      <FontAwesomeIcon icon={faStar} className="star" />
+                      &nbsp;
+                    </button>
+                  </div>
+                ) : (
+                  <button className="rate-button">
                     <FontAwesomeIcon icon={faStar} className="star" />
-                    &nbsp;
+                    &nbsp;&nbsp;Rate it!
                   </button>
-                </div>
-                {/* <button className="rate-button">
-                  <FontAwesomeIcon icon={faStar} className="star" />
-                  &nbsp;&nbsp;Rate it!
-                </button> */}
+                )}
               </div>
               <div className="card-data">
                 <p className="author">

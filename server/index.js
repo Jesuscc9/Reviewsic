@@ -14,7 +14,7 @@ const PORT = 3001;
 
 const app = express();
 
-const db = mysql.createPool(Mac);
+const db = mysql.createPool(Windows);
 
 //app.use(express.static(path.resolve(__dirname, 'build/')))
 app.use(express.static("public"));
@@ -94,6 +94,17 @@ app.put("/api/update/:id", (req, res) => {
 
 app.get("/api/likes/get", (req, res) => {
   const sqlSelect = "SELECT * FROM likes";
+  db.query(sqlSelect, (err, result) => {
+    if (err) {
+      res.end();
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.get("/api/qualifications/get", (req, res) => {
+  const sqlSelect = "SELECT * FROM qualifications";
   db.query(sqlSelect, (err, result) => {
     if (err) {
       res.end();
