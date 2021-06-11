@@ -298,8 +298,47 @@ export const Card = styled.div`
     justify-content: space-between;
     width: 100%;
   }
+
   .star {
     transition: all 0.3s;
+  }
+
+  .rate-stars-container {
+    position: relative;
+    bottom: 55px;
+    left: -20px;
+    opacity: 0;
+    transition: all 0.2s;
+  }
+
+  .rate-container {
+    width: 85px;
+    height: 30px;
+    margin-left: 30px;
+
+    &:hover {
+      .rate-stars-container {
+        opacity: 1;
+        transform: scale(1.1);
+
+        .rate-stars {
+          pointer-events: auto;
+        }
+      }
+      .star {
+        animation: ${rotate} 2s linear infinite;
+      }
+
+      .rate-button {
+        transform: scale(1.03);
+      }
+    }
+  }
+
+  .rate-stars {
+    position: absolute !important;
+    min-height: 60px;
+    pointer-events: none;
   }
 
   .rate-button {
@@ -312,25 +351,14 @@ export const Card = styled.div`
     font-family: "Poppins", sans-serif;
     font-weight: 600;
     color: rgb(87, 87, 87);
-    margin-left: 30px;
     transition: all 0.3s;
     cursor: pointer;
     outline: none;
-
-    &:hover {
-      background: #f4c800;
-      transform: scale(1.03);
-      .star {
-        animation: ${rotate} 2s linear infinite;
-      }
-    }
   }
 
   .rated-button {
     width: auto;
     padding: 0 5px;
-    position: relative;
-    left: -20px;
     font-size: 14px;
     background-color: rgba(255, 203, 34, 0.2);
     color: #f5c800;

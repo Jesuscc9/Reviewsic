@@ -196,7 +196,6 @@ const RegisterForm = (props) => {
               props.onGenreChange("country");
             }
           } catch (err) {
-            console.log(err);
             spotifyInputStatus.error();
           }
         } else {

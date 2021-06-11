@@ -32,7 +32,6 @@ const Card = (props) => {
   const { likedSongs, author_id, playlist_id } = useSelector(
     (state) => state.user
   );
-
   var { data, uri = "" } = props;
 
   if (!data) setRedirect(true);
@@ -43,13 +42,17 @@ const Card = (props) => {
     return like.review_id == data.id && like.isLike ? sum + 1 : sum;
   }, 0);
 
-  const qualification = props.qualifications.find((e) => {
-    return e.review_id == data.id && e.author_id == author_id;
-  });
+  const qualification =
+    data.author_id == author_id
+      ? {
+          review_id: data.id,
+          qualification: data.qualification,
+        }
+      : props.qualifications.find((e) => {
+          return e.review_id == data.id && e.author_id == author_id;
+        });
 
   let qual_cant = 0;
-
-  console.log(data.qualification);
 
   const average =
     [
@@ -65,9 +68,10 @@ const Card = (props) => {
       } else {
         return 0;
       }
-    }) / qual_cant;
+    }, 0) / qual_cant;
 
   const [liked, setLiked] = useState(false);
+  const [qualificated, setQualificated] = useState(qualification);
 
   const [pause, setPause] = useState(true);
   const [addAnim, setAddAnim] = useState(false);
@@ -108,6 +112,8 @@ const Card = (props) => {
     }
     setLiked(userLiked);
   }, [likes]);
+
+  useEffect(() => {}, [props.qualifications]);
 
   useEffect(() => {
     document.addEventListener("keydown", escFunction, false);
@@ -312,14 +318,15 @@ const Card = (props) => {
                   />
                 </div>
 
-                {qualification ? (
+                {qualificated?.qualification ? (
                   <div className="rating-container average">
+                    <ReactTooltip effect="solid" />
                     <button
                       className="rate-button rated-button"
                       data-tip="Your rating"
                     >
                       <span className="qualification">
-                        &nbsp;{qualification.qualification}
+                        &nbsp;{qualificated.qualification}
                       </span>
                       &nbsp;&nbsp;
                       <FontAwesomeIcon icon={faStar} className="star" />
@@ -327,10 +334,30 @@ const Card = (props) => {
                     </button>
                   </div>
                 ) : (
-                  <button className="rate-button">
-                    <FontAwesomeIcon icon={faStar} className="star" />
-                    &nbsp;&nbsp;Rate it!
-                  </button>
+                  <div className="rate-container">
+                    <div className="rate-stars-container">
+                      <ReactStars
+                        {...rating}
+                        value={qualification?.qualification}
+                        size="30"
+                        edit="true"
+                        className="stars-calification rate-stars"
+                        onChange={(e) => {
+                          const qualificationData = {
+                            author_id,
+                            review_id: data.id,
+                            qualification: e,
+                          };
+                          setQualificated(qualificationData);
+                          props.qualify(qualificationData);
+                        }}
+                      />
+                    </div>
+                    <button className="rate-button">
+                      <FontAwesomeIcon icon={faStar} className="star" />
+                      &nbsp;&nbsp;Rate it!
+                    </button>
+                  </div>
                 )}
               </div>
               <div className="card-data">

@@ -30,7 +30,7 @@ const Card = (props) => {
   }, [liked]);
 
   var rating = {
-    size: 20,
+    size: 25,
     value: data.qualification,
     edit: false,
   };

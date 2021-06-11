@@ -143,7 +143,7 @@ const Register = () => {
       });
 
       socket.on("updateQualifications", (data) => {
-        setQualifications(data);
+        setQualifications([...data]);
       });
 
       setLoaded(true);
@@ -272,8 +272,6 @@ const Register = () => {
     }, 300);
   };
 
-  const params = useParams();
-
   const CardActions = {
     update: (data) => {
       updateModal(data);
@@ -284,7 +282,14 @@ const Register = () => {
     like: async (data) => {
       socket.emit("updateLikes", [...(await api.setLikes(data))]);
     },
+    qualify: async (data) => {
+      socket.emit("updateQualifications", [
+        ...(await api.setQualifications(data)),
+      ]);
+    },
   };
+
+  const params = useParams();
 
   return (
     <>

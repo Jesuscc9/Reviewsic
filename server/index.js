@@ -25,10 +25,8 @@ app.get("/api/get", (req, res) => {
   const sqlSelect = "SELECT * FROM song_reviews";
   db.query(sqlSelect, (err, result) => {
     if (err) {
-      console.log(err);
       res.end();
     } else {
-      console.log(result);
       res.send(result);
     }
   });
@@ -103,18 +101,7 @@ app.get("/api/likes/get", (req, res) => {
   });
 });
 
-app.get("/api/qualifications/get", (req, res) => {
-  const sqlSelect = "SELECT * FROM qualifications";
-  db.query(sqlSelect, (err, result) => {
-    if (err) {
-      res.end();
-    } else {
-      res.send(result);
-    }
-  });
-});
-
-app.post("/api/likes/setLikes", (req, res) => {
+app.post("/api/likes/set", (req, res) => {
   const sqlSelect = "SELECT * FROM likes WHERE author_id = ? AND review_id = ?";
   db.query(
     sqlSelect,
@@ -156,6 +143,60 @@ app.post("/api/likes/setLikes", (req, res) => {
   );
 });
 
+app.get("/api/qualifications/get", (req, res) => {
+  const sqlSelect = "SELECT * FROM qualifications";
+  db.query(sqlSelect, (err, result) => {
+    if (err) {
+      res.end();
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.post("/api/qualifications/set", (req, res) => {
+  const sqlSelect =
+    "SELECT * FROM qualifications WHERE author_id = ? AND review_id = ?";
+  db.query(
+    sqlSelect,
+    [req.body.author_id, req.body.review_id],
+    (err, result) => {
+      const likes = result;
+      if (likes.length) {
+        const sqlUpdate =
+          "UPDATE qualifications SET qualification = ? WHERE author_id = ? AND review_id = ?";
+
+        db.query(
+          sqlUpdate,
+          [req.body.qualification, req.body.author_id, req.body.review_id],
+          (err, result) => {
+            if (err) {
+              res.send(err);
+            } else {
+              res.send(result);
+            }
+          }
+        );
+      } else {
+        const sqlInsert =
+          "INSERT INTO qualifications (author_id, review_id, qualification) VALUES(?, ?, ?)";
+
+        db.query(
+          sqlInsert,
+          [req.body.author_id, req.body.review_id, req.body.qualification],
+          (err, result) => {
+            if (err) {
+              res.send(err);
+            } else {
+              res.send(result);
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
 // app.get('*', (req, res) => {
 //   res.sendFile(path.resolve(__dirname, 'build/', 'index.html'));
 // });
@@ -170,8 +211,13 @@ io.on("connection", (socket) => {
   socket.on("updateReviews", (data) => {
     io.sockets.emit("updateReviews", data);
   });
+
   socket.on("updateLikes", (data) => {
     io.sockets.emit("updateLikes", data);
+  });
+
+  socket.on("updateQualifications", (data) => {
+    io.sockets.emit("updateQualifications", data);
   });
 
   socket.on("new user", (data) => {

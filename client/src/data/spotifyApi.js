@@ -31,7 +31,7 @@ export const spotifyApi = {
 
     const user_image = userData.data.images.length
       ? userData.data.images[0].url
-      : "http://dissoftec.com/NicePng_user-png_730154.jpeg";
+      : "http://dissoftec.com/DefaultUserImage.png";
 
     this.data.profileImage = user_image;
 
@@ -112,8 +112,6 @@ export const spotifyApi = {
       const songs = await spotifyApi.playlist.get(
         `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
       );
-
-      console.log(songs);
 
       return songs;
     },
