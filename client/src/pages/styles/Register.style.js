@@ -82,7 +82,8 @@ export const MainContainer = styled.div`
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    height: 500px;
+    height: 800px;
+    border: 1px solid;
   }
 `;
 
