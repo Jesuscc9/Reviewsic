@@ -76,6 +76,14 @@ export const MainContainer = styled.div`
     display: flex;
     flex-direction: column-reverse;
   }
+
+  .sidebar {
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    height: 500px;
+  }
 `;
 
 export const ContentContainer = styled(motion.div)`

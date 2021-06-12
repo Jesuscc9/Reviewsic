@@ -3,9 +3,7 @@ import "tailwindcss/tailwind.css";
 import "../components/styles/Contacts.css";
 import { motion } from "framer-motion";
 
-const Contacts = (props) => {
-  const data = props.users;
-
+const Contacts = ({ data }) => {
   return (
     <React.Fragment>
       <div className="contacts">

@@ -388,9 +388,11 @@ const Register = () => {
                 )}
               </AnimatePresence>
 
-              <Contacts users={users} />
+              <div className="sidebar">
+                <Contacts data={users} />
+                <Player token={token} />
+              </div>
             </MainContainer>
-            <Player token={token} />
             <Footer token={token} />
           </PageContainer>
         </SpotifyApiContext.Provider>

@@ -1,4 +1,4 @@
-footer{
+footer {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -8,16 +8,16 @@ footer{
   padding: 10px;
   font-size: 16px;
   display: flex;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 500;
   justify-content: space-around;
 }
 
-footer p{
+footer p {
   font-size: 12px;
 }
 
-.footer-section{
+.footer-section {
   width: 30%;
   height: 60px;
   display: flex;
@@ -26,7 +26,7 @@ footer p{
   flex-wrap: wrap;
 }
 
-.logout-button{
+.logout-button {
   width: 100px;
   height: auto;
   background-color: rgba(255, 0, 0, 0.185);
