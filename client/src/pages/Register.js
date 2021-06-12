@@ -23,6 +23,7 @@ import Contacts from "../components/Contacts";
 import Login from "../components/Login";
 import DropdownMenu from "../components/DropdownMenu";
 import Cookies from "js-cookie";
+import Player from "../components/Player";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -125,6 +126,8 @@ const Register = () => {
       const songsLiked = await spotifyApi.playlist.get(
         `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
       );
+
+      await spotifyApi.player.current();
 
       dispatch(userActions.setLikedSongs([...songsLiked]));
 
@@ -387,6 +390,7 @@ const Register = () => {
 
               <Contacts users={users} />
             </MainContainer>
+            <Player token={token} />
             <Footer token={token} />
           </PageContainer>
         </SpotifyApiContext.Provider>

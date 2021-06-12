@@ -380,6 +380,14 @@ const Home = () => {
                 Scopes.userReadPrivate,
                 Scopes.playlistReadCollaborative,
                 Scopes.playlistModifyPublic,
+                Scopes.appRemoteControl,
+                Scopes.streaming,
+                Scopes.userReadCurrentlyPlaying,
+                Scopes.userReadPlaybackState,
+                Scopes.userModifyPlaybackState,
+                Scopes.userReadPlaybackPosition,
+                Scopes.userReadPrivate,
+                Scopes.userReadEmail,
               ]}
               onAccessToken={() => {
                 window.location = "/home";

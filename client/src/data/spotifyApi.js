@@ -173,4 +173,12 @@ export const spotifyApi = {
       ).data.genres;
     },
   },
+  player: {
+    current: async () => {
+      const current = await Axios.get(
+        `https://api.spotify.com/v1/me/player`,
+        spotifyApi.config
+      );
+    },
+  },
 };

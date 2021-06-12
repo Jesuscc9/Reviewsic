@@ -26,6 +26,7 @@ import userActions from "../redux/user/actions";
 import { spotifyApi } from "../data/spotifyApi";
 import { Palette } from "react-palette";
 import ReactTooltip from "react-tooltip";
+import { hexToRgb, timeAgo } from "../data/utils";
 
 const Card = (props) => {
   const [redirect, setRedirect] = useState(false);
@@ -222,16 +223,6 @@ const Card = (props) => {
 
   const imageUrl = data.image;
 
-  const hexToRgb = (hex = "fff") => {
-    hex = hex.substring(1);
-    var bigint = parseInt(hex, 16);
-    var r = (bigint >> 16) & 255;
-    var g = (bigint >> 8) & 255;
-    var b = bigint & 255;
-    var a = r > 180 ? 0.2 : 0.4;
-    return r + "," + g + "," + b + "," + a;
-  };
-
   return (
     <React.Fragment>
       <ReactTooltip effect="solid" />
@@ -367,7 +358,7 @@ const Card = (props) => {
                     <u>{data.author}</u>
                   </Link>
                 </p>
-                <p className="author date">2 minutes ago</p>
+                <p className="author date">{timeAgo(data.date)}</p>
               </div>
               <div className="card-options">
                 <div className="card-actions">
