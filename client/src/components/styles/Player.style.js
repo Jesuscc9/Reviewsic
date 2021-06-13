@@ -72,6 +72,10 @@ export const Player = styled.div`
         justify-content: center;
         align-items: center;
       }
+
+      ._VolumeRSWP {
+        z-index: 4;
+      }
     }
   }
 
@@ -87,7 +91,6 @@ export const Player = styled.div`
     min-width: 300px;
     padding: 10px;
     height: 300px;
-    z-index: 10;
     pointer-events: none;
   }
 
@@ -110,7 +113,6 @@ export const Player = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
-    z-index: 10;
 
     .play {
       border: 1px solid;

@@ -206,6 +206,10 @@ const Register = () => {
 
   const params = useParams();
 
+  const reviewExists = songList.filter((e) => {
+    return e.id == params.id;
+  }).length;
+
   return (
     <>
       {redirect && <Redirect to="/home" />}
@@ -268,10 +272,7 @@ const Register = () => {
                             {...CardActions}
                           />
                           <AnimatePresence>
-                            {params.id &&
-                            songList.filter((e) => {
-                              return e.id == params.id;
-                            }).length > 0 ? (
+                            {params.id && reviewExists && (
                               <CompleteCard
                                 data={songList.find((song) => {
                                   return song.id == params.id;
@@ -281,8 +282,6 @@ const Register = () => {
                                 {...CardActions}
                                 key="item"
                               />
-                            ) : (
-                              <Redirect to="/home" />
                             )}
                           </AnimatePresence>
                         </ContentContainer>
