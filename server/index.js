@@ -34,7 +34,7 @@ app.get("/api/get", (req, res) => {
 
 app.post("/api/insert", async (req, res) => {
   const sqlInsert =
-    "INSERT INTO song_reviews (image, song, artist, review, genre, spotifyUrl, qualification, author, author_id, song_id, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO song_reviews (image, song, artist, review, genre, qualification, user, userId, spotifyId, spotifyUrl, spotifyUri, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   db.query(
     sqlInsert,
@@ -44,11 +44,12 @@ app.post("/api/insert", async (req, res) => {
       req.body.artist,
       req.body.review,
       req.body.genre,
-      req.body.spotifyUrl,
       req.body.qualification,
-      req.body.author,
-      req.body.author_id,
-      req.body.song_id,
+      req.body.user,
+      req.body.userId,
+      req.body.spotifyId,
+      req.body.spotifyUrl,
+      req.body.spotifyUri,
       req.body.date,
     ],
     async (err, result) => {

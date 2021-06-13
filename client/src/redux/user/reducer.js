@@ -1,9 +1,9 @@
 import actions from "./actions";
 
 const initialState = {
+  user: {},
   token: "",
-  author_id: "",
-  playlist_id: "",
+  playlistId: "",
   likedSongs: [],
 };
 
@@ -14,11 +14,11 @@ const reducer = (state = initialState, action) => {
     case actions.LOGIN:
       return state;
     case actions.SET_USER:
-      return { ...state, author_id: payload.data };
+      return { ...state, ...payload.data };
     case actions.SET_TOKEN:
       return { ...state, token: payload.data };
     case actions.SET_PLAYLIST_ID:
-      return { ...state, playlist_id: payload.data };
+      return { ...state, playlistId: payload.data };
     case actions.SET_LIKED_SONGS:
       return { ...state, likedSongs: [...payload] };
     default:

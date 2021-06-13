@@ -47,27 +47,7 @@ const socket = openSocket(API_ENDPOINT);
 const Register = () => {
   const MySwal = withReactContent(Swal);
 
-  const [songData, setSongData] = useState({
-    song: "",
-    image: "",
-    review: "",
-    artist: "",
-    genre: "",
-    likes: 0,
-    qualification: 0,
-    song_id: "",
-    updateId: 0,
-    author: "",
-    author_id: "",
-    spotifyUrl: "",
-    spotifyUri: "",
-    date: "",
-  });
-
-  const [spotifyData, setSpotifyData] = useState({
-    profileImage: undefined,
-    playlistId: "",
-  });
+  const [userData, setUserData] = useState({});
 
   const [users, setUsers] = useState([]);
   const [redirect, setRedirect] = useState(false);
@@ -108,27 +88,16 @@ const Register = () => {
 
       await spotifyApi.get();
 
-      setSongData((prevState) => ({
-        ...prevState,
-        author: spotifyApi.songData.author,
-        author_id: spotifyApi.songData.author_id,
-      }));
-
       const playlistId = await spotifyApi.playlist.create();
 
-      dispatch(userActions.setUser(spotifyApi.songData.author_id));
+      dispatch(userActions.setUser(spotifyApi.user));
       dispatch(userActions.setPlaylistId(playlistId));
 
-      setSpotifyData({
-        profileImage: spotifyApi.data.profileImage,
-        playlistId,
-      });
+      setUserData(spotifyApi.user);
 
       const songsLiked = await spotifyApi.playlist.get(
         `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
       );
-
-      await spotifyApi.player.current();
 
       dispatch(userActions.setLikedSongs([...songsLiked]));
 
@@ -139,7 +108,7 @@ const Register = () => {
       });
 
       socket.on("updateReviews", (data) => {
-        setSongList(data);
+        setSongList((prevState) => [...prevState, data]);
       });
 
       socket.on("updateLikes", (data) => {
@@ -156,11 +125,10 @@ const Register = () => {
   }, [token]);
 
   api.endpoint = API_ENDPOINT;
-  api.data = songData;
   api.songList = songList;
 
-  const submitReview = async () => {
-    socket.emit("updateReviews", [...songList, await api.insert()]);
+  const submitReview = async (data) => {
+    socket.emit("updateReviews", await api.insert({ ...userData, ...data }));
   };
 
   const updateReview = async (id) => {
@@ -177,57 +145,8 @@ const Register = () => {
       html: (
         <React.Fragment>
           <RegisterForm
-            onSongChange={(e) => {
-              setSongData((prevState) => ({
-                ...prevState,
-                song: e,
-              }));
-            }}
-            selectImage={(e) => {
-              setSongData((prevState) => ({
-                ...prevState,
-                image: e,
-              }));
-            }}
-            onArtistChange={(e) => {
-              setSongData((prevState) => ({
-                ...prevState,
-                artist: e,
-              }));
-            }}
-            onGenreChange={(e) => {
-              setSongData((prevState) => ({
-                ...prevState,
-                genre: e,
-              }));
-            }}
-            onCommentChange={(e) => {
-              setSongData((prevState) => ({
-                ...prevState,
-                review: e,
-              }));
-            }}
-            onSpotifyUrlChange={(e) => {
-              setSongData((prevState) => ({
-                ...prevState,
-                spotifyUrl: e,
-              }));
-
-              if (e.length >= 52) {
-                setSongData((prevState) => ({
-                  ...prevState,
-                  song_id: e.slice(31, 53),
-                }));
-              }
-            }}
-            ratingChanged={(e) => {
-              setSongData((prevState) => ({
-                ...prevState,
-                qualification: e,
-              }));
-            }}
-            onSubmit={(e) => {
-              submitReview();
+            submit={(data) => {
+              submitReview(data);
               MySwal.close();
             }}
           />
@@ -239,24 +158,11 @@ const Register = () => {
   };
 
   const updateModal = (data) => {
-    setSongData(data);
     MySwal.fire({
       html: (
         <UpdateForm
           data={data}
           token={token}
-          onCommentChange={(e) => {
-            setSongData((prevState) => ({
-              ...prevState,
-              review: e,
-            }));
-          }}
-          ratingChanged={(e) => {
-            setSongData((prevState) => ({
-              ...prevState,
-              qualification: e,
-            }));
-          }}
           onSubmit={async (e) => {
             updateReview(data.id);
             MySwal.close();
@@ -303,7 +209,7 @@ const Register = () => {
         onAddClick={() => {
           registerForm();
         }}
-        profileImage={spotifyData.profileImage}
+        profileImage={userData.image}
         token={token}
       ></Navbar>
       <br />

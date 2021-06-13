@@ -5,33 +5,46 @@ import "../components/styles/SmartRegisterForm.css";
 import ReactStars from "react-rating-stars-component";
 
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { spotifyApi } from "../data/spotifyApi";
 import { AnimatePresence, motion } from "framer-motion";
-import Axios from "axios";
-import Cookies from "js-cookie";
+import { validateUrl, defaultGenres } from "../data/formValidation";
 
-const RegisterForm = (props) => {
+const RegisterForm = ({ submit }) => {
   const [disableButton, setDisableButton] = useState(true);
   const [genres, setGenres] = useState([]);
 
+  const [songData, setSongData] = useState({
+    image: "",
+    song: "",
+    artist: "",
+    review: "",
+    genre: "",
+    qualification: 0,
+    spotifyId: "",
+    spotifyUrl: "",
+    spotifyUri: "",
+    date: "",
+  });
+
   const stars = {
     size: 50,
-    value: 0,
+    value: songData.qualification,
     isHalf: true,
   };
 
   const review = React.useRef(null);
   const reviewAlert = React.useRef(null);
-  const spotifyURL = React.useRef(null);
-  const spotifyURLAlert = React.useRef(null);
+  const spotifyUrl = React.useRef(null);
+  const spotifyUrlAlert = React.useRef(null);
 
   const spotifyInputStatus = {
     check: React.useRef(null),
     loader: React.useRef(null),
     container: React.useRef(null),
     loading: function () {
-      spotifyURL.current.style.width = "85%";
+      spotifyUrl.current.style.width = "85%";
       this.loader.current.style.display = "block";
       this.container.current.style.display = "block";
       this.check.current.style.display = "none";
@@ -41,7 +54,7 @@ const RegisterForm = (props) => {
     },
     sucess: function () {
       this.loader.current.style.opacity = "0";
-      let spotifyInputAux = spotifyURL.current;
+      let spotifyInputAux = spotifyUrl.current;
       this.check.current.style.display = "none";
 
       setTimeout(() => {
@@ -60,8 +73,8 @@ const RegisterForm = (props) => {
     },
     error: function () {
       this.loader.current.style.opacity = "0";
-      let spotifyInputAux = spotifyURL.current;
-      let spotifyAlertAux = spotifyURLAlert.current;
+      let spotifyInputAux = spotifyUrl.current;
+      let spotifyAlertAux = spotifyUrlAlert.current;
       this.check.current.style.display = "none";
 
       setTimeout(() => {
@@ -81,26 +94,7 @@ const RegisterForm = (props) => {
     },
   };
 
-  const validateUrl = (spotifyUrl) => {
-    const url = document.createElement("a");
-    url.href = spotifyUrl;
-
-    if (url.protocol != "https:") {
-      return false;
-    }
-
-    if (url.hostname != "open.spotify.com") {
-      return false;
-    }
-
-    if (!url.pathname.includes("/track/")) {
-      return false;
-    }
-
-    return true;
-  };
-
-  function validation() {
+  const validation = () => {
     if (review.current.value.length <= 0) {
       reviewAlert.current.style.opacity = "1";
       review.current.classList.add("wrong-input");
@@ -131,72 +125,67 @@ const RegisterForm = (props) => {
       review.current.classList.remove("wrong-input");
     }
 
-    if (!validateUrl(spotifyURL.current.value)) {
-      spotifyURLAlert.current.textContent = "Please, enter a valid URL!";
-      spotifyURLAlert.current.style.opacity = "1";
-      spotifyURL.current.classList.add("wrong-input");
+    if (!validateUrl(spotifyUrl.current.value)) {
+      spotifyUrlAlert.current.textContent = "Please, enter a valid URL!";
+      spotifyUrlAlert.current.style.opacity = "1";
+      spotifyUrl.current.classList.add("wrong-input");
       return false;
     } else {
-      spotifyURLAlert.current.style.opacity = "0";
-      spotifyURL.current.classList.remove("wrong-input");
+      spotifyUrlAlert.current.style.opacity = "0";
+      spotifyUrl.current.classList.remove("wrong-input");
     }
 
     return true;
-  }
+  };
 
   const handleChange = (e) => {
     setDisableButton(true);
-    if (e.length > 0) {
+    if (validateUrl(spotifyUrl.current.value)) {
       spotifyInputStatus.loading();
-      spotifyURLAlert.current.style.opacity = "0";
-      spotifyURL.current.classList.remove("wrong-input");
+      spotifyUrlAlert.current.style.opacity = "0";
+      spotifyUrl.current.classList.remove("wrong-input");
 
       setTimeout(async () => {
-        if (validateUrl(spotifyURL.current.value)) {
+        if (validateUrl(spotifyUrl.current.value)) {
           const track_id = e.slice(31, 53);
 
           try {
             const data = await spotifyApi.song.get(track_id);
-            console.log(data);
-            props.onSongChange(data.name);
-            props.onArtistChange(data.artists[0].name);
-            props.selectImage(data.album.images[0].url);
 
             spotifyInputStatus.sucess();
 
             const genres = await spotifyApi.song.getGenres(data.artists[0].id);
 
+            const artists = data.artists
+              .map((e) => {
+                return e.name;
+              })
+              .join(", ");
+
+            console.log(data);
+
+            setSongData((prevState) => ({
+              ...prevState,
+              image: data.album.images[0].url,
+              song: data.name,
+              artist: artists,
+              genre: defaultGenres[0],
+              spotifyId: data.id,
+              spotifyUrl: data.external_urls.spotify,
+              spotifyUri: data.uri,
+            }));
+
             if (genres.length > 0) {
               setGenres(genres);
-              props.onGenreChange(genres[0]);
+              setSongData((prevState) => ({
+                ...prevState,
+                genre: genres[0],
+              }));
             } else {
-              setGenres([
-                "country",
-                "electronic",
-                "hip-hop",
-                "jazz",
-                "metal",
-                "pop",
-                "k-pop",
-                "indie pop",
-                "bedroom pop",
-                "dance pop",
-                "rock pop",
-                "Rap",
-                "blues",
-                "eock",
-                "indie rock",
-                "hard rock",
-                "soft rock",
-                "dance rock",
-                "alternative rock",
-                "rock en espanol",
-                "trova",
-                "alternative",
-              ]);
-              props.onGenreChange("country");
+              setGenres(defaultGenres);
             }
           } catch (err) {
+            console.error(err);
             spotifyInputStatus.error();
           }
         } else {
@@ -213,7 +202,7 @@ const RegisterForm = (props) => {
         onSubmit={(e) => {
           e.preventDefault();
           if (validation()) {
-            props.onSubmit();
+            submit(songData);
           }
         }}
         className="register-form"
@@ -227,9 +216,8 @@ const RegisterForm = (props) => {
             placeholder="Spotify link of the song..."
             onChange={(e) => {
               handleChange(e.target.value);
-              props.onSpotifyUrlChange(e.target.value);
             }}
-            ref={spotifyURL}
+            ref={spotifyUrl}
           />
 
           <div
@@ -249,7 +237,7 @@ const RegisterForm = (props) => {
           </div>
         </div>
 
-        <p className="alert-label" ref={spotifyURLAlert}>
+        <p className="alert-label" ref={spotifyUrlAlert}>
           Please fill out this field.
         </p>
 
@@ -301,7 +289,10 @@ const RegisterForm = (props) => {
               <select
                 className={`swal2-input genre-input`}
                 onChange={(e) => {
-                  props.onGenreChange(e.target.value);
+                  setSongData((prevState) => ({
+                    ...prevState,
+                    genre: e.target.value,
+                  }));
                 }}
               >
                 {genres.length ? (
@@ -328,7 +319,10 @@ const RegisterForm = (props) => {
           className="swal2-input"
           placeholder="A little commentary..."
           onChange={(e) => {
-            props.onCommentChange(e.target.value);
+            setSongData((prevState) => ({
+              ...prevState,
+              review: e.target.value,
+            }));
           }}
           ref={review}
         />
@@ -343,7 +337,10 @@ const RegisterForm = (props) => {
           {...stars}
           className="stars-calification"
           onChange={(e) => {
-            props.ratingChanged(e);
+            setSongData((prevState) => ({
+              ...prevState,
+              qualification: e,
+            }));
           }}
         />
 

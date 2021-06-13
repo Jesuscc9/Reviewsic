@@ -12,14 +12,10 @@ export const spotifyApi = {
       Authorization: "Bearer " + token,
     },
   },
-  authorId: "",
+  userId: "",
   data: {
     profileImage: "",
     playlistId: "",
-  },
-  songData: {
-    author_id: "",
-    author: "",
   },
   likedSongs: [],
   user: {},
@@ -35,16 +31,13 @@ export const spotifyApi = {
 
     this.data.profileImage = user_image;
 
-    this.songData.author = userData.data.display_name;
-    this.songData.author_id = userData.data.id;
-
     this.user = {
-      nickname: userData.data.display_name,
+      user: userData.data.display_name,
+      userId: userData.data.id,
       followers: userData.data.followers.total,
       url: userData.data.href,
       type: userData.data.product,
       image: user_image,
-      id: userData.data.id,
     };
   },
   playlist: {

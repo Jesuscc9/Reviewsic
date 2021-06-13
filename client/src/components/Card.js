@@ -131,9 +131,9 @@ const Card = (props) => {
               </div>
               <div className="card-footer">
                 <ReactStars {...rating} className="stars-calification" />{" "}
-                <p className="autor">By: {data.author}</p>
+                <p className="autor">By: {data.user}</p>
                 <div className="card-options" ref={card_options}>
-                  {data.author_id === author_id ? (
+                  {data.userId === author_id ? (
                     <React.Fragment>
                       <div
                         className="edit-option option-container"

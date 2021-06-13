@@ -6,6 +6,8 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const navbar = (props) => {
+  console.log(props);
+
   return (
     <React.Fragment>
       <nav className="bg-gray-800 fixed w-full mb-5" style={{ zIndex: 300 }}>

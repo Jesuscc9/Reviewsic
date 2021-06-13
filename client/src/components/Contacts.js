@@ -37,7 +37,7 @@ const Contacts = ({ data }) => {
                       <img className="profile-image" src={user.image} alt="" />
                     </div>
                     <div className="item-info">
-                      <div className="item-name">{user.nickname}</div>
+                      <div className="item-name">{user.user}</div>
                       <div className="item-info-status">
                         {user.followers == 1 ? (
                           <p>1 follower </p>
