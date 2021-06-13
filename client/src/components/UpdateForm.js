@@ -3,20 +3,15 @@ import "tailwindcss/tailwind.css";
 import "../components/styles/UpdateForm.css";
 import ReactStars from "react-rating-stars-component";
 
-const UpdateForm = (props) => {
-  const { data } = props;
-
-  const [reviewState, setReviewState] = useState(data.review);
-  const [qualification, setQualification] = useState(data.qualification);
-
-  useEffect(() => {
-    props.onCommentChange(reviewState);
-    props.ratingChanged(qualification);
+const UpdateForm = ({ data, submit }) => {
+  const [songData, setSongData] = useState({
+    review: data.review,
+    qualification: data.qualification,
   });
 
   const stars = {
     size: 50,
-    value: qualification,
+    value: songData.qualification,
     isHalf: true,
   };
 
@@ -62,7 +57,7 @@ const UpdateForm = (props) => {
         onSubmit={(e) => {
           e.preventDefault();
           if (validation()) {
-            props.onSubmit();
+            submit(songData);
           }
         }}
         className="register-form"
@@ -73,9 +68,6 @@ const UpdateForm = (props) => {
           type="text"
           className="swal2-input input-disabled"
           placeholder="Name of the song..."
-          onChange={(e) => {
-            props.onSongChange(e.target.value);
-          }}
           value={data.song}
           disabled
         />
@@ -94,15 +86,18 @@ const UpdateForm = (props) => {
 
         <p className="alert-label">Please fill out this field.</p>
 
-        <p className="input-label">Commentary: </p>
+        <p className="input-label">Review: </p>
 
         <input
           type="text"
           className="swal2-input"
-          value={reviewState}
-          placeholder="A little review..."
+          value={songData.review}
+          placeholder="A little commentary..."
           onChange={(e) => {
-            setReviewState(e.target.value);
+            setSongData((prevState) => ({
+              ...prevState,
+              review: e.target.value,
+            }));
           }}
           ref={review}
         />
@@ -117,8 +112,10 @@ const UpdateForm = (props) => {
           {...stars}
           className="stars-calification"
           onChange={(e) => {
-            setQualification(e);
-            props.ratingChanged(e);
+            setSongData((prevState) => ({
+              ...prevState,
+              qualification: e,
+            }));
           }}
         />
 

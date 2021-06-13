@@ -26,19 +26,8 @@ export const api = {
     });
     return upload.data;
   },
-  update: async function (id, songList) {
-    const update = await Axios.put(
-      `${this.endpoint}/api/update/${id}`,
-      this.data
-    );
-
-    for (let i = 0; i < songList.length; i++) {
-      if (songList[i].id == id) {
-        update.data.author = songList[i].author;
-        songList[i] = update.data;
-        break;
-      }
-    }
+  update: async function (data, id, songList) {
+    await Axios.put(`${this.endpoint}/api/update/${id}`, data);
 
     toast.success("🚀 Your review has been updated!", {
       position: "top-right",
@@ -50,7 +39,9 @@ export const api = {
       progress: undefined,
     });
 
-    return songList;
+    return songList.map((e) => {
+      return e.id == id ? { ...e, ...data } : e;
+    });
   },
   delete: async function (id, songList) {
     const deleted = await Swal.fire({

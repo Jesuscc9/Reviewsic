@@ -108,7 +108,9 @@ const Register = () => {
       });
 
       socket.on("updateReviews", (data) => {
-        setSongList((prevState) => [...prevState, data]);
+        console.log("se hornea esto ");
+        console.log(data);
+        setSongList(data);
       });
 
       socket.on("updateLikes", (data) => {
@@ -128,11 +130,14 @@ const Register = () => {
   api.songList = songList;
 
   const submitReview = async (data) => {
-    socket.emit("updateReviews", await api.insert({ ...userData, ...data }));
+    socket.emit("updateReviews", [
+      ...songList,
+      await api.insert({ ...userData, ...data }),
+    ]);
   };
 
-  const updateReview = async (id) => {
-    socket.emit("updateReviews", [...(await api.update(id, songList))]);
+  const updateReview = async (data, id) => {
+    socket.emit("updateReviews", [...(await api.update(data, id, songList))]);
   };
 
   const deleteReview = async (id) => {
@@ -157,14 +162,15 @@ const Register = () => {
     });
   };
 
-  const updateModal = (data) => {
+  const updateModal = (id) => {
     MySwal.fire({
       html: (
         <UpdateForm
-          data={data}
-          token={token}
-          onSubmit={async (e) => {
-            updateReview(data.id);
+          data={songList.find((e) => {
+            return e.id == id;
+          })}
+          submit={async (data) => {
+            updateReview(data, id);
             MySwal.close();
           }}
         />
@@ -183,8 +189,8 @@ const Register = () => {
   };
 
   const CardActions = {
-    update: (data) => {
-      updateModal(data);
+    update: (id) => {
+      updateModal(id);
     },
     delete: (data) => {
       deleteReview(data);

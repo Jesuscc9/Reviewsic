@@ -30,9 +30,7 @@ import { hexToRgb, timeAgo } from "../data/utils";
 
 const Card = (props) => {
   const [redirect, setRedirect] = useState(false);
-  const { likedSongs, author_id, playlist_id } = useSelector(
-    (state) => state.user
-  );
+  const { likedSongs, userId, playlistId } = useSelector((state) => state.user);
   var { data, uri = "" } = props;
 
   if (!data) setRedirect(true);
@@ -44,13 +42,13 @@ const Card = (props) => {
   }, 0);
 
   const qualification =
-    data.author_id == author_id
+    data.userId == userId
       ? {
           review_id: data.id,
           qualification: data.qualification,
         }
       : props.qualifications.find((e) => {
-          return e.review_id == data.id && e.author_id == author_id;
+          return e.review_id == data.id && e.userId == userId;
         });
 
   let qual_cant = 0;
@@ -102,7 +100,7 @@ const Card = (props) => {
 
   useEffect(() => {
     const userLiked = props.likes.find((like) => {
-      return like.review_id == data.id && like.author_id == author_id;
+      return like.review_id == data.id && like.userId == userId;
     })?.isLike
       ? true
       : false;
@@ -164,7 +162,7 @@ const Card = (props) => {
       setIsInPlaylist(-1);
       const songs = await spotifyApi.playlist.delete(
         data.song_id,
-        playlist_id,
+        playlistId,
         isInPlaylist,
         uri
       );
@@ -175,7 +173,7 @@ const Card = (props) => {
         setTimeout(async () => {
           const { songs, insertedId } = await spotifyApi.playlist.add(
             data.song_id,
-            playlist_id
+            playlistId
           );
           setAddAnim(false);
           dispatch(userActions.setLikedSongs(songs));
@@ -206,10 +204,10 @@ const Card = (props) => {
 
   const handleLikeSong = async () => {
     if (liked) {
-      await props.like({ author_id, review_id: data.id, like: 0 });
+      await props.like({ userId, review_id: data.id, like: 0 });
       heartActions.dislike();
     } else {
-      await props.like({ author_id, review_id: data.id, like: 1 });
+      await props.like({ userId, review_id: data.id, like: 1 });
       heartActions.like();
     }
     setLiked(!liked);
@@ -335,7 +333,7 @@ const Card = (props) => {
                         className="stars-calification rate-stars"
                         onChange={(e) => {
                           const qualificationData = {
-                            author_id,
+                            userId,
                             review_id: data.id,
                             qualification: e,
                           };
@@ -354,8 +352,8 @@ const Card = (props) => {
               <div className="card-data">
                 <p className="author">
                   By:{" "}
-                  <Link to={`/user/${data.author_id}`} target="_blank">
-                    <u>{data.author}</u>
+                  <Link to={`/user/${data.userId}`} target="_blank">
+                    <u>{data.user}</u>
                   </Link>
                 </p>
                 <p className="author date">{timeAgo(data.date)}</p>
@@ -422,12 +420,12 @@ const Card = (props) => {
                   </div>
                 </div>
 
-                {data.author_id === author_id && (
+                {data.userId === userId && (
                   <div className="card-actions register-options">
                     <div
                       className="edit-option option-container"
                       onClick={() => {
-                        props.update(props.data);
+                        props.update(data.id);
                       }}
                     >
                       <FontAwesomeIcon icon={faPen} className="faPen" />
