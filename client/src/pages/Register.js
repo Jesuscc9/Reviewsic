@@ -108,7 +108,6 @@ const Register = () => {
       });
 
       socket.on("updateReviews", (data) => {
-        console.log("se hornea esto ");
         console.log(data);
         setSongList(data);
       });
@@ -269,17 +268,20 @@ const Register = () => {
                             {...CardActions}
                           />
                           <AnimatePresence>
-                            {params.id && (
-                              <CompleteCard
-                                data={songList.find((song) => {
-                                  return song.id == params.id;
-                                })}
-                                likes={likes}
-                                qualifications={qualifications}
-                                {...CardActions}
-                                key="item"
-                              />
-                            )}
+                            {params.id &&
+                              songList.filter((e) => {
+                                return e.id == params.id;
+                              }).length > 0 && (
+                                <CompleteCard
+                                  data={songList.find((song) => {
+                                    return song.id == params.id;
+                                  })}
+                                  likes={likes}
+                                  qualifications={qualifications}
+                                  {...CardActions}
+                                  key="item"
+                                />
+                              )}
                           </AnimatePresence>
                         </ContentContainer>
                       </AnimatePresence>

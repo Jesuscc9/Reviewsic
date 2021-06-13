@@ -20,7 +20,7 @@ const Player = ({ token }) => {
         token={token}
         play={playing}
         callback={(state) => {
-          console.log(state);
+          setPlaying(state.isPlaying);
         }}
       />
       <div className="player-overlay-container">
