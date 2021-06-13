@@ -269,19 +269,21 @@ const Register = () => {
                           />
                           <AnimatePresence>
                             {params.id &&
-                              songList.filter((e) => {
-                                return e.id == params.id;
-                              }).length > 0 && (
-                                <CompleteCard
-                                  data={songList.find((song) => {
-                                    return song.id == params.id;
-                                  })}
-                                  likes={likes}
-                                  qualifications={qualifications}
-                                  {...CardActions}
-                                  key="item"
-                                />
-                              )}
+                            songList.filter((e) => {
+                              return e.id == params.id;
+                            }).length > 0 ? (
+                              <CompleteCard
+                                data={songList.find((song) => {
+                                  return song.id == params.id;
+                                })}
+                                likes={likes}
+                                qualifications={qualifications}
+                                {...CardActions}
+                                key="item"
+                              />
+                            ) : (
+                              <Redirect to="/home" />
+                            )}
                           </AnimatePresence>
                         </ContentContainer>
                       </AnimatePresence>
