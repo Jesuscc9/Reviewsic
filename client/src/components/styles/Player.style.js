@@ -82,13 +82,13 @@ export const Player = styled.div`
   .player-overlay {
     position: relative;
     top: -300px;
-    background-color: red !important;
-    opacity: 0.6;
     border-radius: 10px;
     max-width: 300px;
     min-width: 300px;
     padding: 10px;
     height: 300px;
+    z-index: 10;
+    pointer-events: none;
   }
 
   .slider {
@@ -102,7 +102,26 @@ export const Player = styled.div`
   }
 
   .controls {
-    width: 100%;
+    width: 45px;
     height: 48px;
+    border: 1px solid;
+    margin: auto;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 10;
+
+    .play {
+      border: 1px solid;
+      width: 45px;
+      height: 45px;
+      background-color: #d29fff;
+      color: white;
+      border-radius: 15px;
+      font-size: 14px;
+      outline: none;
+      pointer-events: all;
+    }
   }
 `;

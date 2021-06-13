@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Player as PlayerContainer } from "./styles/Player.style";
 import SpotifyPlayer from "react-spotify-web-playback";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBackward,
+  faForward,
+  faPause,
+} from "@fortawesome/free-solid-svg-icons";
+
 const Player = ({ token }) => {
+  const [playing, setPlaying] = useState(false);
+
   return (
     <PlayerContainer>
       <SpotifyPlayer
@@ -9,6 +18,7 @@ const Player = ({ token }) => {
         syncExternalDevice={true}
         syncExternalDeviceInterval={3}
         token={token}
+        play={playing}
         callback={(state) => {
           console.log(state);
         }}
@@ -23,9 +33,21 @@ const Player = ({ token }) => {
             <div className="info"></div>
           </div>
           <div className="controls">
-            <button>Forward</button>
-            <button>Play</button>
-            <button>Backwards</button>
+            {/* <button className="control-button backward">
+              <FontAwesomeIcon icon={faBackward} />
+            </button> */}
+            <button
+              className="control-button play"
+              onClick={() => {
+                console.log("Se clickea");
+                setPlaying(!playing);
+              }}
+            >
+              <FontAwesomeIcon icon={faPause} />
+            </button>
+            {/*             <button className="control-button forward">
+              <FontAwesomeIcon icon={faForward} />
+            </button> */}
           </div>
         </div>
       </div>

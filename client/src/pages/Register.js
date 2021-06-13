@@ -60,6 +60,7 @@ const Register = () => {
     author: "",
     author_id: "",
     spotifyUrl: "",
+    spotifyUri: "",
     date: "",
   });
 

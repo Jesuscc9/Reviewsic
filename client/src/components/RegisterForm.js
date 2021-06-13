@@ -157,6 +157,7 @@ const RegisterForm = (props) => {
 
           try {
             const data = await spotifyApi.song.get(track_id);
+            console.log(data);
             props.onSongChange(data.name);
             props.onArtistChange(data.artists[0].name);
             props.selectImage(data.album.images[0].url);
