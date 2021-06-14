@@ -331,7 +331,6 @@ const Register = () => {
                     setPlayerStatus={(data) => {
                       setPlayerStatus({ ...data });
                     }}
-                    songToPlay={songToPlay}
                   />
                 </div>
               </div>
