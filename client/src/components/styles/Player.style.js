@@ -4,10 +4,10 @@ export const Player = styled.div`
   .PlayerRSWP {
     background-color: #ffffff !important;
     border-radius: 10px;
-    max-width: 300px;
-    min-width: 300px;
+    max-width: 280px;
+    min-width: 280px;
     padding: 10px;
-    height: 300px;
+    height: 350px;
     /*     img {
       min-width: 100px;
       min-height: 100px;
@@ -16,21 +16,22 @@ export const Player = styled.div`
 
   ._SliderRSWP {
     position: relative;
-    top: 160px;
+    /* top: 160px; */
+    opacity: 0;
     z-index: 4;
   }
 
   ._ContentRSWP {
     display: block;
+    margin-top: 20px;
 
     ._InfoRSWP {
       display: block !important;
-      margin-bottom: 20px;
     }
 
     .rswp__active {
-      width: 280px;
-      height: 150px;
+      width: 260px;
+      height: auto;
       border: 1px solid;
 
       img {
@@ -42,11 +43,20 @@ export const Player = styled.div`
 
       .__nnvdcq {
         text-align: center;
-        width: 280px;
-        margin: 0px !important;
+        width: 260px;
         padding: 0px;
+        border: 1px solid;
+        margin-top: 10px !important;
+
         p {
+          font-family: "Montserrat", sans-serif;
+          font-size: 12px;
+
           span {
+            font-family: "Hind", sans-serif;
+            font-size: 18px !important;
+            font-weight: 600;
+            color: #252525 !important;
             margin: auto;
           }
         }
@@ -54,7 +64,7 @@ export const Player = styled.div`
     }
 
     ._ControlsRSWP {
-      margin: 0px;
+      margin-top: 10px;
       border: 1px solid;
       width: 100%;
     }
@@ -76,6 +86,10 @@ export const Player = styled.div`
       ._VolumeRSWP {
         z-index: 4;
       }
+
+      ._DevicesRSWP {
+        z-index: 4;
+      }
     }
   }
 
@@ -92,6 +106,9 @@ export const Player = styled.div`
     padding: 10px;
     height: 300px;
     pointer-events: none;
+    background-color: black;
+    opacity: 0.5;
+    z-index: 4;
   }
 
   .slider {
@@ -116,7 +133,7 @@ export const Player = styled.div`
 
     .play {
       border: 1px solid;
-      width: 45px;
+      min-width: 45px;
       height: 45px;
       background-color: #d29fff;
       color: white;

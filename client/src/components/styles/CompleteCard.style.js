@@ -170,7 +170,7 @@ export const Card = styled.div`
     &:after {
       content: "";
       top: 0;
-      transform: translateX(100%) rotate(190deg);
+      transform: translateX(130%) rotate(190deg);
       width: 30px;
       height: 100%;
       border-radius: 50%;

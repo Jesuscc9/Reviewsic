@@ -8,7 +8,7 @@ import {
   faPause,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Player = ({ token }) => {
+const Player = ({ token, playerStatus, setPlayerStatus }) => {
   const [playing, setPlaying] = useState(false);
 
   return (
@@ -18,12 +18,15 @@ const Player = ({ token }) => {
         syncExternalDevice={true}
         syncExternalDeviceInterval={3}
         token={token}
-        play={playing}
+        play={playerStatus.isPlaying}
         callback={(state) => {
-          setPlaying(state.isPlaying);
+          setPlayerStatus({ ...playerStatus, ...state });
         }}
+        uris={
+          playerStatus.spotifyUri?.length > 0 ? playerStatus.spotifyUri : ""
+        }
       />
-      <div className="player-overlay-container">
+      {/* <div className="player-overlay-container">
         <div className="player-overlay">
           <div className="slider"></div>
           <div className="content">
@@ -33,9 +36,9 @@ const Player = ({ token }) => {
             <div className="info"></div>
           </div>
           <div className="controls">
-            {/* <button className="control-button backward">
+            <button className="control-button backward">
               <FontAwesomeIcon icon={faBackward} />
-            </button> */}
+            </button>
             <button
               className="control-button play"
               onClick={() => {
@@ -45,12 +48,12 @@ const Player = ({ token }) => {
             >
               <FontAwesomeIcon icon={faPause} />
             </button>
-            {/*             <button className="control-button forward">
+            <button className="control-button forward">
               <FontAwesomeIcon icon={faForward} />
-            </button> */}
+            </button>
           </div>
         </div>
-      </div>
+      </div> */}
     </PlayerContainer>
   );
 };

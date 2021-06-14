@@ -33,8 +33,6 @@ const Card = (props) => {
   const { likedSongs, userId, playlistId } = useSelector((state) => state.user);
   var { data, uri = "" } = props;
 
-  if (!data) setRedirect(true);
-
   const song_name = useRef(null);
 
   const likes = props.likes.reduce((sum, like) => {
@@ -71,9 +69,18 @@ const Card = (props) => {
 
   const [liked, setLiked] = useState(false);
   const [qualificated, setQualificated] = useState(qualification);
-
   const [pause, setPause] = useState(true);
   const [addAnim, setAddAnim] = useState(false);
+
+  useEffect(() => {
+    if (props.playerStatus.isPlaying) {
+      if (props.playerStatus.track.id == data.spotifyId) {
+        setPause(false);
+      }
+    } else {
+      setPause(true);
+    }
+  }, [props.playerStatus]);
 
   const [isInPlaylist, setIsInPlaylist] = useState(
     likedSongs.findIndex((item) => {
@@ -262,6 +269,11 @@ const Card = (props) => {
               <button
                 className={`play-button ${pause ? "shine" : ""}`}
                 onClick={() => {
+                  if (pause) {
+                    props.playSong(data.spotifyUri);
+                  } else {
+                    props.pause();
+                  }
                   setPause(!pause);
                 }}
               >

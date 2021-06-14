@@ -53,6 +53,8 @@ const Register = () => {
   const [redirect, setRedirect] = useState(false);
   const [showCards, setShowCards] = useState(false);
 
+  const [playerStatus, setPlayerStatus] = useState({});
+
   const [token, setToken] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
   const [sortType, setSortType] = useState(undefined);
@@ -108,7 +110,6 @@ const Register = () => {
       });
 
       socket.on("updateReviews", (data) => {
-        console.log(data);
         setSongList(data);
       });
 
@@ -202,6 +203,20 @@ const Register = () => {
         ...(await api.setQualifications(data)),
       ]);
     },
+    playSong: (spotifyUri) => {
+      setPlayerStatus((prevState) => ({
+        ...prevState,
+        isPlaying: true,
+        spotifyUri: spotifyUri,
+      }));
+    },
+    pause: () => {
+      setPlayerStatus((prevState) => ({
+        ...prevState,
+        isPlaying: false,
+        spotifyUri: "",
+      }));
+    },
   };
 
   const params = useParams();
@@ -209,6 +224,8 @@ const Register = () => {
   const reviewExists = songList.filter((e) => {
     return e.id == params.id;
   }).length;
+
+  useEffect(() => {}, [playerStatus]);
 
   return (
     <>
@@ -281,6 +298,7 @@ const Register = () => {
                                 qualifications={qualifications}
                                 {...CardActions}
                                 key="item"
+                                playerStatus={{ ...playerStatus }}
                               />
                             )}
                           </AnimatePresence>
@@ -306,7 +324,16 @@ const Register = () => {
 
               <div className="sidebar">
                 <Contacts data={users} />
-                <Player token={token} />
+                <div style={{ opacity: playerStatus.isActive ? 1 : 0 }}>
+                  <Player
+                    token={token}
+                    playerStatus={{ ...playerStatus }}
+                    setPlayerStatus={(data) => {
+                      setPlayerStatus({ ...data });
+                    }}
+                    songToPlay={songToPlay}
+                  />
+                </div>
               </div>
             </MainContainer>
             <Footer token={token} />

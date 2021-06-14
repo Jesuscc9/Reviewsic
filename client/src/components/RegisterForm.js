@@ -162,8 +162,6 @@ const RegisterForm = ({ submit }) => {
               })
               .join(", ");
 
-            console.log(data);
-
             setSongData((prevState) => ({
               ...prevState,
               image: data.album.images[0].url,

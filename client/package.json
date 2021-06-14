@@ -18,6 +18,7 @@
     "animate.css": "^4.1.1",
     "autoprefixer": "^9.8.6",
     "axios": "^0.21.1",
+    "color.js": "^1.2.0",
     "framer-motion": "^4.1.11",
     "js-cookie": "^2.2.1",
     "parallax-js": "^3.1.0",
