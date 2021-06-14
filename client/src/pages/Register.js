@@ -105,7 +105,8 @@ const Register = () => {
 
       socket.emit("new user", spotifyApi.user);
 
-      socket.on("usernames", (data) => {
+      socket.on("users", (data) => {
+        console.log(data);
         setUsers(data);
       });
 

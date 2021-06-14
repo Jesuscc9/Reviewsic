@@ -36,17 +36,17 @@ const Card = (props) => {
   const song_name = useRef(null);
 
   const likes = props.likes.reduce((sum, like) => {
-    return like.review_id == data.id && like.isLike ? sum + 1 : sum;
+    return like.reviewId == data.id && like.isLike ? sum + 1 : sum;
   }, 0);
 
   const qualification =
     data.userId == userId
       ? {
-          review_id: data.id,
+          reviewId: data.id,
           qualification: data.qualification,
         }
       : props.qualifications.find((e) => {
-          return e.review_id == data.id && e.userId == userId;
+          return e.reviewId == data.id && e.userId == userId;
         });
 
   let qual_cant = 0;
@@ -55,11 +55,11 @@ const Card = (props) => {
     [
       ...props.qualifications,
       {
-        review_id: data.id,
+        reviewId: data.id,
         qualification: data.qualification,
       },
     ].reduce((sum, e) => {
-      if (e && e.review_id == data.id) {
+      if (e && e.reviewId == data.id) {
         qual_cant++;
         return sum + e.qualification;
       } else {
@@ -84,7 +84,7 @@ const Card = (props) => {
 
   const [isInPlaylist, setIsInPlaylist] = useState(
     likedSongs.findIndex((item) => {
-      return item.track.id == data.song_id;
+      return item.track.id == data.spotifyId;
     })
   );
 
@@ -107,7 +107,7 @@ const Card = (props) => {
 
   useEffect(() => {
     const userLiked = props.likes.find((like) => {
-      return like.review_id == data.id && like.userId == userId;
+      return like.reviewId == data.id && like.userId == userId;
     })?.isLike
       ? true
       : false;
@@ -168,10 +168,9 @@ const Card = (props) => {
     if (isInPlaylist > -1) {
       setIsInPlaylist(-1);
       const songs = await spotifyApi.playlist.delete(
-        data.song_id,
+        data.spotifyUri,
         playlistId,
-        isInPlaylist,
-        uri
+        isInPlaylist
       );
       dispatch(userActions.setLikedSongs([...songs]));
     } else {
@@ -179,8 +178,9 @@ const Card = (props) => {
         setAddAnim(true);
         setTimeout(async () => {
           const { songs, insertedId } = await spotifyApi.playlist.add(
-            data.song_id,
-            playlistId
+            data.spotifyUri,
+            playlistId,
+            data.spotifyId
           );
           setAddAnim(false);
           dispatch(userActions.setLikedSongs(songs));
@@ -211,10 +211,10 @@ const Card = (props) => {
 
   const handleLikeSong = async () => {
     if (liked) {
-      await props.like({ userId, review_id: data.id, like: 0 });
+      await props.like({ userId, reviewId: data.id, like: 0 });
       heartActions.dislike();
     } else {
-      await props.like({ userId, review_id: data.id, like: 1 });
+      await props.like({ userId, reviewId: data.id, like: 1 });
       heartActions.like();
     }
     setLiked(!liked);
@@ -346,7 +346,7 @@ const Card = (props) => {
                         onChange={(e) => {
                           const qualificationData = {
                             userId,
-                            review_id: data.id,
+                            reviewId: data.id,
                             qualification: e,
                           };
                           setQualificated(qualificationData);

@@ -52,13 +52,11 @@ export const spotifyApi = {
 
       return getAllSongs(songs.data.next, items);
     },
-    add: async (songId, playlistId) => {
-      const songUri = `spotify:track:${songId}`;
-
+    add: async (uri, playlistId, songId) => {
       await Axios.post(
         `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
         {
-          uris: [songUri],
+          uris: [uri],
         },
         spotifyApi.config
       );
@@ -83,7 +81,7 @@ export const spotifyApi = {
 
       return { songs, insertedId };
     },
-    delete: async (songId, playlistId, pos, uri) => {
+    delete: async (uri, playlistId, pos) => {
       const headers = {
         Authorization: "Bearer " + token,
       };
@@ -91,7 +89,7 @@ export const spotifyApi = {
       const data = {
         tracks: [
           {
-            uri: uri.length > 0 ? uri : `spotify:track:${songId}`,
+            uri,
             positions: [pos],
           },
         ],
@@ -132,7 +130,7 @@ export const spotifyApi = {
         );
       } else {
         const createPlaylist = await Axios.post(
-          `https://api.spotify.com/v1/users/${spotifyApi.songData.author_id}/playlists`,
+          `https://api.spotify.com/v1/users/${spotifyApi.user.userId}/playlists`,
           {
             name: "Reviewsic",
           },

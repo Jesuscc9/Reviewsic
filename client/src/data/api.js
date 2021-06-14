@@ -77,10 +77,10 @@ export const api = {
   getLikes: async function () {
     return (await Axios.get(`${this.endpoint}/api/likes/get`)).data;
   },
-  setLikes: async function ({ author_id, review_id, like }) {
+  setLikes: async function ({ userId, reviewId, like }) {
     await Axios.post(`${this.endpoint}/api/likes/set`, {
-      author_id,
-      review_id,
+      userId,
+      reviewId,
       like,
     });
     return this.getLikes();
@@ -88,10 +88,10 @@ export const api = {
   getQualifications: async function () {
     return (await Axios.get(`${this.endpoint}/api/qualifications/get`)).data;
   },
-  setQualifications: async function ({ author_id, review_id, qualification }) {
+  setQualifications: async function ({ userId, reviewId, qualification }) {
     await Axios.post(`${this.endpoint}/api/qualifications/set`, {
-      author_id,
-      review_id,
+      userId,
+      reviewId,
       qualification,
     });
     return this.getQualifications();

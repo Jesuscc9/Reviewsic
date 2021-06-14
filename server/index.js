@@ -103,45 +103,40 @@ app.get("/api/likes/get", (req, res) => {
 });
 
 app.post("/api/likes/set", (req, res) => {
-  const sqlSelect = "SELECT * FROM likes WHERE author_id = ? AND review_id = ?";
-  db.query(
-    sqlSelect,
-    [req.body.author_id, req.body.review_id],
-    (err, result) => {
-      const likes = result;
-      if (likes.length) {
-        const sqlUpdate =
-          "UPDATE likes SET isLike = ? WHERE author_id = ? AND review_id = ?";
+  const sqlSelect = "SELECT * FROM likes WHERE userId = ? AND reviewId = ?";
+  db.query(sqlSelect, [req.body.userId, req.body.reviewId], (err, likes) => {
+    if (likes.length) {
+      const sqlUpdate =
+        "UPDATE likes SET isLike = ? WHERE userId = ? AND reviewId = ?";
 
-        db.query(
-          sqlUpdate,
-          [req.body.like, req.body.author_id, req.body.review_id],
-          (err, result) => {
-            if (err) {
-              res.send(err);
-            } else {
-              res.send(result);
-            }
+      db.query(
+        sqlUpdate,
+        [req.body.like, req.body.userId, req.body.reviewId],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send(result);
           }
-        );
-      } else {
-        const sqlInsert =
-          "INSERT INTO likes (author_id, review_id, isLike) VALUES(?, ?, ?)";
+        }
+      );
+    } else {
+      const sqlInsert =
+        "INSERT INTO likes (userId, reviewId, isLike) VALUES(?, ?, ?)";
 
-        db.query(
-          sqlInsert,
-          [req.body.author_id, req.body.review_id, req.body.like],
-          (err, result) => {
-            if (err) {
-              res.send(err);
-            } else {
-              res.send(result);
-            }
+      db.query(
+        sqlInsert,
+        [req.body.userId, req.body.reviewId, req.body.like],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send(result);
           }
-        );
-      }
+        }
+      );
     }
-  );
+  });
 });
 
 app.get("/api/qualifications/get", (req, res) => {
@@ -157,45 +152,41 @@ app.get("/api/qualifications/get", (req, res) => {
 
 app.post("/api/qualifications/set", (req, res) => {
   const sqlSelect =
-    "SELECT * FROM qualifications WHERE author_id = ? AND review_id = ?";
-  db.query(
-    sqlSelect,
-    [req.body.author_id, req.body.review_id],
-    (err, result) => {
-      const likes = result;
-      if (likes.length) {
-        const sqlUpdate =
-          "UPDATE qualifications SET qualification = ? WHERE author_id = ? AND review_id = ?";
+    "SELECT * FROM qualifications WHERE userId = ? AND reviewId = ?";
+  db.query(sqlSelect, [req.body.userId, req.body.reviewId], (err, result) => {
+    const likes = result;
+    if (likes.length) {
+      const sqlUpdate =
+        "UPDATE qualifications SET qualification = ? WHERE userId = ? AND reviewId = ?";
 
-        db.query(
-          sqlUpdate,
-          [req.body.qualification, req.body.author_id, req.body.review_id],
-          (err, result) => {
-            if (err) {
-              res.send(err);
-            } else {
-              res.send(result);
-            }
+      db.query(
+        sqlUpdate,
+        [req.body.qualification, req.body.userId, req.body.reviewId],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send(result);
           }
-        );
-      } else {
-        const sqlInsert =
-          "INSERT INTO qualifications (author_id, review_id, qualification) VALUES(?, ?, ?)";
+        }
+      );
+    } else {
+      const sqlInsert =
+        "INSERT INTO qualifications (userId, reviewId, qualification) VALUES(?, ?, ?)";
 
-        db.query(
-          sqlInsert,
-          [req.body.author_id, req.body.review_id, req.body.qualification],
-          (err, result) => {
-            if (err) {
-              res.send(err);
-            } else {
-              res.send(result);
-            }
+      db.query(
+        sqlInsert,
+        [req.body.userId, req.body.reviewId, req.body.qualification],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send(result);
           }
-        );
-      }
+        }
+      );
     }
-  );
+  });
 });
 
 // app.get('*', (req, res) => {
@@ -222,9 +213,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new user", (data) => {
+    console.log("New user: ");
+    console.log(data);
+    console.log("Usuarios existentes: ");
+    console.log(Object.keys(users));
     let keys = Object.keys(users);
-    socket.user = data.nickname;
-    if (!keys.includes(data.nickname)) {
+    socket.user = data.user;
+    if (!keys.includes(data.user)) {
       users[socket.user] = socket;
       users[socket.user].instance = 1;
       users[socket.user].data = data;
@@ -253,7 +248,7 @@ io.on("connection", (socket) => {
       users_.push(users[keys[i]].data);
     }
 
-    io.sockets.emit("usernames", users_);
+    io.sockets.emit("users", users_);
   }
 });
 
