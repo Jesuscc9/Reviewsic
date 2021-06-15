@@ -204,6 +204,10 @@ io.on("connection", (socket) => {
     io.sockets.emit("updateReviews", data);
   });
 
+  socket.on("updateActivity", (data) => {
+    updateUsersActivity(data);
+  });
+
   socket.on("updateLikes", (data) => {
     io.sockets.emit("updateLikes", data);
   });
@@ -236,15 +240,23 @@ io.on("connection", (socket) => {
   });
 
   function updateUsers() {
-    const keys = Object.keys(users);
+    const userNames = Object.keys(users).map((e) => {
+      return users[e].data;
+    });
 
-    let users_ = [];
+    io.sockets.emit("users", userNames);
+  }
 
-    for (let i = 0; i < keys.length; i++) {
-      users_.push(users[keys[i]].data);
-    }
+  function updateUsersActivity({ user, activity }) {
+    var usersActivity = Object.keys(users).map((e) => {
+      return users[e].data;
+    });
 
-    io.sockets.emit("users", users_);
+    usersActivity.map((e) => {
+      return e.user == user ? (e.activity = { ...activity }) : e;
+    });
+
+    io.sockets.emit("users", usersActivity);
   }
 });
 

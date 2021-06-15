@@ -8,7 +8,7 @@ import {
   faPause,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Player = ({ token, song, setInitialSong }) => {
+const Player = ({ token, song, setInitialSong, updateActivity }) => {
   const [play, setPlay] = useState(false);
 
   useEffect(() => {
@@ -26,10 +26,12 @@ const Player = ({ token, song, setInitialSong }) => {
         token={token}
         syncExternalDevice={true}
         callback={(state) => {
-          if (state.isPlaying && !song) {
-            setInitialSong(state.track);
-          }
+          if (state.isPlaying && !song) setInitialSong(state.track);
           if (!state.isPlaying) setPlay(false);
+
+          if (state.isPlaying != undefined) {
+            updateActivity({ ...state.track, isPlaying: state.isPlaying });
+          }
         }}
         play={play}
         uris={song?.spotifyUri && [song.spotifyUri]}

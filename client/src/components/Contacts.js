@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "tailwindcss/tailwind.css";
 import "../components/styles/Contacts.css";
 import { motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 const Contacts = ({ data }) => {
   return (
@@ -16,7 +17,7 @@ const Contacts = ({ data }) => {
               <motion.div key={user}>
                 <div className="divisor"></div>
                 <a
-                  href={`https://open.spotify.com/user/${user.id}`}
+                  href={`https://open.spotify.com/user/${user.userId}`}
                   target="_blank"
                 >
                   <motion.div
@@ -46,9 +47,37 @@ const Contacts = ({ data }) => {
                         )}
                       </div>
                     </div>
-                    <div className="item-status">
-                      <div className="status"></div>
-                    </div>
+                    <AnimatePresence>
+                      {user.activity?.isPlaying ? (
+                        <motion.div
+                          initial={{ x: 30, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          exit={{
+                            x: 30,
+                            opacity: 0,
+                          }}
+                          key="gif"
+                          transition={{ type: "spring" }}
+                          className="item-status"
+                        >
+                          <img src="https://i.kym-cdn.com/photos/images/original/001/879/958/fb1.gif" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          initial={{
+                            scale: 0,
+                            opacity: 0,
+                          }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          transition={{ type: "spring" }}
+                          key="status"
+                          className="item-status"
+                        >
+                          <div className="status"></div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
                 </a>
               </motion.div>

@@ -107,7 +107,7 @@ const Register = () => {
       socket.emit("new user", spotifyApi.user);
 
       socket.on("users", (data) => {
-        setUsers(data);
+        setUsers([...data]);
       });
 
       socket.on("updateReviews", (data) => {
@@ -219,6 +219,10 @@ const Register = () => {
     },
   };
 
+  const updateActivity = (activity) => {
+    socket.emit("updateActivity", { user: userData.user, activity });
+  };
+
   const params = useParams();
 
   const reviewExists =
@@ -323,7 +327,7 @@ const Register = () => {
               </AnimatePresence>
 
               <div className="sidebar">
-                <Contacts data={users} />
+                <Contacts data={[...users]} />
                 <div
                   className="player-container"
                   style={{
@@ -336,6 +340,9 @@ const Register = () => {
                     song={playingSong}
                     setInitialSong={(song) => {
                       setPlayingSong(song);
+                    }}
+                    updateActivity={(activity) => {
+                      updateActivity(activity);
                     }}
                   />
                 </div>

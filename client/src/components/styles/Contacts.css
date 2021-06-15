@@ -39,11 +39,11 @@
 }
 
 .item-image-container {
-  width: 55px;
+  min-width: 55px;
 }
 
 .item-info {
-  width: 90%;
+  min-width: 170px;
 }
 
 .item-name {
@@ -70,10 +70,16 @@
 }
 
 .item-status {
-  width: 5%;
+  width: 50px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
+}
+
+.item-status img {
+  min-width: 35px;
+  max-width: 35px;
+  border-radius: 1px;
 }
 
 .status {
