@@ -221,9 +221,11 @@ const Register = () => {
 
   const params = useParams();
 
-  const reviewExists = songList.filter((e) => {
-    return e.id == params.id;
-  }).length;
+  const reviewExists =
+    songList.length &&
+    songList.filter((e) => {
+      return e.id == params.id;
+    }).length;
 
   return (
     <>
@@ -322,8 +324,20 @@ const Register = () => {
 
               <div className="sidebar">
                 <Contacts data={users} />
-                <div style={{ opacity: 1 }}>
-                  <Player token={token} song={playingSong} />
+                <div
+                  className="player-container"
+                  style={{
+                    transform: playingSong ? "scale(1)" : "scale(0.6)",
+                    opacity: playingSong ? 1 : 0,
+                  }}
+                >
+                  <Player
+                    token={token}
+                    song={playingSong}
+                    setInitialSong={(song) => {
+                      setPlayingSong(song);
+                    }}
+                  />
                 </div>
               </div>
             </MainContainer>

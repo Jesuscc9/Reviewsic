@@ -86,6 +86,13 @@ export const MainContainer = styled.div`
     position: -webkit-sticky;
     position: sticky;
     top: 82px;
+
+    .player-container {
+      /* transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: opacity 0.5s; */
+      transition: all 0.2s;
+      /* transition: opacity 1s; */
+    }
   }
 `;
 

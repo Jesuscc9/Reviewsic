@@ -8,7 +8,7 @@ import {
   faPause,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Player = ({ token, song }) => {
+const Player = ({ token, song, setInitialSong }) => {
   const [play, setPlay] = useState(false);
 
   useEffect(() => {
@@ -24,11 +24,15 @@ const Player = ({ token, song }) => {
       <SpotifyPlayer
         name="Reviewsic"
         token={token}
+        syncExternalDevice={true}
         callback={(state) => {
+          if (state.isPlaying && !song) {
+            setInitialSong(state.track);
+          }
           if (!state.isPlaying) setPlay(false);
         }}
         play={play}
-        uris={song ? [song.spotifyUri] : []}
+        uris={song?.spotifyUri && [song.spotifyUri]}
       />
       {/* <div className="player-overlay-container">
         <div className="player-overlay">
