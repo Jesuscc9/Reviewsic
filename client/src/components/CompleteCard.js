@@ -73,8 +73,8 @@ const Card = (props) => {
   const [addAnim, setAddAnim] = useState(false);
 
   useEffect(() => {
-    if (props.playerStatus.isPlaying) {
-      if (props.playerStatus.track.id == data.spotifyId) {
+    if (props.song?.paused == false) {
+      if (props.song.spotifyId == data.spotifyId) {
         setPause(false);
       }
     } else {
@@ -270,7 +270,7 @@ const Card = (props) => {
                 className={`play-button ${pause ? "shine" : ""}`}
                 onClick={() => {
                   if (pause) {
-                    props.playSong(data.spotifyUri);
+                    props.playSong(data);
                   } else {
                     props.pause();
                   }

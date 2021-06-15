@@ -83,7 +83,9 @@ export const MainContainer = styled.div`
     justify-content: center;
     flex-wrap: wrap;
     height: 800px;
-    border: 1px solid;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 82px;
   }
 `;
 

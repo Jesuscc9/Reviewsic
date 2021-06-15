@@ -53,7 +53,9 @@ const Register = () => {
   const [redirect, setRedirect] = useState(false);
   const [showCards, setShowCards] = useState(false);
 
-  const [playerStatus, setPlayerStatus] = useState({});
+  // const [playerStatus, setPlayerStatus] = useState({});
+  const [playingSong, setPlayingSong] = useState();
+  const [auxPlayingSong, setAuxPlayingSong] = useState();
 
   const [token, setToken] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
@@ -75,7 +77,6 @@ const Register = () => {
     else sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
     return sorted;
   };
-
   useEffect(async () => {
     setToken(
       !Cookies.get("spotifyAuthToken") ? "" : Cookies.get("spotifyAuthToken")
@@ -106,7 +107,6 @@ const Register = () => {
       socket.emit("new user", spotifyApi.user);
 
       socket.on("users", (data) => {
-        console.log(data);
         setUsers(data);
       });
 
@@ -204,18 +204,17 @@ const Register = () => {
         ...(await api.setQualifications(data)),
       ]);
     },
-    playSong: (spotifyUri) => {
-      setPlayerStatus((prevState) => ({
+    playSong: (song) => {
+      setPlayingSong((prevState) => ({
         ...prevState,
-        isPlaying: true,
-        spotifyUri: spotifyUri,
+        ...song,
+        paused: false,
       }));
     },
     pause: () => {
-      setPlayerStatus((prevState) => ({
+      setPlayingSong((prevState) => ({
         ...prevState,
-        isPlaying: false,
-        spotifyUri: "",
+        paused: true,
       }));
     },
   };
@@ -225,8 +224,6 @@ const Register = () => {
   const reviewExists = songList.filter((e) => {
     return e.id == params.id;
   }).length;
-
-  useEffect(() => {}, [playerStatus]);
 
   return (
     <>
@@ -299,7 +296,7 @@ const Register = () => {
                                 qualifications={qualifications}
                                 {...CardActions}
                                 key="item"
-                                playerStatus={{ ...playerStatus }}
+                                song={playingSong}
                               />
                             )}
                           </AnimatePresence>
@@ -325,14 +322,8 @@ const Register = () => {
 
               <div className="sidebar">
                 <Contacts data={users} />
-                <div style={{ opacity: playerStatus.isActive ? 1 : 0 }}>
-                  <Player
-                    token={token}
-                    playerStatus={{ ...playerStatus }}
-                    setPlayerStatus={(data) => {
-                      setPlayerStatus({ ...data });
-                    }}
-                  />
+                <div style={{ opacity: 1 }}>
+                  <Player token={token} song={playingSong} />
                 </div>
               </div>
             </MainContainer>

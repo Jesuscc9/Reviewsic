@@ -213,10 +213,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new user", (data) => {
-    console.log("New user: ");
-    console.log(data);
-    console.log("Usuarios existentes: ");
-    console.log(Object.keys(users));
     let keys = Object.keys(users);
     socket.user = data.user;
     if (!keys.includes(data.user)) {

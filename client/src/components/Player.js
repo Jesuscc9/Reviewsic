@@ -8,23 +8,27 @@ import {
   faPause,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Player = ({ token, playerStatus, setPlayerStatus }) => {
-  const [playing, setPlaying] = useState(false);
+const Player = ({ token, song }) => {
+  const [play, setPlay] = useState(false);
+
+  useEffect(() => {
+    if (song?.paused) {
+      setPlay(false);
+    } else {
+      setPlay(true);
+    }
+  }, [song]);
 
   return (
     <PlayerContainer>
       <SpotifyPlayer
         name="Reviewsic"
-        syncExternalDevice={true}
-        syncExternalDeviceInterval={3}
         token={token}
-        play={playerStatus.isPlaying}
         callback={(state) => {
-          setPlayerStatus({ ...playerStatus, ...state });
+          if (!state.isPlaying) setPlay(false);
         }}
-        uris={
-          playerStatus.spotifyUri?.length > 0 ? playerStatus.spotifyUri : ""
-        }
+        play={play}
+        uris={song ? [song.spotifyUri] : []}
       />
       {/* <div className="player-overlay-container">
         <div className="player-overlay">
@@ -42,8 +46,10 @@ const Player = ({ token, playerStatus, setPlayerStatus }) => {
             <button
               className="control-button play"
               onClick={() => {
-                console.log("Se clickea");
-                setPlaying(!playing);
+                setPlayerStatus({
+                  ...playerStatus,
+                  isPlaying: !playerStatus.isPlaying,
+                });
               }}
             >
               <FontAwesomeIcon icon={faPause} />
