@@ -5,6 +5,18 @@ import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 
 const Contacts = ({ data }) => {
+  const gifs = [
+    "",
+    "https://cdn.betterttv.net/emote/5ffa90b557784508462544e7/2x",
+    "https://cdn.betterttv.net/emote/602e1e25ee839b1e5ec6e00b/2x",
+    "https://cdn.betterttv.net/emote/60b11c96f8b3f62601c34a70/2x",
+    "https://cdn.betterttv.net/emote/5f25a22265fe924464ef0799/2x",
+    "https://cdn.betterttv.net/emote/60ac1dc867644f1d67e8c5f3/2x",
+    "https://cdn.betterttv.net/emote/5ffa90b557784508462544e7/2x",
+  ];
+
+  console.log(data);
+
   return (
     <React.Fragment>
       <div className="contacts">
@@ -24,10 +36,12 @@ const Contacts = ({ data }) => {
                     key={user.id}
                     className="item"
                     initial={{
+                      opacity: 0,
                       scale: 0,
                     }}
                     animate={{
                       scale: 1,
+                      opacity: 1,
                     }}
                     transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
                     exit={{
@@ -57,20 +71,20 @@ const Contacts = ({ data }) => {
                             opacity: 0,
                           }}
                           key="gif"
-                          transition={{ type: "spring" }}
+                          transition={{ type: "spring", duration: 0.4 }}
                           className="item-status"
                         >
-                          <img src="https://i.kym-cdn.com/photos/images/original/001/879/958/fb1.gif" />
+                          <img src={gifs[user.activity.gifIndex]} />
                         </motion.div>
                       ) : (
                         <motion.div
                           initial={{
-                            scale: 0,
                             opacity: 0,
+                            scale: 0,
                           }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          exit={{ scale: 0, opacity: 0 }}
-                          transition={{ type: "spring" }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0 }}
+                          transition={{ type: "spring", duration: 0.4 }}
                           key="status"
                           className="item-status"
                         >

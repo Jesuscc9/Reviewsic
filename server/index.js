@@ -253,7 +253,12 @@ io.on("connection", (socket) => {
     });
 
     usersActivity.map((e) => {
-      return e.user == user ? (e.activity = { ...activity }) : e;
+      return e.user == user
+        ? (e.activity = {
+            ...activity,
+            gifIndex: Math.floor(Math.random() * 6) + 1,
+          })
+        : e;
     });
 
     io.sockets.emit("users", usersActivity);
