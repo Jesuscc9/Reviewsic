@@ -152,8 +152,12 @@ const Home = () => {
           <motion.button
             className="try-button"
             id="try-button"
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
+            onMouseEnter={(e) => {
+              onMouseEnter(e);
+            }}
+            onMouseLeave={(e) => {
+              onMouseLeave(e);
+            }}
             onClick={handleClick}
             initial={{ opacity: 0 }}
             animate={{
