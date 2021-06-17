@@ -109,7 +109,7 @@ const Contacts = ({ data }) => {
                               href={`https://open.spotify.com/track/${user.activity.id}`}
                               target="_blank"
                             >
-                              {user.activity.name}
+                              <p>{user.activity.name}</p>
                             </a>
                             <p className="artist-name">
                               {user.activity.artists}

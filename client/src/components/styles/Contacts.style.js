@@ -28,11 +28,11 @@ export const Contacts = styled.div`
 
   .contact-body {
     .divisor {
-      width: 92%;
+      max-width: 93%;
+      margin: auto;
       height: 1px;
       background-color: rgba(160, 159, 159, 0.315);
       border-radius: 100px;
-      margin: 6px auto;
     }
   }
 
@@ -111,26 +111,32 @@ export const Contacts = styled.div`
 `;
 
 export const Item = styled(motion.div)`
-  width: 90%;
-  height: 40px;
+  width: 100%;
   margin: auto;
   display: flex;
+  padding: 7px 5%;
 
   .item-image-container {
-    min-width: 55px;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
   }
 
   .item-info {
     min-width: 170px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+    margin-bottom: 3px;
   }
 
   .item-name {
     font-family: "Montserrat", sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     color: rgb(48, 48, 48);
     font-weight: 100;
     height: 18px;
-    margin-bottom: 6px;
+    margin-bottom: 2px;
     text-transform: capitalize !important;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -152,15 +158,15 @@ export const Item = styled(motion.div)`
   }
 
   .item-status {
-    width: 50px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
   }
 
   .item-status img {
     min-width: 33px;
     max-width: 33px;
+    max-height: 37px;
     border-radius: 1px;
   }
 
@@ -173,8 +179,10 @@ export const Item = styled(motion.div)`
 
   &:hover {
     .activity-container {
+      display: flex;
       opacity: 1;
       transform: translateX(0px);
+      pointer-events: all;
     }
   }
 
@@ -187,6 +195,7 @@ export const ActivityCard = styled.div`
   top: -7px;
 
   .activity-container {
+    display: flex;
     position: absolute;
     width: 250px;
     height: 100px;
@@ -202,10 +211,13 @@ export const ActivityCard = styled.div`
     padding: 3px 15px;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: rgba(99, 99, 99, 0.2) -5px 2px 8px 0px;
-
-    display: flex;
     flex-wrap: wrap;
     align-content: space-around;
+    pointer-events: none;
+
+    &:hover {
+      pointer-events: all;
+    }
 
     p {
       font-family: "Hind", sans-serif;
@@ -229,15 +241,14 @@ export const ActivityCard = styled.div`
       .song-data {
         margin-left: 15px;
 
-        p,
-        a {
+        p {
           font-size: 16px;
           font-weight: 600;
           color: #000;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
-          max-width: 90%;
+          max-width: 100%;
         }
 
         a {
