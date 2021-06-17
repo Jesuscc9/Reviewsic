@@ -7,7 +7,6 @@ import {
   ActivityCard,
   Item,
 } from "./styles/Contacts.style";
-import { User } from "react-spotify-api";
 
 const Contacts = ({ data }) => {
   const gifs = [

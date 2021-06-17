@@ -131,7 +131,7 @@
 .selected-type {
   background-color: rgba(0, 132, 255, 0.459);
 }
-
+/* 
 @media (max-width: 1270px) {
   .dropdown-menu-container {
     width: 78%;
@@ -148,4 +148,4 @@
   .dropdown-menu-container {
     width: 90%;
   }
-}
+} */

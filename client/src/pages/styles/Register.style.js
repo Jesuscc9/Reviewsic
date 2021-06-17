@@ -66,7 +66,7 @@ export const MainContainer = styled.div`
   margin: auto;
   margin-top: 10px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   padding-bottom: 80px;
 
   @media (max-width: 500px) {
@@ -98,7 +98,8 @@ export const MainContainer = styled.div`
 `;
 
 export const ContentContainer = styled(motion.div)`
-  width: 70%;
+  width: 65%;
+  margin-right: 40px;
 `;
 
 // @media (max-width: 500px) {

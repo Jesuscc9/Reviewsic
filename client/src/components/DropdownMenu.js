@@ -86,6 +86,16 @@ const DropdownMenu = function (props) {
             >
               <h1>Alphabetical</h1>
             </div>
+            <hr className="divisor dropdown-divisor" />
+            <div
+              className="dropdown-item"
+              onClick={() => {
+                setShow(!show);
+                setValue("Rating");
+              }}
+            >
+              <h1>Rating</h1>
+            </div>
           </div>
         </div>
         <div className="select-type">

@@ -284,12 +284,16 @@ const Register = () => {
                           exit={{ x: -200 }}
                         >
                           <DropdownMenu
-                            onSelect={(value) => handleDropdown(value)}
-                            onCardViewChange={(value) => setCardView(value)}
+                            onSelect={(value) => {
+                              setSortType(value);
+                            }}
+                            // onCardViewChange={(value) => setCardView(value)}
                           />
                           <CardsList
                             songList={songList}
                             likes={likes}
+                            qualifications={qualifications}
+                            sortType={sortType}
                             {...CardActions}
                           />
                           <AnimatePresence>

@@ -228,6 +228,8 @@ const Card = (props) => {
 
   const imageUrl = data.image;
 
+  console.log(data);
+
   return (
     <React.Fragment>
       <ReactTooltip effect="solid" />

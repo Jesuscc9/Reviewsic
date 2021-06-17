@@ -4,6 +4,6 @@ export const CardsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
   z-index: 2;
 `;
