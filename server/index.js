@@ -256,7 +256,7 @@ io.on("connection", (socket) => {
       return e.user == user
         ? (e.activity = {
             ...activity,
-            gifIndex: Math.floor(Math.random() * 6) + 1,
+            gifIndex: Math.floor(Math.random() * 7),
           })
         : e;
     });

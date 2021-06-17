@@ -26,6 +26,16 @@ const Player = ({ token, song, setInitialSong, updateActivity }) => {
         token={token}
         syncExternalDevice={true}
         callback={(state) => {
+          console.log(state);
+          if (
+            state.isActive == true &&
+            state.isPlaying == true &&
+            state.track.name == ""
+          ) {
+            setInitialSong();
+            updateActivity({ ...state.track, isPlaying: false });
+            return;
+          }
           if (state.isPlaying && !song) setInitialSong(state.track);
           if (!state.isPlaying) setPlay(false);
 
