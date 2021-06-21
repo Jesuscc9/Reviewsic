@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "tailwindcss/tailwind.css";
-import "../components/styles/DropdownMenu.css";
 import {
   faAngleDown,
   faFilter,
@@ -9,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import onClickOutside from "react-onclickoutside";
+import { DropdownMainContainer } from "./styles/DropdownMenu.style";
 
 const DropdownMenu = function (props) {
   const [show, setShow] = useState(false);
@@ -31,7 +31,7 @@ const DropdownMenu = function (props) {
 
   return (
     <React.Fragment>
-      <div className="dropdown-main-container">
+      <DropdownMainContainer>
         <div className="dropdown-menu-container">
           <div className="dropdown">
             <button
@@ -85,7 +85,7 @@ const DropdownMenu = function (props) {
             <input
               type="text"
               className="search"
-              placeholder="Search..."
+              placeholder="Search by song, artist or user..."
               onChange={(e) => {
                 props.onSearch(e.target.value);
               }}
@@ -105,7 +105,7 @@ const DropdownMenu = function (props) {
             </button>
           </div>
         </div>
-      </div>
+      </DropdownMainContainer>
     </React.Fragment>
   );
 };

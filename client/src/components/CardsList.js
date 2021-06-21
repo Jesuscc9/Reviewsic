@@ -64,9 +64,8 @@ const CardsList = (props) => {
       return (
         el.song.toLowerCase().includes(props.search.toLowerCase()) ||
         el.artist.toLowerCase().includes(props.search.toLowerCase()) ||
-        el.review.toLowerCase().includes(props.search.toLowerCase()) ||
-        el.user.toLowerCase().includes(props.search.toLowerCase()) ||
-        el.genre.toLowerCase().includes(props.search.toLowerCase())
+        el.user.toLowerCase().includes(props.search.toLowerCase())
+        // el.genre.toLowerCase().includes(props.search.toLowerCase())
       );
     });
   }
