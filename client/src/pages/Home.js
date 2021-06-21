@@ -29,6 +29,32 @@ const Home = () => {
   const [showSvg, setShowSvg] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
 
+  const objects = document.getElementsByName("element");
+
+  const elements = {
+    objects,
+    on: function () {
+      this.objects.forEach((el) => {
+        if (el.className.includes("clairo")) el.style.opacity = "0.8";
+        else if (el.className.includes("try-button")) el.style.opacity = "0.7";
+        else el.style.opacity = "1";
+      });
+
+      stars.current.classList.add("star-shadow");
+      stars.current.style.opacity = "1";
+    },
+    off: function () {
+      this.objects.forEach((el) => {
+        if (el.className.includes("try-button")) return;
+        if (el.className.includes("clairo")) el.style.opacity = "0.5";
+        else el.style.opacity = "0.7";
+      });
+
+      stars.current.classList.remove("star-shadow");
+      stars.current.style.opacity = "0.2";
+    },
+  };
+
   let endedAnim = false;
 
   const pathVariants = {
@@ -47,6 +73,13 @@ const Home = () => {
       transitionEnd: () => {
         if (!endedAnim) {
           setTimeout(() => {
+            elements.on();
+            document.getElementById("elements-container").style.opacity = 1;
+            // document.getElementById("try-button").style.opacity = 1;
+            document.getElementById("try-button").style.pointerEvents = "all";
+            setTimeout(() => {
+              elements.off();
+            }, 350);
             if (svgRef.current) {
               svgRef.current.style.opacity = 0;
               setShowSvg(false);
@@ -82,28 +115,6 @@ const Home = () => {
   const login = useRef(null);
   const svgRef = useRef(null);
 
-  const elements = {
-    objects: document.getElementsByName("element"),
-    on: function () {
-      this.objects.forEach((el) => {
-        if (el.className.includes("clairo")) el.style.opacity = "0.8";
-        else el.style.opacity = "1";
-      });
-
-      stars.current.classList.add("star-shadow");
-      stars.current.style.opacity = "1";
-    },
-    off: function () {
-      this.objects.forEach((el) => {
-        if (el.className.includes("clairo")) el.style.opacity = "0.5";
-        else el.style.opacity = "0.7";
-      });
-
-      stars.current.classList.remove("star-shadow");
-      stars.current.style.opacity = "0.2";
-    },
-  };
-
   useEffect(() => {
     setToken(Cookies.get("spotifyAuthToken"));
     const parallaxInstance = new Parallax(sceneEl.current, {
@@ -112,6 +123,7 @@ const Home = () => {
     });
 
     parallaxInstance.enable();
+    elements.off();
 
     return () => parallaxInstance.disable();
   }, []);
@@ -159,14 +171,7 @@ const Home = () => {
               onMouseLeave(e);
             }}
             onClick={handleClick}
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: 0.7,
-            }}
-            transition={{ delay: 3.15 }}
-            whileHover={{
-              opacity: 1,
-            }}
+            name="element"
           >
             Try it now!
           </motion.button>
@@ -425,13 +430,7 @@ const Home = () => {
           </div>
         </Scene>
       </div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: 1,
-        }}
-        transition={{ delay: 3.2 }}
-      >
+      <motion.div initial={{ opacity: 0 }} id="elements-container">
         <motion.img
           style={{ position: "absolute", top: "21%", left: "64%" }}
           name="element"

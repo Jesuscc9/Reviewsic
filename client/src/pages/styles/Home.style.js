@@ -1,30 +1,40 @@
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 
 const planetAnim1 = keyframes`
-    from { 
+    0% { 
       transform: rotate(0deg) translateX(150px) rotate(0deg); 
     }
-    to { 
-      transform: rotate(360deg) translateX(180px); 
+    50% { 
+      transform: rotate(20deg) translateX(160px); 
+    }
+    100% { 
+      transform: rotate(0deg) translateX(150px) rotate(0deg); 
     }
 `;
 
 const planetAnim2 = keyframes`
-    from { 
+    0% { 
       transform: rotate(0deg) translateX(150px); 
     }
-    to { 
-      transform: rotate(-200deg) translateX(150px); 
+    50% { 
+      transform: rotate(-5deg) translateX(130px); 
+    }
+    100% { 
+      transform: rotate(0deg) translateX(150px); 
     }
 `;
 
 const planetAnim3 = keyframes`
-    from { 
+    0% { 
       transform: rotate(0deg) translateY(150px); 
     }
-    to { 
-      transform: rotate(-200deg) translateY(150px); 
+    50% { 
+      transform: rotate(-20deg) translateY(160px); 
     }
+    100% { 
+      transform: rotate(0deg) translateY(150px); 
+    }
+
 `;
 
 export const GlobalStyle = createGlobalStyle`
@@ -51,15 +61,15 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .planet1{
-    animation: ${planetAnim1} 100s linear infinite;
+    animation: ${planetAnim1} 20s linear infinite;
   }
 
   .planet2{
-    animation: ${planetAnim2} 100s linear infinite;
+    animation: ${planetAnim2} 20s linear infinite;
   }
 
   .planet3{
-    animation: ${planetAnim3} 100s linear infinite;
+    animation: ${planetAnim3} 20s linear infinite;
   }
 
   .stars {
@@ -154,7 +164,9 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 20px;
     transition: all 0.2s;
     outline: none !important;
-
+    opacity: 0;
+    pointer-events: none;
+    
     &:hover{
       opacity: 1 !important;
     }

@@ -147,6 +147,7 @@ export const DropdownMainContainer = styled.div`
 
       .option-select-type:hover {
         cursor: pointer;
+        /* background-color: rgba(0, 132, 255, 0.459); */
         transform: scale(1.06);
       }
 
