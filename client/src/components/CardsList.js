@@ -29,8 +29,11 @@ const CardsList = (props) => {
 
     const rating =
       (props.qualifications.reduce((acc, x) => {
-        cant++;
-        return x.reviewId == item.id ? acc + x.qualification : 0;
+        if (x.reviewId == item.id) {
+          cant++;
+          return acc + x.qualification;
+        }
+        return 0;
       }, 0) +
         item.qualification) /
       (cant + 1);
@@ -40,6 +43,8 @@ const CardsList = (props) => {
     item.likes = props.likes.reduce((acc, x) => {
       return x.reviewId == item.id && x.isLike ? acc + 1 : acc;
     }, 0);
+
+    console.log(item);
 
     return item;
   });
@@ -52,6 +57,18 @@ const CardsList = (props) => {
     );
   } else {
     cards = [...cards].sort((a, b) => b[sortType] - a[sortType]);
+  }
+
+  if (props.search.length) {
+    cards = cards.filter((el) => {
+      return (
+        el.song.toLowerCase().includes(props.search.toLowerCase()) ||
+        el.artist.toLowerCase().includes(props.search.toLowerCase()) ||
+        el.review.toLowerCase().includes(props.search.toLowerCase()) ||
+        el.user.toLowerCase().includes(props.search.toLowerCase()) ||
+        el.genre.toLowerCase().includes(props.search.toLowerCase())
+      );
+    });
   }
 
   return (

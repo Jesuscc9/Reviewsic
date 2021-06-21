@@ -1,3 +1,8 @@
+.dropdown-main-container {
+  width: 100%;
+  padding: 0px 20px;
+}
+
 .dropdown-menu-container {
   width: 100%;
   margin: auto;
@@ -34,6 +39,7 @@
   border: 0px;
   outline: none !important;
   padding: 0px 15px;
+  text-transform: capitalize;
 }
 
 .actual:hover {
@@ -55,6 +61,10 @@
   background-color: #fff;
   padding-left: 6px;
   cursor: pointer;
+}
+
+.dropdown-item h1 {
+  text-transform: capitalize;
 }
 
 .dropdown-item:hover {
@@ -123,6 +133,10 @@
   background: rgba(63, 63, 63, 0.425);
 }
 
+.filter-icon {
+  color: rgba(63, 63, 63, 0.425);
+}
+
 .list-icon {
   transform: scale(1.5);
   color: rgba(63, 63, 63, 0.425);
@@ -131,6 +145,30 @@
 .selected-type {
   background-color: rgba(0, 132, 255, 0.459);
 }
+
+.search-container {
+  width: 100%;
+  margin-right: 10px;
+  position: relative;
+  top: 3px;
+  border: 0px solid;
+  display: flex;
+}
+
+.search-container input {
+  width: 95%;
+  height: 30px;
+  background-color: transparent;
+  outline: none;
+}
+.search-container .icon {
+  width: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px !important;
+}
+
 /* 
 @media (max-width: 1270px) {
   .dropdown-menu-container {

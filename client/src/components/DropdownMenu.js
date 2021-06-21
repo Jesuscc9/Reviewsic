@@ -1,129 +1,109 @@
 import React, { useEffect, useState } from "react";
 import "tailwindcss/tailwind.css";
 import "../components/styles/DropdownMenu.css";
-import { faAngleDown, faList } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleDown,
+  faFilter,
+  faList,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import onClickOutside from "react-onclickoutside";
 
 const DropdownMenu = function (props) {
   const [show, setShow] = useState(false);
   const [value, setValue] = useState(undefined);
-  const [selectedView, setSelectedView] = useState("categories");
+  const [selectedView, setSelectedView] = useState("all");
 
   useEffect(() => {
     if (!value) return;
-    props.onSelect(
-      value == "Recent" ? "date" : value == "Most Popular" ? "likes" : "song"
-    );
+    props.onSelect(value == "name" ? "song" : value);
   }, [value]);
 
   const handleClick = (value) => {
-    setSelectedView(value);
-    props.onCardViewChange(value);
+    // setSelectedView(value);
+    // props.onCardViewChange(value);
   };
+
+  const values = ["date", "likes", "name", "rating"];
 
   DropdownMenu.handleClickOutside = () => setShow(false);
 
   return (
     <React.Fragment>
-      <div className="dropdown-menu-container">
-        <div className="dropdown">
-          <button
-            className="actual"
-            onClick={() => {
-              setShow(!show);
-            }}
-          >
-            {value ? (
-              <React.Fragment>
-                {show ? (
-                  <React.Fragment>
-                    Sort by &#160;
-                    <FontAwesomeIcon icon={faAngleDown} />
-                  </React.Fragment>
-                ) : (
-                  value
-                )}
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                Sort by &#160;
-                <FontAwesomeIcon icon={faAngleDown} />
-              </React.Fragment>
-            )}
-          </button>
-          <div
-            className={`dropdown-content shadow ${
-              show ? "dropdown-show" : "dropdown-hide"
-            }`}
-          >
-            <div
-              className="dropdown-item"
+      <div className="dropdown-main-container">
+        <div className="dropdown-menu-container">
+          <div className="dropdown">
+            <button
+              className="actual"
               onClick={() => {
                 setShow(!show);
-                setValue("Recent");
               }}
             >
-              <h1>Date</h1>
-            </div>
-            <hr className="divisor dropdown-divisor" />
+              {value ? (
+                <React.Fragment>
+                  {show ? (
+                    <React.Fragment>
+                      Sort by &#160;
+                      <FontAwesomeIcon icon={faAngleDown} />
+                    </React.Fragment>
+                  ) : (
+                    value
+                  )}
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  Sort by &#160;
+                  <FontAwesomeIcon icon={faAngleDown} />
+                </React.Fragment>
+              )}
+            </button>
             <div
-              className="dropdown-item"
-              onClick={() => {
-                setShow(!show);
-                setValue("Most Popular");
-              }}
+              className={`dropdown-content shadow ${
+                show ? "dropdown-show" : "dropdown-hide"
+              }`}
             >
-              <h1>Popularity</h1>
-            </div>
-            <hr className="divisor dropdown-divisor" />
-            <div
-              className="dropdown-item"
-              onClick={() => {
-                setShow(!show);
-                setValue("Name");
-              }}
-            >
-              <h1>Alphabetical</h1>
-            </div>
-            <hr className="divisor dropdown-divisor" />
-            <div
-              className="dropdown-item"
-              onClick={() => {
-                setShow(!show);
-                setValue("Rating");
-              }}
-            >
-              <h1>Rating</h1>
+              {values.map((value) => {
+                return (
+                  <div>
+                    <div
+                      className="dropdown-item"
+                      onClick={() => {
+                        setShow(!show);
+                        setValue(value);
+                      }}
+                    >
+                      <h1>{value}</h1>
+                    </div>
+                    <hr className="divisor dropdown-divisor" />
+                  </div>
+                );
+              })}
             </div>
           </div>
-        </div>
-        <div className="select-type">
-          <button
-            className={`option-select-type mr-4 ${
-              selectedView == "categories" ? "selected-type" : ""
-            }`}
-            onClick={() => {
-              handleClick("categories");
-            }}
-          >
-            <div className="cat-dot-list"></div>
-            <div className="cat-dot-list"></div>
-            <div className="cat-dot-list"></div>
-          </button>
-          <button
-            className={`option-select-type ${
-              selectedView == "all" ? "selected-type" : ""
-            }`}
-            onClick={() => {
-              handleClick("all");
-            }}
-          >
-            <div className="cat-dot"></div>
-            <div className="cat-dot"></div>
-            <div className="cat-dot"></div>
-            <div className="cat-dot"></div>
-          </button>
+          <div className="search-container">
+            <input
+              type="text"
+              className="search"
+              placeholder="Search..."
+              onChange={(e) => {
+                props.onSearch(e.target.value);
+              }}
+            />
+            <FontAwesomeIcon icon={faSearch} className="icon" />
+          </div>
+          <div className="select-type">
+            <button
+              className={`option-select-type  ${
+                selectedView == "categories" ? "selected-type" : ""
+              }`}
+              onClick={() => {
+                handleClick("categories");
+              }}
+            >
+              <FontAwesomeIcon icon={faFilter} className="filter-icon" />
+            </button>
+          </div>
         </div>
       </div>
     </React.Fragment>

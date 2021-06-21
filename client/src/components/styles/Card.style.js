@@ -19,7 +19,7 @@ export const Card = styled.div`
   border-radius: 30px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  margin: 20px 0px;
+  margin: 20px 20px;
   padding: 0px;
   transition: all 0.2s;
   z-index: 1 !important;

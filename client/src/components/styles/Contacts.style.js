@@ -248,7 +248,7 @@ export const ActivityCard = styled.div`
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
-          max-width: 100%;
+          max-width: 150px;
         }
 
         a {

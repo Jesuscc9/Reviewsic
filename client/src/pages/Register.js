@@ -53,14 +53,12 @@ const Register = () => {
   const [redirect, setRedirect] = useState(false);
   const [showCards, setShowCards] = useState(false);
 
-  // const [playerStatus, setPlayerStatus] = useState({});
   const [playingSong, setPlayingSong] = useState();
-  const [auxPlayingSong, setAuxPlayingSong] = useState();
 
   const [token, setToken] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
   const [sortType, setSortType] = useState(undefined);
-  const [cardView, setCardView] = useState("categories");
+  const [search, setSearch] = useState("");
 
   const [likes, setLikes] = useState([]);
   const [songList, setSongList] = useState([]);
@@ -68,15 +66,6 @@ const Register = () => {
 
   const dispatch = useDispatch();
 
-  const sortArray = () => {
-    let sorted = [];
-    if (sortType === "song")
-      sorted = [...songList].sort((a, b) =>
-        a[sortType].localeCompare(b[sortType], "en", { sensitivity: "base" })
-      );
-    else sorted = [...songList].sort((a, b) => b[sortType] - a[sortType]);
-    return sorted;
-  };
   useEffect(async () => {
     setToken(
       !Cookies.get("spotifyAuthToken") ? "" : Cookies.get("spotifyAuthToken")
@@ -115,6 +104,7 @@ const Register = () => {
       });
 
       socket.on("updateLikes", (data) => {
+        console.log(data);
         setLikes(data);
       });
 
@@ -178,15 +168,6 @@ const Register = () => {
       ),
       showConfirmButton: false,
     });
-  };
-
-  const handleDropdown = (value) => {
-    setSortType(value);
-    setSongList([...songList]);
-    setShowCards(false);
-    setTimeout(() => {
-      setShowCards(true);
-    }, 300);
   };
 
   const CardActions = {
@@ -287,6 +268,9 @@ const Register = () => {
                             onSelect={(value) => {
                               setSortType(value);
                             }}
+                            onSearch={(value) => {
+                              setSearch(value);
+                            }}
                             // onCardViewChange={(value) => setCardView(value)}
                           />
                           <CardsList
@@ -294,6 +278,7 @@ const Register = () => {
                             likes={likes}
                             qualifications={qualifications}
                             sortType={sortType}
+                            search={search}
                             {...CardActions}
                           />
                           <AnimatePresence>
