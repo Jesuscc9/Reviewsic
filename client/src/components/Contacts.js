@@ -28,7 +28,7 @@ const Contacts = ({ data }) => {
         <div className="contact-body">
           {data.map((user) => {
             return (
-              <motion.div key={user}>
+              <>
                 <div className="divisor"></div>
 
                 <Item
@@ -119,10 +119,10 @@ const Contacts = ({ data }) => {
                     </ActivityCard>
                   )}
                 </Item>
-              </motion.div>
+              </>
             );
           })}
-          <div className="divisor"></div>
+          <div className="divisor extra-divisor"></div>
         </div>
       </ContactsContainer>
     </React.Fragment>

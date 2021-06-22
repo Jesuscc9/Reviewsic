@@ -63,7 +63,7 @@ const Card = (props) => {
         qual_cant++;
         return sum + e.qualification;
       } else {
-        return 0;
+        return sum;
       }
     }, 0) / qual_cant;
 
@@ -365,7 +365,8 @@ const Card = (props) => {
                 <p className="author">
                   By:{" "}
                   <Link to={`/user/${data.userId}`} target="_blank">
-                    <u>{data.user}</u>
+                    {/* <u>{data.user}</u> */}
+                    {data.user}
                   </Link>
                 </p>
                 <p className="author date">{timeAgo(data.date)}</p>

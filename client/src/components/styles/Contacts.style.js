@@ -2,16 +2,15 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 
 export const Contacts = styled.div`
-  width: 100%;
   background-color: #ffffff;
   max-height: 330px;
   min-height: 330px;
-  min-width: 250px;
+  min-width: 300px;
   max-width: 300px;
   border-radius: 30px;
   z-index: 1000;
-  box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  padding: 5px;
 
   .contact-header {
     width: 90%;
@@ -44,68 +43,40 @@ export const Contacts = styled.div`
     }
   }
 
-  @media (max-width: 500px) {
-    .contacts {
-      width: 95%;
-      background-color: #ffffff;
-      min-height: 130px;
-      border-radius: 30px;
-      box-shadow: 0 5px 15px -3px rgba(0, 0, 0, 0.1),
-        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  @media (max-width: 649px) {
+    max-height: 130px !important;
+    min-height: 130px !important;
+    margin-bottom: 40px;
+    min-width: 90%;
+    max-width: 90%;
+
+    .contact-body {
+      margin: 0 10px;
+      display: flex;
+      border-top: 1px solid rgba(160, 159, 159, 0.315);
+      border-bottom: 1px solid rgba(160, 159, 159, 0.315);
+      padding: 5px 0px;
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      ::-webkit-scrollbar {
+        height: 5px;
+        border-radius: 10px;
+      }
+
+      .item-info {
+        display: none;
+      }
     }
 
-    .contacts ::-webkit-scrollbar {
-      width: 3px !important;
-      height: 5px;
-      padding: 3px !important;
-      cursor: pointer;
-      opacity: 0;
-    }
-    .contacts ::-webkit-scrollbar-track {
-      background: rgb(255, 255, 255) !important;
-    }
-
-    .item-image-container {
-      width: 40px;
-    }
-
-    .item {
-      width: auto;
-      border-left: 1px solid rgba(160, 159, 159, 0.315);
-      border-right: 1px solid rgba(160, 159, 159, 0.315);
-      padding: 0px 10px;
-    }
-
-    .item-info {
-      display: none;
-    }
-
-    .item-info-status {
-      display: none;
-    }
-
-    .item-name {
-      font-size: 12px;
-      word-break: break-all;
-    }
-
-    .item-status {
-      width: 20px;
+    .users-container {
+      display: flex;
     }
 
     .divisor {
-      visibility: hidden;
-    }
-
-    .contact-body {
-      display: flex;
-      width: 98%;
-      margin: auto;
-      border-top: 1px solid rgba(160, 159, 159, 0.315);
-      border-bottom: 1px solid rgba(160, 159, 159, 0.315);
-      overflow-x: scroll;
-      overflow-y: hidden;
-      padding-top: 5px;
+      width: 1px;
+      min-height: 30px;
+      margin: 0px !important;
     }
   }
 `;
@@ -187,11 +158,17 @@ export const Item = styled(motion.div)`
   }
 
   z-index: 2;
+  min-width: 100px !important;
+
+  @media (max-width: 649px) {
+    padding: 0px;
+    width: auto;
+  }
 `;
 
 export const ActivityCard = styled.div`
   position: relative;
-  right: calc(100% + 265px);
+  right: calc(100% + 269px);
   top: -7px;
 
   .activity-container {

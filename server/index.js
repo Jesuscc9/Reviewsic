@@ -7,7 +7,7 @@ const cors = require("cors");
 const mysql = require("mysql");
 const fileUpload = require("express-fileupload");
 
-const { Mac, Windows, Remote } = require("../server/Conection");
+const { Mac, Windows, Remote } = require("../server/Connection");
 
 //const PORT = process.env.PORT || 3001;
 const PORT = 3001;

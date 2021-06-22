@@ -124,6 +124,10 @@ export const DropdownMainContainer = styled.div`
         position: relative;
         top: 3px;
         transform: rotateY(180deg);
+
+        @media (max-width: 649px) {
+          transform: scale(1.6) rotateY(180deg);
+        }
       }
     }
 

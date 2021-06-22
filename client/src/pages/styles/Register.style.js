@@ -69,14 +69,6 @@ export const MainContainer = styled.div`
   justify-content: space-between;
   padding-bottom: 80px;
 
-  @media (max-width: 500px) {
-    width: 90%;
-    max-width: 90%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column-reverse;
-  }
-
   .sidebar {
     width: 300px;
     display: flex;
@@ -89,10 +81,28 @@ export const MainContainer = styled.div`
     z-index: 2;
 
     .player-container {
-      /* transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      transition: opacity 0.5s; */
       transition: all 0.2s;
-      /* transition: opacity 1s; */
+    }
+  }
+
+  @media (max-width: 650px) {
+    width: 95%;
+    max-width: 95%;
+    flex-direction: column-reverse;
+    display: flex;
+    justify-content: center;
+
+    .sidebar {
+      position: initial;
+      height: auto;
+      min-width: 100%;
+
+      .player-container {
+        position: fixed;
+        bottom: -1px;
+        left: 0px;
+        width: 100%;
+      }
     }
   }
 `;
@@ -100,16 +110,9 @@ export const MainContainer = styled.div`
 export const ContentContainer = styled(motion.div)`
   width: 65%;
   margin-right: 40px;
+
+  @media (max-width: 649px) {
+    margin: auto;
+    width: 95%;
+  }
 `;
-
-// @media (max-width: 500px) {
-
-//   .card-container {
-//     display: flex;
-//     justify-content: center;
-//     flex-wrap: wrap;
-//     width: 90%;
-//     max-width: 90%;
-//     margin: auto;
-//   }
-// }

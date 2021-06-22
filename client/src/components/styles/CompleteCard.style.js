@@ -73,6 +73,10 @@ export const Card = styled.div`
     height: auto;
     max-width: 600px;
     overflow: hidden;
+
+    @media (max-width: 650px) {
+      max-width: 90%;
+    }
   }
 
   .card-content {
@@ -115,6 +119,11 @@ export const Card = styled.div`
     /* transform: scale(1.06); */
     transition: all 0.3s;
     cursor: pointer;
+
+    @media (max-width: 650px) {
+      position: initial;
+      transform: none;
+    }
   }
 
   .song-img:hover {
@@ -124,6 +133,10 @@ export const Card = styled.div`
   .card-header {
     min-width: 29%;
     flex-basis: 29%;
+
+    @media (max-width: 650px) {
+      min-width: 130px;
+    }
   }
 
   .card-body {
@@ -610,4 +623,8 @@ export const CardContent = styled(motion.div)`
   width: 100%;
   height: 100%;
   margin: 0 auto;
+
+  @media (max-width: 650px) {
+    max-width: 90%;
+  }
 `;

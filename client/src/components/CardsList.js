@@ -33,7 +33,7 @@ const CardsList = (props) => {
           cant++;
           return acc + x.qualification;
         }
-        return 0;
+        return acc;
       }, 0) +
         item.qualification) /
       (cant + 1);
@@ -43,8 +43,6 @@ const CardsList = (props) => {
     item.likes = props.likes.reduce((acc, x) => {
       return x.reviewId == item.id && x.isLike ? acc + 1 : acc;
     }, 0);
-
-    console.log(item);
 
     return item;
   });

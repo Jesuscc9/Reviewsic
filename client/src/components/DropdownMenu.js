@@ -85,7 +85,7 @@ const DropdownMenu = function (props) {
             <input
               type="text"
               className="search"
-              placeholder="Search by song, artist or user..."
+              placeholder="Search..."
               onChange={(e) => {
                 props.onSearch(e.target.value);
               }}
