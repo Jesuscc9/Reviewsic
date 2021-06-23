@@ -15,7 +15,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CardsList from "../components/CardsList";
 import CompleteCard from "../components/CompleteCard";
-import CardsCarousel from "../components/CardsCarousel";
+import LoadMore from "../components/LoadMore";
 import Loader from "react-loader-spinner";
 import RegisterForm from "../components/RegisterForm";
 import UpdateForm from "../components/UpdateForm";
@@ -51,7 +51,7 @@ const Register = () => {
 
   const [users, setUsers] = useState([]);
   const [redirect, setRedirect] = useState(false);
-  const [showCards, setShowCards] = useState(false);
+  const [cardsLimit, setCardsLimit] = useState(12);
 
   const [playingSong, setPlayingSong] = useState();
 
@@ -113,7 +113,6 @@ const Register = () => {
       });
 
       setLoaded(true);
-      setShowCards(true);
     }
   }, [token]);
 
@@ -271,7 +270,6 @@ const Register = () => {
                             onSearch={(value) => {
                               setSearch(value);
                             }}
-                            // onCardViewChange={(value) => setCardView(value)}
                           />
                           <CardsList
                             songList={songList}
@@ -279,8 +277,16 @@ const Register = () => {
                             qualifications={qualifications}
                             sortType={sortType}
                             search={search}
+                            limit={cardsLimit}
                             {...CardActions}
                           />
+                          {cardsLimit < songList.length && !search.length && (
+                            <LoadMore
+                              onLoadMore={() => {
+                                setCardsLimit(cardsLimit + 4);
+                              }}
+                            />
+                          )}
                           <AnimatePresence>
                             {params.id && reviewExists && (
                               <CompleteCard

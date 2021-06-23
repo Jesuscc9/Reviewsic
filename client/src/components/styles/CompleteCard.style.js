@@ -136,6 +136,12 @@ export const Card = styled.div`
 
     @media (max-width: 650px) {
       min-width: 130px;
+      margin-right: 20px;
+    }
+
+    @media (max-width: 500px) {
+      min-width: 130px;
+      margin-right: 30px;
     }
   }
 
@@ -143,6 +149,11 @@ export const Card = styled.div`
     flex-basis: 55%;
     border-radius: 10px;
     position: relative;
+
+    @media (max-width: 440px) {
+      margin-top: 20px;
+      margin-left: 5px;
+    }
   }
 
   .card-footer {
@@ -153,12 +164,16 @@ export const Card = styled.div`
     margin-bottom: 0px !important;
   }
 
+  .play-button-container {
+    position: absolute;
+  }
+
   .play-button {
     min-width: 50px;
     max-width: 50px;
     min-height: 50px;
     max-height: 50px;
-    position: absolute;
+    position: relative;
     left: -65px;
     top: 55px;
     background-color: #0cb431;
@@ -176,6 +191,11 @@ export const Card = styled.div`
 
     &:hover {
       background-color: #0ca72e !important;
+    }
+
+    @media (max-width: 440px) {
+      top: -90px;
+      left: 97px;
     }
   }
 
@@ -300,8 +320,25 @@ export const Card = styled.div`
     display: flex;
     align-items: center;
 
+    @media (max-width: 440px) {
+      justify-content: space-between;
+    }
+
     .average {
       margin-left: 30px;
+
+      @media (max-width: 500px) {
+        margin-left: 10px;
+      }
+
+      @media (max-width: 440px) {
+        margin-left: 0px;
+      }
+
+      @media (max-width: 390px) {
+        margin-left: -10px;
+        margin-right: 10px;
+      }
     }
   }
 
@@ -367,6 +404,10 @@ export const Card = styled.div`
     transition: all 0.3s;
     cursor: pointer;
     outline: none;
+
+    @media (max-width: 440px) {
+      padding: 0px;
+    }
   }
 
   .rated-button {
@@ -375,6 +416,10 @@ export const Card = styled.div`
     font-size: 14px;
     background-color: rgba(255, 203, 34, 0.2);
     color: #f5c800;
+
+    @media (max-width: 440px) {
+      padding: 0px;
+    }
 
     &:hover {
       background-color: rgba(255, 203, 34, 0.2);
@@ -412,7 +457,7 @@ export const Card = styled.div`
     position: absolute;
     right: 20px;
     top: 20px;
-    background-color: white;
+    background-color: transparent;
     transition: left 0.25s linear, opacity 0.3s ease-in-out;
     opacity: 1;
     cursor: default;
@@ -420,6 +465,10 @@ export const Card = styled.div`
     flex-wrap: wrap;
     justify-content: flex-end;
     align-content: space-between;
+
+    @media (max-width: 440px) {
+      min-height: 53%;
+    }
   }
 
   .card-actions {

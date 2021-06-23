@@ -171,6 +171,10 @@ export const ActivityCard = styled.div`
   right: calc(100% + 269px);
   top: -7px;
 
+  @media (max-width: 649px) {
+    display: none;
+  }
+
   .activity-container {
     display: flex;
     position: absolute;

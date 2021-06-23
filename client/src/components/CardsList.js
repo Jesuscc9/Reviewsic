@@ -11,10 +11,21 @@ const CardsList = (props) => {
 
   var cards = [];
 
+  cards = props.songList.slice(0, props.limit);
+
   if (params.id) {
-    cards = props.songList.filter((e) => e.id != params.id);
-  } else {
-    cards = props.songList;
+    cards = cards.filter((e) => e.id != params.id);
+  }
+
+  if (props.search.length) {
+    cards = props.songList.filter((el) => {
+      return (
+        el.song.toLowerCase().includes(props.search.toLowerCase()) ||
+        el.artist.toLowerCase().includes(props.search.toLowerCase()) ||
+        el.user.toLowerCase().includes(props.search.toLowerCase())
+        // el.genre.toLowerCase().includes(props.search.toLowerCase())
+      );
+    });
   }
 
   cards = cards.map((item) => {
@@ -55,17 +66,6 @@ const CardsList = (props) => {
     );
   } else {
     cards = [...cards].sort((a, b) => b[sortType] - a[sortType]);
-  }
-
-  if (props.search.length) {
-    cards = cards.filter((el) => {
-      return (
-        el.song.toLowerCase().includes(props.search.toLowerCase()) ||
-        el.artist.toLowerCase().includes(props.search.toLowerCase()) ||
-        el.user.toLowerCase().includes(props.search.toLowerCase())
-        // el.genre.toLowerCase().includes(props.search.toLowerCase())
-      );
-    });
   }
 
   return (

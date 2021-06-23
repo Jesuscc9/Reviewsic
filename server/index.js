@@ -14,7 +14,7 @@ const PORT = 3001;
 
 const app = express();
 
-const db = mysql.createPool(Windows);
+const db = mysql.createPool(Remote);
 
 //app.use(express.static(path.resolve(__dirname, 'build/')))
 app.use(express.static("public"));

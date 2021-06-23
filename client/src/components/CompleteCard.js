@@ -266,32 +266,34 @@ const Card = (props) => {
               </Palette>
             </div>
             <div className="card-body">
-              <button
-                className={`play-button ${pause ? "shine" : ""}`}
-                onClick={() => {
-                  if (pause) {
-                    props.playSong(data);
-                  } else {
-                    props.pause();
-                  }
-                  setPause(!pause);
-                }}
-              >
-                <AnimatePresence>
-                  {pause ? (
-                    <motion.div
-                      initial={{ rotate: 0 }}
-                      animate={{ rotate: 360 }}
-                    >
-                      <FontAwesomeIcon icon={faPlay} className="play-icon" />
-                    </motion.div>
-                  ) : (
-                    <motion.div>
-                      <FontAwesomeIcon icon={faPause} className="play-icon" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </button>
+              <div className="play-button-container">
+                <button
+                  className={`play-button ${pause ? "shine" : ""}`}
+                  onClick={() => {
+                    if (pause) {
+                      props.playSong(data);
+                    } else {
+                      props.pause();
+                    }
+                    setPause(!pause);
+                  }}
+                >
+                  <AnimatePresence>
+                    {pause ? (
+                      <motion.div
+                        initial={{ rotate: 0 }}
+                        animate={{ rotate: 360 }}
+                      >
+                        <FontAwesomeIcon icon={faPlay} className="play-icon" />
+                      </motion.div>
+                    ) : (
+                      <motion.div>
+                        <FontAwesomeIcon icon={faPause} className="play-icon" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </button>
+              </div>
               <div
                 className="song-name"
                 ref={song_name}
@@ -364,10 +366,11 @@ const Card = (props) => {
               <div className="card-data">
                 <p className="author">
                   By:{" "}
-                  <Link to={`/user/${data.userId}`} target="_blank">
-                    {/* <u>{data.user}</u> */}
+                  {/* <Link to={`/user/${data.userId}`} target="_blank">
+                    <u>{data.user}</u>
                     {data.user}
-                  </Link>
+                  </Link> */}
+                  {data.user}
                 </p>
                 <p className="author date">{timeAgo(data.date)}</p>
               </div>
