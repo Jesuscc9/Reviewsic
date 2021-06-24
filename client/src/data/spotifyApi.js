@@ -133,6 +133,8 @@ export const spotifyApi = {
           `https://api.spotify.com/v1/users/${spotifyApi.user.userId}/playlists`,
           {
             name: "Reviewsic",
+            description:
+              "This playlist was created by reviewsic.herokuapp.com, all the songs you add to your spotify from our website will be here!",
           },
           spotifyApi.config
         );
