@@ -59,6 +59,7 @@ const Register = () => {
   const [loaded, setLoaded] = useState(false);
   const [sortType, setSortType] = useState(undefined);
   const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState([]);
 
   const [likes, setLikes] = useState([]);
   const [songList, setSongList] = useState([]);
@@ -269,12 +270,18 @@ const Register = () => {
                             onSearch={(value) => {
                               setSearch(value);
                             }}
+                            filters={filters}
+                            onUpdateFilters={(newFilters) => {
+                              setFilters([...newFilters]);
+                            }}
+                            genres={songList.map((e) => e.genre)}
                           />
                           <CardsList
                             songList={songList}
                             likes={likes}
                             qualifications={qualifications}
                             sortType={sortType}
+                            filters={filters}
                             search={search}
                             limit={cardsLimit}
                             {...CardActions}

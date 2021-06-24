@@ -168,7 +168,7 @@ export const Item = styled(motion.div)`
 
 export const ActivityCard = styled.div`
   position: relative;
-  right: calc(100% + 269px);
+  right: calc(100% + 265px);
   top: -7px;
 
   @media (max-width: 649px) {

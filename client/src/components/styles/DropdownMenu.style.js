@@ -131,11 +131,11 @@ export const DropdownMainContainer = styled.div`
       }
     }
 
-    .select-type {
+    .filter-button-container {
       display: flex;
       justify-content: space-around;
 
-      .option-select-type {
+      .filter-button {
         width: 30px;
         height: 30px;
         border-radius: 0.25rem;
@@ -147,27 +147,16 @@ export const DropdownMainContainer = styled.div`
         justify-content: space-around;
         align-items: center;
         padding: 3.5px !important;
+
+        &:hover {
+          background-color: rgba(0, 132, 255, 0.459);
+          cursor: pointer;
+        }
       }
 
-      .option-select-type:hover {
-        cursor: pointer;
-        /* background-color: rgba(0, 132, 255, 0.459); */
+      .showingFilter {
+        background-color: rgba(0, 132, 255, 0.459);
         transform: scale(1.06);
-      }
-
-      .cat-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 2px;
-        background: rgba(63, 63, 63, 0.425);
-      }
-
-      .cat-dot-list {
-        width: 18px;
-        max-height: 4.5px;
-        min-height: 4.5px;
-        border-radius: 2px;
-        background: rgba(63, 63, 63, 0.425);
       }
 
       .filter-icon {
@@ -183,24 +172,89 @@ export const DropdownMainContainer = styled.div`
         background-color: rgba(0, 132, 255, 0.459);
       }
     }
-  }
 
-  /* 
-@media (max-width: 1270px) {
-  .dropdown-menu-container {
-    width: 78%;
-  }
-}
+    .filter-container {
+      position: relative;
+      z-index: 2;
 
-@media (max-width: 1000px) {
-  .dropdown-menu-container {
-    width: 86%;
-  }
-}
+      .filters {
+        box-shadow: rgba(0, 0, 0, 0.1) -10px 5px 12px;
+        position: absolute;
+        top: 40px;
+        right: -20px;
+        width: 230px;
+        max-height: 500px;
+        overflow-x: auto;
+        border-radius: 5px;
+        background-color: #fff;
+        padding: 10px 15px;
 
-@media (max-width: 1000px) {
-  .dropdown-menu-container {
-    width: 90%;
+        ::-webkit-scrollbar {
+          width: 7px;
+          padding: 5px;
+          cursor: pointer;
+        }
+
+        ::-webkit-scrollbar-track {
+          background-color: rgba(0, 132, 255, 0.459);
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+          background: rgb(255, 255, 255);
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+          background: #b6b6b6;
+          border-radius: 10px;
+          transition: all 0.4s;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+          background: #9c9c9c;
+          border-radius: 10px;
+          transition: all 0.4s;
+        }
+
+        h1 {
+          font-family: "Hind", sans-serif;
+          font-size: 20px;
+          color: #202a37;
+          font-weight: 600;
+        }
+
+        .filter {
+          width: 100%;
+          height: 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin: 13px 0px;
+          cursor: pointer;
+
+          p {
+            font-family: "Montserrat", sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6d6d6d;
+            text-transform: capitalize;
+          }
+
+          input {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+          }
+        }
+
+        > * {
+          &:nth-child(1) {
+            margin-top: 0px;
+          }
+        }
+      }
+    }
   }
-} */
 `;

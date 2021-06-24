@@ -28,6 +28,18 @@ const CardsList = (props) => {
     });
   }
 
+  if (props.filters.length) {
+    cards = props.songList.filter((el) => {
+      for (let i = 0; i < props.filters.length; i++) {
+        if (el.genre == props.filters[i]) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    });
+  }
+
   cards = cards.map((item) => {
     item.isInPlaylist = likedSongs.findIndex((song) => {
       return song.track.id == item.id;

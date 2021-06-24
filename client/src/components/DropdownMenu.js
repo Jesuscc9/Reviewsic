@@ -9,25 +9,31 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import onClickOutside from "react-onclickoutside";
 import { DropdownMainContainer } from "./styles/DropdownMenu.style";
+import { AnimatePresence, motion } from "framer-motion";
 
 const DropdownMenu = function (props) {
   const [show, setShow] = useState(false);
   const [value, setValue] = useState(undefined);
-  const [selectedView, setSelectedView] = useState("all");
+  const [showFilter, setShowFilter] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState([]);
 
   useEffect(() => {
     if (!value) return;
     props.onSelect(value == "name" ? "song" : value);
   }, [value]);
 
-  const handleClick = (value) => {
-    // setSelectedView(value);
-    // props.onCardViewChange(value);
-  };
-
   const values = ["date", "likes", "name", "rating"];
 
-  DropdownMenu.handleClickOutside = () => setShow(false);
+  const filters = [...new Set(props.genres)].sort((a, b) => a.localeCompare(b));
+
+  useEffect(() => {
+    props.onUpdateFilters(selectedFilters);
+  }, [selectedFilters]);
+
+  DropdownMenu.handleClickOutside = () => {
+    setShow(false);
+    setShowFilter(false);
+  };
 
   return (
     <React.Fragment>
@@ -92,17 +98,57 @@ const DropdownMenu = function (props) {
             />
             <FontAwesomeIcon icon={faSearch} className="icon" />
           </div>
-          <div className="select-type">
+          <div className="filter-button-container">
             <button
-              className={`option-select-type  ${
-                selectedView == "categories" ? "selected-type" : ""
-              }`}
+              className={`filter-button ${showFilter && "showingFilter"}`}
               onClick={() => {
-                handleClick("categories");
+                setShowFilter(!showFilter);
               }}
             >
               <FontAwesomeIcon icon={faFilter} className="filter-icon" />
             </button>
+            <AnimatePresence>
+              {showFilter && (
+                <motion.div
+                  className="filter-container"
+                  initial={{ opacity: 0, x: -5 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="filters">
+                    <h1>Genres</h1>
+                    <hr />
+                    {filters.map((e) => {
+                      return (
+                        <div
+                          className="filter"
+                          onClick={() => {
+                            if (!selectedFilters.includes(e)) {
+                              setSelectedFilters((prevState) => [
+                                ...prevState,
+                                e,
+                              ]);
+                            } else {
+                              setSelectedFilters(
+                                selectedFilters.filter((genre) => genre != e)
+                              );
+                            }
+                          }}
+                        >
+                          <p>{e}</p>
+                          <input
+                            type="checkbox"
+                            value={e}
+                            checked={selectedFilters.includes(e)}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </DropdownMainContainer>
