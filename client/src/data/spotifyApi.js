@@ -157,6 +157,14 @@ export const spotifyApi = {
         return false;
       }
     },
+    search: async (query) => {
+      return (
+        await Axios.get(
+          `https://api.spotify.com/v1/search?q=${query}&type=track`,
+          spotifyApi.config
+        )
+      ).data.tracks.items;
+    },
     getGenres: async function (artistId) {
       return (
         await Axios.get(

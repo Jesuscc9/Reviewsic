@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "tailwindcss/tailwind.css";
-import "../components/styles/RegisterForm.css";
 import "../components/styles/SmartRegisterForm.css";
 import ReactStars from "react-rating-stars-component";
 
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { spotifyApi } from "../data/spotifyApi";
 import { AnimatePresence, motion } from "framer-motion";
 import { validateUrl, defaultGenres } from "../data/formValidation";
+import { GlobalStyles } from "./styles/RegisterForm.style";
+import { useDetectClickOutside } from "react-detect-click-outside";
 
 const RegisterForm = ({ submit }) => {
   const [disableButton, setDisableButton] = useState(true);
+  const [search, setSearch] = useState("");
+  const [searchList, setSearchList] = useState([]);
   const [genres, setGenres] = useState([]);
 
   const [songData, setSongData] = useState({
@@ -94,6 +97,12 @@ const RegisterForm = ({ submit }) => {
     },
   };
 
+  const ref = useDetectClickOutside({
+    onTriggered: () => {
+      setSearchList([]);
+    },
+  });
+
   const validation = () => {
     if (review.current.value.length <= 0) {
       reviewAlert.current.style.opacity = "1";
@@ -125,76 +134,61 @@ const RegisterForm = ({ submit }) => {
       review.current.classList.remove("wrong-input");
     }
 
-    if (!validateUrl(spotifyUrl.current.value)) {
-      spotifyUrlAlert.current.textContent = "Please, enter a valid URL!";
-      spotifyUrlAlert.current.style.opacity = "1";
-      spotifyUrl.current.classList.add("wrong-input");
-      return false;
-    } else {
-      spotifyUrlAlert.current.style.opacity = "0";
-      spotifyUrl.current.classList.remove("wrong-input");
-    }
-
     return true;
   };
 
-  const handleChange = (e) => {
-    setDisableButton(true);
-    if (validateUrl(spotifyUrl.current.value)) {
-      spotifyInputStatus.loading();
-      spotifyUrlAlert.current.style.opacity = "0";
-      spotifyUrl.current.classList.remove("wrong-input");
+  const handleSelectSong = async (song) => {
+    const artists = song.artists
+      .map((e) => {
+        return e.name;
+      })
+      .join(", ");
 
-      setTimeout(async () => {
-        if (validateUrl(spotifyUrl.current.value)) {
-          const track_id = e.slice(31, 53);
+    const genres = await spotifyApi.song.getGenres(song.artists[0].id);
 
-          try {
-            const data = await spotifyApi.song.get(track_id);
+    setSongData((prevState) => ({
+      ...prevState,
+      image: song.album.images[0].url,
+      song: song.name,
+      artist: artists,
+      genre: defaultGenres[0],
+      spotifyId: song.id,
+      spotifyUrl: song.external_urls.spotify,
+      spotifyUri: song.uri,
+    }));
 
-            spotifyInputStatus.sucess();
-
-            const genres = await spotifyApi.song.getGenres(data.artists[0].id);
-
-            const artists = data.artists
-              .map((e) => {
-                return e.name;
-              })
-              .join(", ");
-
-            setSongData((prevState) => ({
-              ...prevState,
-              image: data.album.images[0].url,
-              song: data.name,
-              artist: artists,
-              genre: defaultGenres[0],
-              spotifyId: data.id,
-              spotifyUrl: data.external_urls.spotify,
-              spotifyUri: data.uri,
-            }));
-
-            if (genres.length > 0) {
-              setGenres(genres);
-              setSongData((prevState) => ({
-                ...prevState,
-                genre: genres[0],
-              }));
-            } else {
-              setGenres(defaultGenres);
-            }
-          } catch (err) {
-            console.error(err);
-            spotifyInputStatus.error();
-          }
-        } else {
-          spotifyInputStatus.error();
-        }
-      }, 1500);
+    if (genres.length > 0) {
+      setGenres(genres);
+      setSongData((prevState) => ({
+        ...prevState,
+        genre: genres[0],
+      }));
+    } else {
+      setGenres(defaultGenres);
     }
+
+    setSearch("");
   };
+
+  useEffect(async () => {
+    if (!songData.song.length) {
+      setDisableButton(true);
+    } else {
+      setDisableButton(false);
+    }
+  }, [songData]);
+
+  useEffect(async () => {
+    if (search.length) {
+      setSearchList([...(await spotifyApi.song.search(search))]);
+    } else {
+      setSearchList([]);
+    }
+  }, [search]);
 
   return (
     <React.Fragment>
+      <GlobalStyles />
       <div className="display-flex justify-start"></div>
       <form
         onSubmit={(e) => {
@@ -205,18 +199,52 @@ const RegisterForm = ({ submit }) => {
         }}
         className="register-form"
       >
-        <p className="input-label">Spotify URL: </p>
+        <p className="input-label">Song: </p>
 
         <div className="spotify-link-container">
-          <input
-            type="text"
-            className="swal2-input spotify-link-input"
-            placeholder="Spotify link of the song..."
-            onChange={(e) => {
-              handleChange(e.target.value);
-            }}
-            ref={spotifyUrl}
-          />
+          <AnimatePresence>
+            {songData.song.length ? (
+              <motion.div
+                className="selected-song swal2-input spotify-link-input"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.1 }}
+                key="selected-song"
+              >
+                <div className="image-container">
+                  <img src={songData.image} alt="" />
+                </div>
+                <div className="track-data">
+                  <p className="track-name">{songData.song}</p>
+                  <p className="track-artist">{songData.artist}</p>
+                </div>
+
+                <button
+                  className="close-button"
+                  type="button"
+                  onClick={() => {
+                    setSongData((prevState) => ({
+                      ...prevState,
+                      song: "",
+                    }));
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTimes} className="close-icon" />
+                </button>
+              </motion.div>
+            ) : (
+              <input
+                type="text"
+                className="swal2-input spotify-link-input"
+                placeholder="Name of the song..."
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+                value={search}
+                ref={ref}
+              />
+            )}
+          </AnimatePresence>
 
           <div
             className="spotify-link-status"
@@ -235,41 +263,51 @@ const RegisterForm = ({ submit }) => {
           </div>
         </div>
 
+        {searchList.length ? (
+          <div className="search-list-container">
+            <div className="search-list">
+              {searchList.map((song) => {
+                const artists = song.artists
+                  .map((e) => {
+                    return e.name;
+                  })
+                  .join(", ");
+
+                const image = song.album.images[2]?.url
+                  ? song.album.images[2].url
+                  : "http://dissoftec.com/NotFoundImage.jpg";
+                return (
+                  <>
+                    <div
+                      className="search-result"
+                      onClick={() => {
+                        handleSelectSong(song);
+                      }}
+                    >
+                      <div className="image-container">
+                        <img src={image} alt="" />
+                      </div>
+                      <div className="track-data">
+                        <p className="track-name">{song.name}</p>
+                        <p className="track-artist">{artists}</p>
+                      </div>
+                    </div>
+                    <hr />
+                  </>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+
         <p className="alert-label" ref={spotifyUrlAlert}>
           Please fill out this field.
         </p>
 
-        {/* <div
-          className={`genre-container ${
-            genres.length ? "show-genre" : "hide-genre"
-          }`}
-        >
-          <p className="input-label">Genre: </p>
-
-          <select
-            className={`swal2-input ${
-              genres.length ? "genre-input" : "genre-input-hidden"
-            }`}
-            onChange={(e) => {
-              props.onGenreChange(e.target.value);
-            }}
-          >
-            {genres.length ? (
-              genres.map((genre) => {
-                return (
-                  <option value={genre} className="genre-option">
-                    {genre}
-                  </option>
-                );
-              })
-            ) : (
-              <div />
-            )}
-          </select>
-          <p className="alert-label">.</p>
-        </div> */}
         <AnimatePresence>
-          {genres.length && (
+          {genres.length && songData.song.length && (
             <motion.div
               className={`genre-container show-genre`}
               initial={{
@@ -277,9 +315,9 @@ const RegisterForm = ({ submit }) => {
               }}
               animate={{ scale: 1 }}
               transition={{
-                duration: 0.7,
+                duration: 0.4,
                 type: "spring",
-                bounce: 0.5,
+                bounce: 0.4,
               }}
             >
               <p className="input-label">Genre: </p>

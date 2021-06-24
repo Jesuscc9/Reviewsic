@@ -9,27 +9,24 @@ const CardsList = (props) => {
 
   const likedSongs = useSelector((state) => state.user.likedSongs);
 
-  var cards = [];
-
-  cards = props.songList.slice(0, props.limit);
+  var cards = props.songList;
 
   if (params.id) {
     cards = cards.filter((e) => e.id != params.id);
   }
 
   if (props.search.length) {
-    cards = props.songList.filter((el) => {
+    cards = cards.filter((el) => {
       return (
         el.song.toLowerCase().includes(props.search.toLowerCase()) ||
         el.artist.toLowerCase().includes(props.search.toLowerCase()) ||
         el.user.toLowerCase().includes(props.search.toLowerCase())
-        // el.genre.toLowerCase().includes(props.search.toLowerCase())
       );
     });
   }
 
   if (props.filters.length) {
-    cards = props.songList.filter((el) => {
+    cards = cards.filter((el) => {
       for (let i = 0; i < props.filters.length; i++) {
         if (el.genre == props.filters[i]) {
           return true;
@@ -39,6 +36,18 @@ const CardsList = (props) => {
       }
     });
   }
+
+  const sortType = props.sortType;
+
+  if (sortType === "song") {
+    cards = [...cards].sort((a, b) =>
+      a[sortType].localeCompare(b[sortType], "en", { sensitivity: "base" })
+    );
+  } else {
+    cards = [...cards].sort((a, b) => b[sortType] - a[sortType]);
+  }
+
+  cards = cards.slice(0, props.limit);
 
   cards = cards.map((item) => {
     item.isInPlaylist = likedSongs.findIndex((song) => {
@@ -69,16 +78,6 @@ const CardsList = (props) => {
 
     return item;
   });
-
-  const sortType = props.sortType;
-
-  if (props.sortType === "song") {
-    cards = [...cards].sort((a, b) =>
-      a[sortType].localeCompare(b[sortType], "en", { sensitivity: "base" })
-    );
-  } else {
-    cards = [...cards].sort((a, b) => b[sortType] - a[sortType]);
-  }
 
   return (
     <CardsContainer>

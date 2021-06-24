@@ -286,13 +286,15 @@ const Register = () => {
                             limit={cardsLimit}
                             {...CardActions}
                           />
-                          {cardsLimit < songList.length && !search.length && (
-                            <LoadMore
-                              onLoadMore={() => {
-                                setCardsLimit(cardsLimit + 4);
-                              }}
-                            />
-                          )}
+                          {cardsLimit < songList.length &&
+                            !search.length &&
+                            !filters.length && (
+                              <LoadMore
+                                onLoadMore={() => {
+                                  setCardsLimit(cardsLimit + 4);
+                                }}
+                              />
+                            )}
                           <AnimatePresence>
                             {params.id && reviewExists && (
                               <CompleteCard
