@@ -407,6 +407,7 @@ export const Card = styled.div`
 
     @media (max-width: 440px) {
       padding: 0px;
+      margin-left: -50px;
     }
   }
 

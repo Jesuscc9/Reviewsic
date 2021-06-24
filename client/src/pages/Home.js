@@ -5,13 +5,9 @@ import { SpotifyAuth, Scopes } from "react-spotify-auth";
 import { SpotifyApiContext } from "react-spotify-api";
 import { AnimatePresence, motion } from "framer-motion";
 
-import "../assets/animate.css";
-import "react-spotify-auth/dist/index.css?v=2";
-
 import Parallax from "parallax-js";
 import Stars from "../assets/img/star.svg";
 import Moonlight from "../assets/img/moonlight.png";
-import Reviewsic from "../assets/img/reviewsic.svg";
 import Clairo from "../assets/img/clairo.png";
 import Clairo2 from "../assets/img/clairo2.png";
 import Clairo3 from "../assets/img/clairo3.png";
@@ -23,6 +19,7 @@ import Planet2 from "../assets/img/planet2.png";
 import Planet3 from "../assets/img/planet3.png";
 import ReviewsicSVG from "../assets/img/reviewsicFilled.svg";
 
+import "react-spotify-auth/dist/index.css";
 import { Scene, GlobalStyle } from "./styles/Home.style";
 
 const Home = () => {

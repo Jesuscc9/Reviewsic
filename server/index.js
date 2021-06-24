@@ -7,16 +7,16 @@ const cors = require("cors");
 const mysql = require("mysql");
 const fileUpload = require("express-fileupload");
 
-const { Mac, Windows, Remote } = require("../server/Connection");
+const { Mac, Windows, Remote } = require("./Connection");
 
-//const PORT = process.env.PORT || 3001;
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+// const PORT = 3001;
 
 const app = express();
 
 const db = mysql.createPool(Remote);
 
-//app.use(express.static(path.resolve(__dirname, 'build/')))
+app.use(express.static(path.resolve(__dirname, "build/")));
 app.use(express.static("public"));
 app.use(cors());
 app.use(express.json());
@@ -189,9 +189,9 @@ app.post("/api/qualifications/set", (req, res) => {
   });
 });
 
-// app.get('*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, 'build/', 'index.html'));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "build/", "index.html"));
+});
 
 const server = http.createServer(app);
 

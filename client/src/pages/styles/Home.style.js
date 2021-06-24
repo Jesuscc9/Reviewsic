@@ -148,6 +148,10 @@ export const GlobalStyle = createGlobalStyle`
 
   .reviewsic-svg{
     filter: drop-shadow( 3px 3px 2px rgba(106, 90, 205, .3));
+
+    @media (max-width: 450px) {
+      transform: scale(0.7);
+    }
   }
 
   .try-button {
@@ -166,6 +170,10 @@ export const GlobalStyle = createGlobalStyle`
     outline: none !important;
     opacity: 0;
     pointer-events: none;
+
+    @media (max-width: 450px) {
+      transform: scale(0.85);
+    }
     
     &:hover{
       opacity: 1 !important;
@@ -176,9 +184,9 @@ export const GlobalStyle = createGlobalStyle`
 `;
 
 export const Scene = styled.div`
-  @import url("https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@700;900&display=swap");
-
-  @import url("https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400&display=swap");
+  @media (max-width: 450px) {
+    transform: scale(1.3) !important;
+  }
 
   ._3xrlJ {
     width: 250px;
@@ -189,10 +197,6 @@ export const Scene = styled.div`
 
   ._1JCP_ {
     transform: scale(1.5);
-  }
-
-  #scene {
-    transform: scale(0.5);
   }
 
   .slash {
@@ -270,6 +274,19 @@ export const Scene = styled.div`
       position: relative;
       left: 20px;
       top: 10px;
+    }
+  }
+
+  @media (max-width: 450px) {
+    .slash {
+      display: none;
+    }
+
+    .clairo {
+      transform: scale(0.7) scaleX(-1);
+      position: relative;
+      left: -80px;
+      top: 40px;
     }
   }
 `;
