@@ -266,34 +266,42 @@ const Card = (props) => {
               </Palette>
             </div>
             <div className="card-body">
-              <div className="play-button-container">
-                <button
-                  className={`play-button ${pause ? "shine" : ""}`}
-                  onClick={() => {
-                    if (pause) {
-                      props.playSong(data);
-                    } else {
-                      props.pause();
-                    }
-                    setPause(!pause);
-                  }}
-                >
-                  <AnimatePresence>
-                    {pause ? (
-                      <motion.div
-                        initial={{ rotate: 0 }}
-                        animate={{ rotate: 360 }}
-                      >
-                        <FontAwesomeIcon icon={faPlay} className="play-icon" />
-                      </motion.div>
-                    ) : (
-                      <motion.div>
-                        <FontAwesomeIcon icon={faPause} className="play-icon" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </button>
-              </div>
+              {props.userType == "premium" && (
+                <div className="play-button-container">
+                  <button
+                    className={`play-button ${pause ? "shine" : ""}`}
+                    onClick={() => {
+                      if (pause) {
+                        props.playSong(data);
+                      } else {
+                        props.pause();
+                      }
+                      setPause(!pause);
+                    }}
+                  >
+                    <AnimatePresence>
+                      {pause ? (
+                        <motion.div
+                          initial={{ rotate: 0 }}
+                          animate={{ rotate: 360 }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faPlay}
+                            className="play-icon"
+                          />
+                        </motion.div>
+                      ) : (
+                        <motion.div>
+                          <FontAwesomeIcon
+                            icon={faPause}
+                            className="play-icon"
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </button>
+                </div>
+              )}
               <div
                 className="song-name"
                 ref={song_name}

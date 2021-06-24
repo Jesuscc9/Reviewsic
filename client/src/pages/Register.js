@@ -304,6 +304,7 @@ const Register = () => {
                                 {...CardActions}
                                 key="item"
                                 song={playingSong}
+                                userType={userData.type}
                               />
                             )}
                           </AnimatePresence>
@@ -336,16 +337,18 @@ const Register = () => {
                     opacity: playingSong ? 1 : 0,
                   }}
                 >
-                  <Player
-                    token={token}
-                    song={playingSong}
-                    setInitialSong={(song) => {
-                      setPlayingSong(song);
-                    }}
-                    updateActivity={(activity) => {
-                      updateActivity(activity);
-                    }}
-                  />
+                  {userData.type == "premium" && (
+                    <Player
+                      token={token}
+                      song={playingSong}
+                      setInitialSong={(song) => {
+                        setPlayingSong(song);
+                      }}
+                      updateActivity={(activity) => {
+                        updateActivity(activity);
+                      }}
+                    />
+                  )}
                 </div>
               </div>
             </MainContainer>
