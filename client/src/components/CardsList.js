@@ -18,9 +18,9 @@ const CardsList = (props) => {
   if (props.search.length) {
     cards = cards.filter((el) => {
       return (
-        el.song.toLowerCase().includes(props.search.toLowerCase()) ||
-        el.artist.toLowerCase().includes(props.search.toLowerCase()) ||
-        el.user.toLowerCase().includes(props.search.toLowerCase())
+        el.song?.toLowerCase().includes(props.search.toLowerCase()) ||
+        el.artist?.toLowerCase().includes(props.search.toLowerCase()) ||
+        el.user?.toLowerCase().includes(props.search.toLowerCase())
       );
     });
   }

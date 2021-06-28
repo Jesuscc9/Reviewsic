@@ -1,30 +1,5 @@
-.input-disabled{
+.input-disabled {
   background-color: rgba(191, 222, 255, 0.356) !important;
   color: rgb(121, 121, 121) !important;
   cursor: text !important;
-}
-
-@media (max-width: 600px){
-  .swal2-input{
-    height: 35px !important;
-    font-size: 15px;
-  } 
-
-  .input-label{
-    font-size: 15px;
-  }
-
-  .stars-calification span{
-    font-size: 25px !important;
-  }
-
-  .submit-button{
-    width: 140px;
-    height: 40px;
-    font-size: 18px;
-  }
-
-  .swal2-file{
-    font-size: 16px;
-  }
 }

@@ -3,14 +3,15 @@ import { motion } from "framer-motion";
 
 export const Contacts = styled.div`
   background-color: #ffffff;
-  max-height: 330px;
   min-height: 330px;
+  max-height: 330px;
   min-width: 300px;
   max-width: 300px;
   border-radius: 30px;
   z-index: 1000;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   padding: 5px;
+  
 
   .contact-header {
     width: 90%;
@@ -26,6 +27,45 @@ export const Contacts = styled.div`
   }
 
   .contact-body {
+
+    overflow-x: auto;
+    max-height: 260px;
+    height: 260px;
+
+::-webkit-scrollbar {
+  width: 7px;
+  padding: 5px;
+  cursor: pointer;
+  height: 80%;
+  opacity: 0;
+}
+
+::-webkit-scrollbar-track {
+  opacity: 0;
+  background-color: rgba(0, 132, 255, 0.459);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  opacity: 0;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  opacity: 0;
+  background: #b6b6b6;
+  border-radius: 30px;
+  transition: all 0.4s;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #9c9c9c;
+  border-radius: 10px;
+  transition: all 0.4s;
+}
+
     .divisor {
       max-width: 93%;
       margin: auto;

@@ -326,18 +326,37 @@ export const Card = styled.div`
 
     .average {
       margin-left: 30px;
+    }
 
-      @media (max-width: 500px) {
-        margin-left: 10px;
+    @media (max-width: 500px) {
+      .rating-container {
+        transform: scale(0.9);
       }
 
-      @media (max-width: 440px) {
+      .rate-container {
+        transform: scale(0.9);
+      }
+
+      .average {
         margin-left: 0px;
+        width: 110px;
       }
 
-      @media (max-width: 390px) {
-        margin-left: -10px;
-        margin-right: 10px;
+      .author-rate {
+        width: 100px;
+        margin: 0px !important;
+      }
+
+      .users-rate {
+        width: 110px;
+      }
+
+      .stars-calification {
+        width: 100px;
+      }
+
+      .rate-container {
+        margin-left: 0px !important;
       }
     }
   }
@@ -404,11 +423,6 @@ export const Card = styled.div`
     transition: all 0.3s;
     cursor: pointer;
     outline: none;
-
-    @media (max-width: 440px) {
-      padding: 0px;
-      margin-left: -50px;
-    }
   }
 
   .rated-button {
@@ -418,8 +432,9 @@ export const Card = styled.div`
     background-color: rgba(255, 203, 34, 0.2);
     color: #f5c800;
 
-    @media (max-width: 440px) {
-      padding: 0px;
+    @media (max-width: 500px) {
+      position: relative;
+      left: 10px;
     }
 
     &:hover {

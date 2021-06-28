@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const DropdownMenu = function (props) {
   const [show, setShow] = useState(false);
-  const [value, setValue] = useState(undefined);
+  const [value, setValue] = useState("date");
   const [showFilter, setShowFilter] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
 
@@ -34,6 +34,7 @@ const DropdownMenu = function (props) {
     setShow(false);
     setShowFilter(false);
   };
+  
 
   return (
     <React.Fragment>

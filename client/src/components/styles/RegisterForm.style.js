@@ -86,6 +86,37 @@ export const GlobalStyles = createGlobalStyle`
       z-index: 10;
       box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
+      overflow-x: auto;
+
+      ::-webkit-scrollbar {
+        width: 11px;
+        padding: 5px;
+        cursor: pointer;
+        height: 80%;
+        opacity: 0;
+      }
+
+      ::-webkit-scrollbar-track {
+        opacity: 0;
+        background-color: rgba(0, 132, 255, 0.459);
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: transparent;
+        opacity: 0;
+      }
+
+      /* Handle */
+
+
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #9c9c9c;
+        border-radius: 10px;
+        transition: all 0.4s;
+      }
+
       .search-result{
         padding: 10px;
         display: flex;
@@ -145,6 +176,7 @@ export const GlobalStyles = createGlobalStyle`
     border-radius: 5px;
     background-color: #f0f3ff;
     width: 100%;
+    min-height: 56px;
     height: auto;
     z-index: 10;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -164,7 +196,6 @@ export const GlobalStyles = createGlobalStyle`
     }
 
     p{
-      width: 300px;
       text-align: left;
       white-space: nowrap;
       overflow: hidden;
@@ -175,6 +206,8 @@ export const GlobalStyles = createGlobalStyle`
       color: #7e7e7e;
       transition: all 0.2s;
       outline: none;
+      position: absolute;
+      right: 60px;
 
       &:hover{
         color: #575757;

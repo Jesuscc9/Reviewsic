@@ -187,7 +187,7 @@ const Register = () => {
     playSong: (song) => {
       setPlayingSong((prevState) => ({
         ...prevState,
-        ...song,
+        ...song,  
         paused: false,
       }));
     },
