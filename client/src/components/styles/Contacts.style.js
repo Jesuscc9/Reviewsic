@@ -28,9 +28,8 @@ export const Contacts = styled.div`
 
   .contact-body {
 
-    overflow-x: auto;
+    overflow-x: none;
     max-height: 260px;
-    height: 260px;
 
 ::-webkit-scrollbar {
   width: 7px;
