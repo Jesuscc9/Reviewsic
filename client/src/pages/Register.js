@@ -39,10 +39,10 @@ import {
 } from "./styles/Register.style";
 import { useParams } from "react-router";
 
-// const API_ENDPOINT = "";
-// const socket = openSocket("/");
-const API_ENDPOINT = "http://localhost:3001";
-const socket = openSocket(API_ENDPOINT);
+const API_ENDPOINT = "";
+const socket = openSocket("/");
+// const API_ENDPOINT = "http://localhost:3001";
+// const socket = openSocket(API_ENDPOINT);
 
 const Register = () => {
   const MySwal = withReactContent(Swal);
@@ -68,6 +68,7 @@ const Register = () => {
   const dispatch = useDispatch();
 
   useEffect(async () => {
+    console.log(token);
     setToken(
       !Cookies.get("spotifyAuthToken") ? "" : Cookies.get("spotifyAuthToken")
     );
@@ -187,7 +188,7 @@ const Register = () => {
     playSong: (song) => {
       setPlayingSong((prevState) => ({
         ...prevState,
-        ...song,  
+        ...song,
         paused: false,
       }));
     },
@@ -359,7 +360,10 @@ const Register = () => {
         </SpotifyApiContext.Provider>
       ) : (
         <>
-          {token != undefined && !token.length && <Login />}
+          {() => {
+            console.log(token);
+          }}
+          {token != undefined && !token.length && <Redirect to="home" />}
           <Footer />
         </>
       )}
