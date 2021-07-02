@@ -29,7 +29,7 @@ const Footer = ({ token }) => {
           </a>
         </div>
         <div className="footer-section">
-          {token && token.length ? (
+          {token && token.length && (
             <div className="logout-button-container">
               <button
                 className="logout-button"
@@ -41,8 +41,6 @@ const Footer = ({ token }) => {
                 <FontAwesomeIcon icon={faSignOutAlt} />
               </button>
             </div>
-          ) : (
-            <div />
           )}
         </div>
       </footer>
