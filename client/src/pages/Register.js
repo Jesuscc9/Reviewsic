@@ -228,9 +228,6 @@ const Register = () => {
 
       {token && token.length ? (
         <SpotifyApiContext.Provider value={token}>
-          {() => {
-            console.log("xd");
-          }}
           <PageContainer>
             <MainContainer>
               <AnimatePresence>
