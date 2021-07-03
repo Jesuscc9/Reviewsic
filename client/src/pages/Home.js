@@ -140,7 +140,7 @@ const Home = () => {
                 </motion.div>
                 <div className="line"></div>
                 <p>
-                  Share your toughts about your favorite music, and be part
+                  Share your toughts about your favorite music, and be part of
                   worlwide communities with common music interest!
                 </p>
                 <motion.div
@@ -202,7 +202,7 @@ const Home = () => {
                   </section>
                 </Bounce>
 
-                <Bounce delay={500} duration={700}>
+                <Bounce duration={700}>
                   <section>
                     <div className="feature second">
                       <div className="header">
@@ -216,7 +216,7 @@ const Home = () => {
                   </section>
                 </Bounce>
 
-                <Bounce delay={1000} duration={700}>
+                <Bounce duration={700}>
                   <section>
                     <div className="feature third">
                       <div className="coming-soon-container">
@@ -274,7 +274,7 @@ const Home = () => {
                   <div className="ball-decoration">
                     <img src={GreenSphere} alt="" className="ball ballsecond" />
                   </div>
-                  <Slide right delay={500}>
+                  <Slide right>
                     <section>
                       <a
                         className="release second"
@@ -304,7 +304,7 @@ const Home = () => {
                   <div className="ball-decoration">
                     <img src={OrangeSphere} alt="" className="ball ballthird" />
                   </div>
-                  <Slide left delay={800}>
+                  <Slide left>
                     <section>
                       <a
                         className="release third"
