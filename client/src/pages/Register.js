@@ -39,10 +39,10 @@ import {
 } from "./styles/Register.style";
 import { useParams } from "react-router";
 
-const API_ENDPOINT = "";
-const socket = openSocket("/");
-// const API_ENDPOINT = "http://localhost:3001";
-// const socket = openSocket(API_ENDPOINT);
+// const API_ENDPOINT = "";
+// const socket = openSocket("/");
+const API_ENDPOINT = "http://localhost:3001";
+const socket = openSocket(API_ENDPOINT);
 
 const Register = () => {
   const MySwal = withReactContent(Swal);

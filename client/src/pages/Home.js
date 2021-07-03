@@ -304,7 +304,7 @@ const Home = () => {
                   <div className="ball-decoration">
                     <img src={OrangeSphere} alt="" className="ball ballthird" />
                   </div>
-                  <Slide left delay={1000}>
+                  <Slide left delay={800}>
                     <section>
                       <a
                         className="release third"

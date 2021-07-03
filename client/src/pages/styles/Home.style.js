@@ -28,7 +28,8 @@ const Gradient = keyframes`
 
 const shine = keyframes`
 	0% {
-    transform:translateX(-100%);
+    transform: translateX(-100%);
+    pointer-events: none;
   }
   70%{
     transform:translateX(-100%);
@@ -279,7 +280,7 @@ export const MainContainer = styled.div`
       .phone {
         height: 600px;
         margin: auto;
-        animation: ${RotateAnim} 10s linear infinite;
+        animation: ${RotateAnim} 5s linear infinite;
         pointer-events: none;
       }
     }
