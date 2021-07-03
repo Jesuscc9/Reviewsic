@@ -68,7 +68,6 @@ const Register = () => {
   const dispatch = useDispatch();
 
   useEffect(async () => {
-    console.log(token);
     setToken(
       !Cookies.get("spotifyAuthToken") ? "" : Cookies.get("spotifyAuthToken")
     );
@@ -229,6 +228,9 @@ const Register = () => {
 
       {token && token.length ? (
         <SpotifyApiContext.Provider value={token}>
+          {() => {
+            console.log("xd");
+          }}
           <PageContainer>
             <MainContainer>
               <AnimatePresence>
@@ -360,10 +362,7 @@ const Register = () => {
         </SpotifyApiContext.Provider>
       ) : (
         <>
-          {() => {
-            console.log(token);
-          }}
-          {token != undefined && !token.length && <Redirect to="home" />}
+          {token != undefined && !token.length && <Redirect to="/" />}
           <Footer />
         </>
       )}

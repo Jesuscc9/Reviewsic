@@ -52,7 +52,7 @@ const Home = () => {
 
   const updateValues = ({ scroll }) => {
     if (scroll.changed && scroll.velocity.x == 0 && scroll.velocity.y == 0) {
-      if (scroll.top > 50) {
+      if (scroll.top > 1) {
         if (!scrolled) {
           setScrolled(true);
         }
@@ -151,8 +151,8 @@ const Home = () => {
                   <SpotifyAuth
                     noLogo={true}
                     title={"Get Started!"}
-                    // redirectUri="http://localhost:3000/"
-                    redirectUri="https://reviewsic.herokuapp.com/"
+                    redirectUri="http://localhost:3000/"
+                    // redirectUri="https://reviewsic.herokuapp.com/"
                     clientID="9751c1f85b2a4684a8cc0a02f6942b91"
                     btnClassName="loginbutton"
                     scopes={scopes}
@@ -188,7 +188,7 @@ const Home = () => {
               <h1>Features</h1>
 
               <div className="features">
-                <Bounce left>
+                <Bounce duration={700}>
                   <section>
                     <div className="feature first">
                       <div className="header">
@@ -202,7 +202,7 @@ const Home = () => {
                   </section>
                 </Bounce>
 
-                <Bounce delay={500}>
+                <Bounce delay={500} duration={700}>
                   <section>
                     <div className="feature second">
                       <div className="header">
@@ -216,7 +216,7 @@ const Home = () => {
                   </section>
                 </Bounce>
 
-                <Bounce delay={1000}>
+                <Bounce delay={1000} duration={700}>
                   <section>
                     <div className="feature third">
                       <div className="coming-soon-container">
