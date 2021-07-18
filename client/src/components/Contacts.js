@@ -9,6 +9,8 @@ import {
 } from "./styles/Contacts.style";
 
 const Contacts = ({ data }) => {
+  console.log(data);
+
   const gifs = [
     "https://cdn.betterttv.net/emote/5ffa90b557784508462544e7/2x",
     "https://cdn.betterttv.net/emote/602e1e25ee839b1e5ec6e00b/2x",
@@ -59,11 +61,9 @@ const Contacts = ({ data }) => {
                     </a>
 
                     <div className="item-info-status">
-                      {user.followers == 1 ? (
-                        <p>1 follower </p>
-                      ) : (
-                        <p>{user.followers} followers</p>
-                      )}
+                      <p>
+                        {user.followers} follower{user.followers > 1 && "s"}
+                      </p>
                     </div>
                   </div>
                   <AnimatePresence>

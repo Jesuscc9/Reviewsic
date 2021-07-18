@@ -45,36 +45,6 @@ const Player = ({ token, song, setInitialSong, updateActivity }) => {
         play={play}
         uris={song?.spotifyUri && [song.spotifyUri]}
       />
-      {/* <div className="player-overlay-container">
-        <div className="player-overlay">
-          <div className="slider"></div>
-          <div className="content">
-            <div className="song-image">
-              <img src="" alt="" />
-            </div>
-            <div className="info"></div>
-          </div>
-          <div className="controls">
-            <button className="control-button backward">
-              <FontAwesomeIcon icon={faBackward} />
-            </button>
-            <button
-              className="control-button play"
-              onClick={() => {
-                setPlayerStatus({
-                  ...playerStatus,
-                  isPlaying: !playerStatus.isPlaying,
-                });
-              }}
-            >
-              <FontAwesomeIcon icon={faPause} />
-            </button>
-            <button className="control-button forward">
-              <FontAwesomeIcon icon={faForward} />
-            </button>
-          </div>
-        </div>
-      </div> */}
     </PlayerContainer>
   );
 };

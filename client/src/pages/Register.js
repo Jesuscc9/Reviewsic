@@ -88,6 +88,8 @@ const Register = () => {
 
       setUserData(spotifyApi.user);
 
+      await api.newUserConnection(spotifyApi.user);
+
       const songsLiked = await spotifyApi.playlist.get(
         `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
       );
@@ -200,7 +202,7 @@ const Register = () => {
   };
 
   const updateActivity = (activity) => {
-    socket.emit("updateActivity", { user: userData.user, activity });
+    socket.emit("updateActivity", { userId: userData.userId, activity });
   };
 
   const params = useParams();

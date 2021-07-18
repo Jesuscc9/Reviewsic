@@ -9,16 +9,20 @@ const fileUpload = require("express-fileupload");
 
 const { Mac, Windows, Remote } = require("./Connection");
 
-const PORT = process.env.PORT || 3001;
-// const PORT = 3001;
+// const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 
 const app = express();
 
-const db = mysql.createPool(Remote);
+const db = mysql.createPool(Windows);
 
-app.use(express.static(path.resolve(__dirname, "build/")));
+// app.use(express.static(path.resolve(__dirname, "build/")));
 app.use(express.static("public"));
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 
 app.get("/api/get", (req, res) => {
@@ -189,9 +193,57 @@ app.post("/api/qualifications/set", (req, res) => {
   });
 });
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "build/", "index.html"));
+app.post("/api/newUserConnection", (req, res) => {
+  const userData = req.body;
+
+  const sqlSelect = "SELECT * FROM users WHERE userId = ?";
+  db.query(sqlSelect, [userData.userId], (err, result) => {
+    const user = result;
+    if (user.length) {
+      const sqlUpdate =
+        "UPDATE users SET user = ?, userId = ?, followers = ?, country = ?, image = ?, type = ?, email = ?, spotifyUrl = ?, spotifyUri = ?, connections = ? WHERE userId = ?";
+
+      const connections = user[0].connections + " " + String(Date.now());
+
+      db.query(
+        sqlUpdate,
+        [...Object.values(userData), connections, userData.userId],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send(result);
+          }
+        }
+      );
+    } else {
+      const sqlInsert =
+        "INSERT INTO users (user, userId, followers, country, image, type, email, spotifyUrl, spotifyUri, connections) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+      db.query(
+        sqlInsert,
+        [...Object.values(userData), Date.now()],
+        (err, result) => {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send(result);
+          }
+        }
+      );
+    }
+  });
 });
+
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "build/", "index.html"));
+// });
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 const server = http.createServer(app);
 
@@ -217,6 +269,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("new user", (data) => {
+    delete data["email"];
+    delete data["country"];
     let keys = Object.keys(users);
     socket.user = data.user;
     if (!keys.includes(data.user)) {
@@ -247,13 +301,13 @@ io.on("connection", (socket) => {
     io.sockets.emit("users", userNames);
   }
 
-  function updateUsersActivity({ user, activity }) {
+  function updateUsersActivity({ userId, activity }) {
     var usersActivity = Object.keys(users).map((e) => {
       return users[e].data;
     });
 
     usersActivity.map((e) => {
-      return e.user == user
+      return e.userId == userId
         ? (e.activity = {
             ...activity,
             gifIndex: Math.floor(Math.random() * 7),

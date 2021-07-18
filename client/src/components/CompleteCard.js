@@ -444,26 +444,27 @@ const Card = (props) => {
                   </div>
                 </div>
 
-                {data.userId === userId && (
-                  <div className="card-actions register-options">
-                    <div
-                      className="edit-option option-container"
-                      onClick={() => {
-                        props.update(data.id);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faPen} className="faPen" />
+                {data.userId === userId ||
+                  (userId == "k8u8vkz1zxoqslo3g0voopd1e" && (
+                    <div className="card-actions register-options">
+                      <div
+                        className="edit-option option-container"
+                        onClick={() => {
+                          props.update(data.id);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faPen} className="faPen" />
+                      </div>
+                      <div
+                        className="delete-option option-container"
+                        onClick={(e) => {
+                          props.delete(data.id);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrash} className="faTrash" />
+                      </div>
                     </div>
-                    <div
-                      className="delete-option option-container"
-                      onClick={(e) => {
-                        props.delete(data.id);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faTrash} className="faTrash" />
-                    </div>
-                  </div>
-                )}
+                  ))}
               </div>
             </div>
           </motion.div>

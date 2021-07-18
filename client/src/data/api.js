@@ -96,4 +96,13 @@ export const api = {
     });
     return this.getQualifications();
   },
+  newUserConnection: async function (userData) {
+    const res = await Axios.post(
+      `${this.endpoint}/api/newUserConnection`,
+      userData
+    );
+
+    console.log(res);
+    return res;
+  },
 };

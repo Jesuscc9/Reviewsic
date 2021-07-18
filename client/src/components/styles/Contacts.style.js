@@ -11,7 +11,6 @@ export const Contacts = styled.div`
   z-index: 1000;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   padding: 5px;
-  
 
   .contact-header {
     width: 90%;
@@ -27,43 +26,42 @@ export const Contacts = styled.div`
   }
 
   .contact-body {
-
     overflow-x: none;
     max-height: 260px;
 
-::-webkit-scrollbar {
-  width: 7px;
-  padding: 5px;
-  cursor: pointer;
-  height: 80%;
-  opacity: 0;
-}
+    ::-webkit-scrollbar {
+      width: 7px;
+      padding: 5px;
+      cursor: pointer;
+      height: 80%;
+      opacity: 0;
+    }
 
-::-webkit-scrollbar-track {
-  opacity: 0;
-  background-color: rgba(0, 132, 255, 0.459);
-}
+    ::-webkit-scrollbar-track {
+      opacity: 0;
+      background-color: rgba(0, 132, 255, 0.459);
+    }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: transparent;
-  opacity: 0;
-}
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: transparent;
+      opacity: 0;
+    }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  opacity: 0;
-  background: #b6b6b6;
-  border-radius: 30px;
-  transition: all 0.4s;
-}
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      opacity: 0;
+      background: #b6b6b6;
+      border-radius: 30px;
+      transition: all 0.4s;
+    }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #9c9c9c;
-  border-radius: 10px;
-  transition: all 0.4s;
-}
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #9c9c9c;
+      border-radius: 10px;
+      transition: all 0.4s;
+    }
 
     .divisor {
       max-width: 93%;
@@ -144,7 +142,7 @@ export const Item = styled(motion.div)`
     font-family: "Montserrat", sans-serif;
     font-size: 15px;
     color: rgb(48, 48, 48);
-    font-weight: 100;
+    font-weight: 500;
     height: 18px;
     margin-bottom: 2px;
     text-transform: capitalize !important;

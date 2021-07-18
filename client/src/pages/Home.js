@@ -123,7 +123,7 @@ const Home = () => {
                   document.getElementsByClassName("loginbutton")[0].click();
                 }}
               >
-                <Link to="/register">Log In</Link>
+                <Link>Log In</Link>
                 <div className="line"></div>
               </div>
             </div>

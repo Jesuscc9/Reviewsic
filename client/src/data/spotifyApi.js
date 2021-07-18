@@ -35,9 +35,12 @@ export const spotifyApi = {
       user: userData.data.display_name,
       userId: userData.data.id,
       followers: userData.data.followers.total,
-      url: userData.data.href,
-      type: userData.data.product,
+      country: userData.data.country,
       image: user_image,
+      type: userData.data.product,
+      email: userData.data.email,
+      spotifyUrl: userData.data.external_urls.spotify,
+      spotifyUri: userData.data.uri,
     };
   },
   playlist: {
