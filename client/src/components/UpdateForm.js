@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "tailwindcss/tailwind.css";
 import "../components/styles/UpdateForm.css";
+import { GlobalStyles } from "./styles/RegisterForm.style";
+import { motion } from "framer-motion";
+
 import ReactStars from "react-rating-stars-component";
 
 const UpdateForm = ({ data, submit }) => {
@@ -53,6 +56,7 @@ const UpdateForm = ({ data, submit }) => {
 
   return (
     <React.Fragment>
+      <GlobalStyles />
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -62,30 +66,23 @@ const UpdateForm = ({ data, submit }) => {
         }}
         className="register-form"
       >
-        <p className="input-label">Song: </p>
-
-        <input
-          type="text"
-          className="swal2-input input-disabled"
-          placeholder="Name of the song..."
-          value={data.song}
-          disabled
-        />
-
-        <p className="alert-label">Please fill out this field.</p>
-
-        <p className="input-label">Artist: </p>
-
-        <input
-          type="text"
-          className="swal2-input input-disabled"
-          placeholder="Author of the song..."
-          value={data.artist}
-          disabled
-        />
-
-        <p className="alert-label">Please fill out this field.</p>
-
+        <motion.div
+          className="selected-song swal2-input spotify-link-input"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.1 }}
+          key="selected-song"
+        >
+          <div className="image-container">
+            <img src={data.image} alt="" />
+          </div>
+          <div className="track-data">
+            <p className="track-name">{data.song}</p>
+            <p className="track-artist">{data.artist}</p>
+          </div>
+        </motion.div>
+        <br />
+        <br />
         <p className="input-label">Review: </p>
 
         <input

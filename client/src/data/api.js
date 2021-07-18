@@ -102,7 +102,6 @@ export const api = {
       userData
     );
 
-    console.log(res);
     return res;
   },
 };

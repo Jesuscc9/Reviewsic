@@ -1,3 +1,5 @@
+export const DEVELOPMENT = true;
+
 export const hexToRgb = (hex = "fff") => {
   hex = hex.substring(1);
   var bigint = parseInt(hex, 16);

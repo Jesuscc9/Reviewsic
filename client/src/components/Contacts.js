@@ -9,8 +9,6 @@ import {
 } from "./styles/Contacts.style";
 
 const Contacts = ({ data }) => {
-  console.log(data);
-
   const gifs = [
     "https://cdn.betterttv.net/emote/5ffa90b557784508462544e7/2x",
     "https://cdn.betterttv.net/emote/602e1e25ee839b1e5ec6e00b/2x",

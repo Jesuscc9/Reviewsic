@@ -19,6 +19,7 @@ import Footer from "../components/Footer";
 import { watchViewport, unwatchViewport, getViewportState } from "tornis";
 import "animate.css/animate.min.css";
 import ScrollAnimation from "react-animate-on-scroll";
+import { DEVELOPMENT } from "../data/utils";
 
 import Bounce from "react-reveal/Bounce";
 import Slide from "react-reveal/Flip";
@@ -151,8 +152,11 @@ const Home = () => {
                   <SpotifyAuth
                     noLogo={true}
                     title={"Get Started!"}
-                    redirectUri="http://localhost:3000/"
-                    // redirectUri="https://reviewsic.herokuapp.com/"
+                    redirectUri={
+                      DEVELOPMENT
+                        ? "http://localhost:3000/"
+                        : "https://reviewsic.herokuapp.com/"
+                    }
                     clientID="9751c1f85b2a4684a8cc0a02f6942b91"
                     btnClassName="loginbutton"
                     scopes={scopes}

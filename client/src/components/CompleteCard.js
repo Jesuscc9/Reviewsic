@@ -228,6 +228,9 @@ const Card = (props) => {
 
   const imageUrl = data.image;
 
+  console.log(data.userId);
+  console.log(userId);
+
   return (
     <React.Fragment>
       <ReactTooltip effect="solid" />
@@ -374,11 +377,9 @@ const Card = (props) => {
               <div className="card-data">
                 <p className="author">
                   By:{" "}
-                  {/* <Link to={`/user/${data.userId}`} target="_blank">
+                  <Link to={`/user/${data.userId}`} target="_blank">
                     <u>{data.user}</u>
-                    {data.user}
-                  </Link> */}
-                  {data.user}
+                  </Link>
                 </p>
                 <p className="author date">{timeAgo(data.date)}</p>
               </div>
@@ -444,27 +445,27 @@ const Card = (props) => {
                   </div>
                 </div>
 
-                {data.userId === userId ||
-                  (userId == "k8u8vkz1zxoqslo3g0voopd1e" && (
-                    <div className="card-actions register-options">
-                      <div
-                        className="edit-option option-container"
-                        onClick={() => {
-                          props.update(data.id);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faPen} className="faPen" />
-                      </div>
-                      <div
-                        className="delete-option option-container"
-                        onClick={(e) => {
-                          props.delete(data.id);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faTrash} className="faTrash" />
-                      </div>
+                {(data.userId == userId ||
+                  userId == "k8u8vkz1zxoqslo3g0voopd1e") && (
+                  <div className="card-actions register-options">
+                    <div
+                      className="edit-option option-container"
+                      onClick={() => {
+                        props.update(data.id);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faPen} className="faPen" />
                     </div>
-                  ))}
+                    <div
+                      className="delete-option option-container"
+                      onClick={(e) => {
+                        props.delete(data.id);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTrash} className="faTrash" />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

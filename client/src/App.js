@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import UserPage from "./pages/User";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <AnimateSharedLayout type="crossfade">
         <BrowserRouter>
           <Route exact path={["/home", "/home/:id"]} component={Register} />
+          <Route exact path={["/user", "/user/:id"]} component={UserPage} />
           <Route exact path="/" component={Home} />
           <Route component={NotFound} />
         </BrowserRouter>

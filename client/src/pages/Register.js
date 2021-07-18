@@ -38,10 +38,9 @@ import {
   ContentContainer,
 } from "./styles/Register.style";
 import { useParams } from "react-router";
+import { DEVELOPMENT } from "../data/utils";
 
-// const API_ENDPOINT = "";
-// const socket = openSocket("/");
-const API_ENDPOINT = "http://localhost:3001";
+const API_ENDPOINT = DEVELOPMENT ? "http://localhost:3001" : "";
 const socket = openSocket(API_ENDPOINT);
 
 const Register = () => {
