@@ -72,7 +72,8 @@ const Register = () => {
     );
 
     if (token && token.length) {
-      setSongList(await api.get());
+      const list = await api.get();
+      setSongList([...list]);
       setLikes(await api.getLikes());
       setQualifications(await api.getQualifications());
 
@@ -101,10 +102,6 @@ const Register = () => {
         setUsers([...data]);
       });
 
-      socket.on("updateReviews", (data) => {
-        setSongList(data);
-      });
-
       socket.on("updateLikes", (data) => {
         setLikes(data);
       });
@@ -117,24 +114,53 @@ const Register = () => {
     }
   }, [token]);
 
+  var listened = false;
+
+  useEffect(() => {
+    if (songList.length > 0 && !listened) {
+      listened = true;
+
+      socket.on("newReview", (data) => {
+        setSongList([...songList, data]);
+      });
+
+      socket.on("updateReview", ({ data, id }) => {
+        updateReviews(songList);
+
+        setSongList(
+          [...songList].map((e) => {
+            return e.id == id ? { ...e, ...data } : e;
+          })
+        );
+      });
+
+      socket.on("deleteReview", (id) => {
+        setSongList(
+          songList.filter((e) => {
+            return e.id != id;
+          })
+        );
+      });
+    }
+  }, [songList]);
+
   api.endpoint = API_ENDPOINT;
   api.songList = songList;
 
-  const submitReview = async (data) => {
-    socket.emit("updateReviews", [
-      ...songList,
-      await api.insert({ ...userData, ...data }),
-    ]);
+  const submitReview = async (review) => {
+    socket.emit("newReview", await api.insert({ ...userData, ...review }));
   };
 
-  const updateReview = async (data, id) => {
-    socket.emit("updateReviews", [...(await api.update(data, id, songList))]);
+  const updateReview = async (newReview, id) => {
+    socket.emit("updateReview", await api.update(newReview, id));
   };
 
   const deleteReview = async (id) => {
-    socket.emit("updateReviews", [...(await api.delete(id, songList))]);
+    socket.emit("deleteReview", await api.delete(id));
     setRedirect(true);
   };
+
+  function updateReviews(list) {}
 
   const registerForm = () => {
     MySwal.fire({
@@ -220,7 +246,6 @@ const Register = () => {
         onAddClick={() => {
           registerForm();
         }}
-        profileImage={userData.image}
         token={token}
       ></Navbar>
       <br />
@@ -285,6 +310,7 @@ const Register = () => {
                             filters={filters}
                             search={search}
                             limit={cardsLimit}
+                            redirect="home"
                             {...CardActions}
                           />
                           {cardsLimit < songList.length &&
@@ -308,6 +334,7 @@ const Register = () => {
                                 key="item"
                                 song={playingSong}
                                 userType={userData.type}
+                                page="home"
                               />
                             )}
                           </AnimatePresence>

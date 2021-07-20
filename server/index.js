@@ -36,6 +36,17 @@ app.get("/api/get", (req, res) => {
   });
 });
 
+app.get("/api/getByUser", (req, res) => {
+  const sqlSelect = "SELECT * FROM song_reviews WHERE userId = ?";
+  db.query(sqlSelect, [req.query.userId], (err, result) => {
+    if (err) {
+      res.end();
+    } else {
+      res.send(result);
+    }
+  });
+});
+
 app.post("/api/insert", async (req, res) => {
   const sqlInsert =
     "INSERT INTO song_reviews (image, song, artist, review, genre, qualification, user, userId, spotifyId, spotifyUrl, spotifyUri, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -252,8 +263,16 @@ const io = socketIo(server);
 let users = {};
 
 io.on("connection", (socket) => {
-  socket.on("updateReviews", (data) => {
-    io.sockets.emit("updateReviews", data);
+  socket.on("newReview", (data) => {
+    io.sockets.emit("newReview", data);
+  });
+
+  socket.on("updateReview", (data) => {
+    io.sockets.emit("updateReview", data);
+  });
+
+  socket.on("deleteReview", (data) => {
+    io.sockets.emit("deleteReview", data);
   });
 
   socket.on("updateActivity", (data) => {

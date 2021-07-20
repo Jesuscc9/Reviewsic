@@ -242,6 +242,7 @@ const RegisterForm = ({ submit }) => {
                 }}
                 value={search}
                 ref={ref}
+                autoFocus
               />
             )}
           </AnimatePresence>

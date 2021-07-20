@@ -4,8 +4,12 @@ import Logo from "../assets/img/music.png";
 import "../components/styles/Navbar.css";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-const navbar = (props) => {
+const Navbar = (props) => {
+  const data = useSelector((state) => state.user);
+
   return (
     <React.Fragment>
       <nav className="bg-gray-800 fixed w-full mb-5" style={{ zIndex: 300 }}>
@@ -22,12 +26,12 @@ const navbar = (props) => {
               </div>
               <div className="hidden sm:block sm:ml-6">
                 <div className="flex space-x-4">
-                  <a
-                    href=""
+                  <Link
+                    to="/home"
                     className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
                     Home
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -43,8 +47,8 @@ const navbar = (props) => {
                       <img
                         className="profile-image"
                         src={
-                          props.profileImage
-                            ? props.profileImage
+                          data.image
+                            ? data.image
                             : `http://dissoftec.com/DefaultUserImage.png`
                         }
                         alt=""
@@ -82,4 +86,4 @@ const navbar = (props) => {
   );
 };
 
-export default navbar;
+export default Navbar;

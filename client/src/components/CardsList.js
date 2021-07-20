@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 
 const CardsList = (props) => {
   const params = useParams();
+  const page = props.redirect;
 
   const likedSongs = useSelector((state) => state.user.likedSongs);
 
@@ -82,7 +83,7 @@ const CardsList = (props) => {
   return (
     <CardsContainer>
       {cards.map((item) => {
-        return <Card data={item} {...props} />;
+        return <Card data={item} {...props} page={page} />;
       })}
     </CardsContainer>
   );

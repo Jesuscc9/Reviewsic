@@ -8,6 +8,15 @@ export const api = {
   get: async function () {
     return (await Axios.get(`${this.endpoint}/api/get`)).data;
   },
+  getByUser: async function (userId) {
+    return (
+      await Axios.get(`${this.endpoint}/api/getByUser`, {
+        params: {
+          userId,
+        },
+      })
+    ).data;
+  },
   insert: async function (data) {
     const date = Date.now();
     const upload = await Axios.post(`${this.endpoint}/api/insert`, {
@@ -26,7 +35,7 @@ export const api = {
     });
     return upload.data;
   },
-  update: async function (data, id, songList) {
+  update: async function (data, id) {
     await Axios.put(`${this.endpoint}/api/update/${id}`, data);
 
     toast.success("🚀 Your review has been updated!", {
@@ -39,9 +48,7 @@ export const api = {
       progress: undefined,
     });
 
-    return songList.map((e) => {
-      return e.id == id ? { ...e, ...data } : e;
-    });
+    return { data, id };
   },
   delete: async function (id, songList) {
     const deleted = await Swal.fire({
@@ -67,9 +74,7 @@ export const api = {
         progress: undefined,
       });
 
-      return songList.filter((e) => {
-        return e.id != id;
-      });
+      return id;
     } else {
       return songList;
     }

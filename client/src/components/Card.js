@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { Card as CustomCard, GlobalStyles } from "./styles/Card.style.js";
 import { useSelector } from "react-redux";
 
-const Card = ({ data }) => {
+const Card = ({ data, page }) => {
   const userId = useSelector((state) => state.user.userId);
 
   const song_name = useRef(null);
@@ -51,7 +51,7 @@ const Card = ({ data }) => {
   return (
     <>
       <GlobalStyles />
-      <Link to={`/home/${data.id}`} id={data.id}>
+      <Link to={`/${page}/${data.id}`} id={data.id}>
         <CustomCard>
           <div className="card-content-container">
             <motion.div

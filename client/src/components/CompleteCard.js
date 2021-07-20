@@ -32,6 +32,7 @@ const Card = (props) => {
   const [redirect, setRedirect] = useState(false);
   const { likedSongs, userId, playlistId } = useSelector((state) => state.user);
   var { data, uri = "" } = props;
+  const page = props.page;
 
   const song_name = useRef(null);
 
@@ -227,15 +228,11 @@ const Card = (props) => {
   const node = useRef();
 
   const imageUrl = data.image;
-
-  console.log(data.userId);
-  console.log(userId);
-
   return (
     <React.Fragment>
       <ReactTooltip effect="solid" />
 
-      {redirect && <Redirect to="/home" />}
+      {redirect && <Redirect to={`/${page}`} />}
       <CustomCard onClick={() => {}}>
         <div className="card-content-container open" key={data.id} ref={node}>
           <motion.div
