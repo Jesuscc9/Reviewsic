@@ -47,6 +47,17 @@ app.get("/api/getByUser", (req, res) => {
   });
 });
 
+app.get("/api/getUser", (req, res) => {
+  const sqlSelect = "SELECT * FROM users WHERE userId = ?";
+  db.query(sqlSelect, [req.query.userId], (err, result) => {
+    if (err) {
+      res.end();
+    } else {
+      res.send(result[0]);
+    }
+  });
+});
+
 app.post("/api/insert", async (req, res) => {
   const sqlInsert =
     "INSERT INTO song_reviews (image, song, artist, review, genre, qualification, user, userId, spotifyId, spotifyUrl, spotifyUri, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

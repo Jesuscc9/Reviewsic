@@ -8,7 +8,7 @@ const CardsList = (props) => {
   const params = useParams();
   const page = props.redirect;
 
-  const likedSongs = useSelector((state) => state.user.likedSongs);
+  const savedSongs = useSelector((state) => state.user.savedSongs);
 
   var cards = props.songList;
 
@@ -51,11 +51,11 @@ const CardsList = (props) => {
   cards = cards.slice(0, props.limit);
 
   cards = cards.map((item) => {
-    item.isInPlaylist = likedSongs.findIndex((song) => {
+    item.isInPlaylist = savedSongs.findIndex((song) => {
       return song.track.id == item.id;
     });
     if (item.isInPlaylist > -1) {
-      item.uri = likedSongs[item.isInPlaylist].track.uri > -1;
+      item.uri = savedSongs[item.isInPlaylist].track.uri > -1;
     }
 
     var cant = 0;

@@ -3,7 +3,7 @@ const actions = {
   SET_USER: "USER/SET_USER",
   SET_TOKEN: "USER/SET_TOKEN",
   SET_PLAYLIST_ID: "USER/SET_PLAYLIST_ID",
-  SET_LIKED_SONGS: "USER/SET_LIKED_SONGS",
+  SET_SAVED_SONGS: "USER/SET_SAVED_SONGS",
 
   login: (data) => ({
     type: actions.LOGIN,
@@ -20,8 +20,8 @@ const actions = {
     type: actions.SET_PLAYLIST_ID,
     payload: { data },
   }),
-  setLikedSongs: (data) => ({
-    type: actions.SET_LIKED_SONGS,
+  setSavedSongs: (data) => ({
+    type: actions.SET_SAVED_SONGS,
     payload: data,
   }),
 };

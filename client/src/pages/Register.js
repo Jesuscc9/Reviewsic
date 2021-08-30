@@ -1,9 +1,11 @@
 import React, { useState, useEffect, Component } from "react";
+
 import { SpotifyApiContext } from "react-spotify-api";
 import { api } from "../data/api";
 import { spotifyApi } from "../data/spotifyApi";
 import { useDispatch } from "react-redux";
 import userActions from "../redux/user/actions";
+import { useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 import { Redirect } from "react-router-dom";
 
@@ -20,9 +22,7 @@ import Loader from "react-loader-spinner";
 import RegisterForm from "../components/RegisterForm";
 import UpdateForm from "../components/UpdateForm";
 import Contacts from "../components/Contacts";
-import Login from "../components/Login";
 import DropdownMenu from "../components/DropdownMenu";
-import Cookies from "js-cookie";
 import Player from "../components/Player";
 
 import { ToastContainer } from "react-toastify";
@@ -38,114 +38,30 @@ import {
   ContentContainer,
 } from "./styles/Register.style";
 import { useParams } from "react-router";
-import { DEVELOPMENT } from "../data/utils";
 
-const API_ENDPOINT = DEVELOPMENT ? "http://localhost:3001" : "";
-const socket = openSocket(API_ENDPOINT);
+const Register = ({ endpoint, token, loaded, users }) => {
+  const socket = openSocket(endpoint);
 
-const Register = () => {
   const MySwal = withReactContent(Swal);
-
-  const [userData, setUserData] = useState({});
-
-  const [users, setUsers] = useState([]);
   const [redirect, setRedirect] = useState(false);
   const [cardsLimit, setCardsLimit] = useState(12);
 
   const [playingSong, setPlayingSong] = useState();
 
-  const [token, setToken] = useState(undefined);
-  const [loaded, setLoaded] = useState(false);
   const [sortType, setSortType] = useState(undefined);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState([]);
 
-  const [likes, setLikes] = useState([]);
-  const [songList, setSongList] = useState([]);
-  const [qualifications, setQualifications] = useState([]);
+  const songList = useSelector((state) => {
+    return state.data.reviews;
+  });
 
-  const dispatch = useDispatch();
+  const userData = useSelector((state) => {
+    return state.user;
+  });
 
-  useEffect(async () => {
-    setToken(
-      !Cookies.get("spotifyAuthToken") ? "" : Cookies.get("spotifyAuthToken")
-    );
-
-    if (token && token.length) {
-      const list = await api.get();
-      setSongList([...list]);
-      setLikes(await api.getLikes());
-      setQualifications(await api.getQualifications());
-
-      dispatch(userActions.setToken(token));
-
-      await spotifyApi.get();
-
-      const playlistId = await spotifyApi.playlist.create();
-
-      dispatch(userActions.setUser(spotifyApi.user));
-      dispatch(userActions.setPlaylistId(playlistId));
-
-      setUserData(spotifyApi.user);
-
-      await api.newUserConnection(spotifyApi.user);
-
-      const songsLiked = await spotifyApi.playlist.get(
-        `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
-      );
-
-      dispatch(userActions.setLikedSongs([...songsLiked]));
-
-      socket.emit("new user", spotifyApi.user);
-
-      socket.on("users", (data) => {
-        setUsers([...data]);
-      });
-
-      socket.on("updateLikes", (data) => {
-        setLikes(data);
-      });
-
-      socket.on("updateQualifications", (data) => {
-        setQualifications([...data]);
-      });
-
-      setLoaded(true);
-    }
-  }, [token]);
-
-  var listened = false;
-
-  useEffect(() => {
-    if (songList.length > 0 && !listened) {
-      listened = true;
-
-      socket.on("newReview", (data) => {
-        setSongList([...songList, data]);
-      });
-
-      socket.on("updateReview", ({ data, id }) => {
-        updateReviews(songList);
-
-        setSongList(
-          [...songList].map((e) => {
-            return e.id == id ? { ...e, ...data } : e;
-          })
-        );
-      });
-
-      socket.on("deleteReview", (id) => {
-        setSongList(
-          songList.filter((e) => {
-            return e.id != id;
-          })
-        );
-      });
-    }
-  }, [songList]);
-
-  api.endpoint = API_ENDPOINT;
-  api.songList = songList;
+  const likes = useSelector((state) => state.data.likes);
+  const qualifications = useSelector((state) => state.data.qualifications);
 
   const submitReview = async (review) => {
     socket.emit("newReview", await api.insert({ ...userData, ...review }));
@@ -160,7 +76,9 @@ const Register = () => {
     setRedirect(true);
   };
 
-  function updateReviews(list) {}
+  const updateActivity = (activity) => {
+    socket.emit("updateActivity", { userId: userData.userId, activity });
+  };
 
   const registerForm = () => {
     MySwal.fire({
@@ -226,10 +144,6 @@ const Register = () => {
     },
   };
 
-  const updateActivity = (activity) => {
-    socket.emit("updateActivity", { userId: userData.userId, activity });
-  };
-
   const params = useParams();
 
   const reviewExists =
@@ -252,145 +166,136 @@ const Register = () => {
 
       <ToastContainer />
 
-      {token && token.length ? (
-        <SpotifyApiContext.Provider value={token}>
-          <PageContainer>
-            <MainContainer>
-              <AnimatePresence>
-                {!loaded ? (
-                  <ContentContainer
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <motion.div
-                      key="loader"
-                      initial={{ y: -200 }}
-                      animate={{ y: 0 }}
-                      exit={{ y: -200 }}
-                      style={{ position: "absolute" }}
+      <PageContainer>
+        <MainContainer>
+          <AnimatePresence>
+            {!loaded ? (
+              <ContentContainer
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <motion.div
+                  key="loader"
+                  initial={{ y: -200 }}
+                  animate={{ y: 0 }}
+                  exit={{ y: -200 }}
+                  style={{ position: "absolute" }}
+                >
+                  <Loader
+                    type="Audio"
+                    color="#6c22cdc7"
+                    height={70}
+                    width={70}
+                    className="mt-5"
+                  />
+                </motion.div>
+              </ContentContainer>
+            ) : (
+              <React.Fragment>
+                {songList.length ? (
+                  <AnimatePresence>
+                    <ContentContainer
+                      initial={{ x: -200 }}
+                      animate={{ x: 0 }}
+                      exit={{ x: -200 }}
                     >
-                      <Loader
-                        type="Audio"
-                        color="#6c22cdc7"
-                        height={70}
-                        width={70}
-                        className="mt-5"
+                      <DropdownMenu
+                        onSelect={(value) => {
+                          setSortType(value);
+                        }}
+                        onSearch={(value) => {
+                          setSearch(value);
+                        }}
+                        filters={filters}
+                        onUpdateFilters={(newFilters) => {
+                          setFilters([...newFilters]);
+                        }}
+                        genres={songList.map((e) => e.genre)}
                       />
-                    </motion.div>
-                  </ContentContainer>
-                ) : (
-                  <React.Fragment>
-                    {songList.length ? (
-                      <AnimatePresence>
-                        <ContentContainer
-                          initial={{ x: -200 }}
-                          animate={{ x: 0 }}
-                          exit={{ x: -200 }}
-                        >
-                          <DropdownMenu
-                            onSelect={(value) => {
-                              setSortType(value);
+                      <CardsList
+                        songList={songList}
+                        likes={likes}
+                        qualifications={qualifications}
+                        sortType={sortType}
+                        filters={filters}
+                        search={search}
+                        limit={cardsLimit}
+                        redirect="home"
+                        {...CardActions}
+                      />
+                      {cardsLimit < songList.length &&
+                        !search.length &&
+                        !filters.length && (
+                          <LoadMore
+                            onLoadMore={() => {
+                              setCardsLimit(cardsLimit + 4);
                             }}
-                            onSearch={(value) => {
-                              setSearch(value);
-                            }}
-                            filters={filters}
-                            onUpdateFilters={(newFilters) => {
-                              setFilters([...newFilters]);
-                            }}
-                            genres={songList.map((e) => e.genre)}
                           />
-                          <CardsList
-                            songList={songList}
+                        )}
+                      <AnimatePresence>
+                        {params.id && reviewExists && (
+                          <CompleteCard
+                            data={songList.find((song) => {
+                              return song.id == params.id;
+                            })}
                             likes={likes}
                             qualifications={qualifications}
-                            sortType={sortType}
-                            filters={filters}
-                            search={search}
-                            limit={cardsLimit}
-                            redirect="home"
                             {...CardActions}
+                            key="item"
+                            song={playingSong}
+                            userType={userData.type}
+                            page="home"
                           />
-                          {cardsLimit < songList.length &&
-                            !search.length &&
-                            !filters.length && (
-                              <LoadMore
-                                onLoadMore={() => {
-                                  setCardsLimit(cardsLimit + 4);
-                                }}
-                              />
-                            )}
-                          <AnimatePresence>
-                            {params.id && reviewExists && (
-                              <CompleteCard
-                                data={songList.find((song) => {
-                                  return song.id == params.id;
-                                })}
-                                likes={likes}
-                                qualifications={qualifications}
-                                {...CardActions}
-                                key="item"
-                                song={playingSong}
-                                userType={userData.type}
-                                page="home"
-                              />
-                            )}
-                          </AnimatePresence>
-                        </ContentContainer>
+                        )}
                       </AnimatePresence>
-                    ) : (
-                      <ContentContainer
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                      >
-                        <p
-                          style={{
-                            textAlign: "center",
-                          }}
-                        >
-                          Not reviews registered yet 😕.
-                        </p>
-                      </ContentContainer>
-                    )}
-                  </React.Fragment>
+                    </ContentContainer>
+                  </AnimatePresence>
+                ) : (
+                  <ContentContainer
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    <p
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      Not reviews registered yet 😕.
+                    </p>
+                  </ContentContainer>
                 )}
-              </AnimatePresence>
+              </React.Fragment>
+            )}
+          </AnimatePresence>
 
-              <div className="sidebar">
-                <Contacts data={[...users]} />
-                <div
-                  className="player-container"
-                  style={{
-                    transform: playingSong ? "scale(1)" : "scale(0.6)",
-                    opacity: playingSong ? 1 : 0,
+          <div className="sidebar">
+            <Contacts data={[...users]} />
+            <div
+              className="player-container"
+              style={{
+                transform: playingSong ? "scale(1)" : "scale(0.6)",
+                opacity: playingSong ? 1 : 0,
+              }}
+            >
+              {userData.type == "premium" && (
+                <Player
+                  token={token}
+                  song={playingSong}
+                  setInitialSong={(song) => {
+                    setPlayingSong(song);
                   }}
-                >
-                  {userData.type == "premium" && (
-                    <Player
-                      token={token}
-                      song={playingSong}
-                      setInitialSong={(song) => {
-                        setPlayingSong(song);
-                      }}
-                      updateActivity={(activity) => {
-                        updateActivity(activity);
-                      }}
-                    />
-                  )}
-                </div>
-              </div>
-            </MainContainer>
-            <Footer token={token} />
-          </PageContainer>
-        </SpotifyApiContext.Provider>
-      ) : (
-        <>
-          {token != undefined && !token.length && <Redirect to="/" />}
-          <Footer />
-        </>
-      )}
+                  updateActivity={(activity) => {
+                    updateActivity(activity);
+                  }}
+                />
+              )}
+            </div>
+          </div>
+        </MainContainer>
+        <Footer token={token} />
+      </PageContainer>
     </>
   );
 };

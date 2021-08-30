@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "devStart": "nodemon index.js",
+    "devUtils": "nodemon utils/GenerateUsers.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

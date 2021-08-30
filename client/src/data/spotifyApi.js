@@ -17,7 +17,7 @@ export const spotifyApi = {
     profileImage: "",
     playlistId: "",
   },
-  likedSongs: [],
+  savedSongs: [],
   user: {},
   get: async function () {
     const userData = await Axios.get(
@@ -37,7 +37,7 @@ export const spotifyApi = {
       followers: userData.data.followers.total,
       country: userData.data.country,
       image: user_image,
-      type: userData.data.product,
+      type: userData.data.product ? userData.data.product : userData.data.type,
       email: userData.data.email,
       spotifyUrl: userData.data.external_urls.spotify,
       spotifyUri: userData.data.uri,
@@ -128,7 +128,7 @@ export const spotifyApi = {
       };
 
       if (reviewsicExists()) {
-        spotifyApi.likedSongs = await spotifyApi.playlist.get(
+        spotifyApi.savedSongs = await spotifyApi.playlist.get(
           `https://api.spotify.com/v1/playlists/${spotifyApi.data.playlistId}/tracks`
         );
       } else {

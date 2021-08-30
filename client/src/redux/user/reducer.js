@@ -4,7 +4,7 @@ const initialState = {
   user: {},
   token: "",
   playlistId: "",
-  likedSongs: [],
+  savedSongs: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -19,8 +19,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, token: payload.data };
     case actions.SET_PLAYLIST_ID:
       return { ...state, playlistId: payload.data };
-    case actions.SET_LIKED_SONGS:
-      return { ...state, likedSongs: [...payload] };
+    case actions.SET_SAVED_SONGS:
+      return { ...state, savedSongs: [...payload] };
     default:
       return state;
   }

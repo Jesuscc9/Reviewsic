@@ -27,18 +27,27 @@ import { spotifyApi } from "../data/spotifyApi";
 import { Palette } from "react-palette";
 import ReactTooltip from "react-tooltip";
 import { hexToRgb, timeAgo } from "../data/utils";
+import Loader from "react-loader-spinner";
 
 const Card = (props) => {
   const [redirect, setRedirect] = useState(false);
-  const { likedSongs, userId, playlistId } = useSelector((state) => state.user);
+  const { savedSongs, userId, playlistId } = useSelector((state) => state.user);
   var { data, uri = "" } = props;
   const page = props.page;
 
   const song_name = useRef(null);
 
-  const likes = props.likes.reduce((sum, like) => {
-    return like.reviewId == data.id && like.isLike ? sum + 1 : sum;
-  }, 0);
+  const reviewLikes = useSelector((state) => {
+    return state.data.likes.reduce((sum, like) => {
+      return like.reviewId == data.id && like.isLike ? sum + 1 : sum;
+    }, 0);
+  });
+
+  const likes = useSelector((state) => state.data.likes);
+
+  const qualifications = useSelector((state) => {
+    return state.data.qualifications;
+  });
 
   const qualification =
     data.userId == userId
@@ -46,7 +55,7 @@ const Card = (props) => {
           reviewId: data.id,
           qualification: data.qualification,
         }
-      : props.qualifications.find((e) => {
+      : qualifications.find((e) => {
           return e.reviewId == data.id && e.userId == userId;
         });
 
@@ -54,7 +63,7 @@ const Card = (props) => {
 
   const average =
     [
-      ...props.qualifications,
+      ...qualifications,
       {
         reviewId: data.id,
         qualification: data.qualification,
@@ -84,14 +93,14 @@ const Card = (props) => {
   }, [props.playerStatus]);
 
   const [isInPlaylist, setIsInPlaylist] = useState(
-    likedSongs.findIndex((item) => {
+    savedSongs.findIndex((item) => {
       return item.track.id == data.spotifyId;
     })
   );
 
   const dispatch = useDispatch();
 
-  if (isInPlaylist > -1) uri = likedSongs[isInPlaylist].track.uri;
+  if (isInPlaylist > -1) uri = savedSongs[isInPlaylist].track.uri;
 
   const escFunction = useCallback((event) => {
     if (event.keyCode === 27) {
@@ -107,7 +116,7 @@ const Card = (props) => {
   };
 
   useEffect(() => {
-    const userLiked = props.likes.find((like) => {
+    const userLiked = likes.find((like) => {
       return like.reviewId == data.id && like.userId == userId;
     })?.isLike
       ? true
@@ -120,7 +129,7 @@ const Card = (props) => {
     setLiked(userLiked);
   }, [likes]);
 
-  useEffect(() => {}, [props.qualifications]);
+  useEffect(() => {}, [qualifications]);
 
   useEffect(() => {
     document.addEventListener("keydown", escFunction, false);
@@ -173,7 +182,7 @@ const Card = (props) => {
         playlistId,
         isInPlaylist
       );
-      dispatch(userActions.setLikedSongs([...songs]));
+      dispatch(userActions.setSavedSongs([...songs]));
     } else {
       if (!addAnim) {
         setAddAnim(true);
@@ -184,7 +193,7 @@ const Card = (props) => {
             data.spotifyId
           );
           setAddAnim(false);
-          dispatch(userActions.setLikedSongs(songs));
+          dispatch(userActions.setSavedSongs(songs));
           setIsInPlaylist(insertedId);
         }, 1000);
       }
@@ -374,7 +383,7 @@ const Card = (props) => {
               <div className="card-data">
                 <p className="author">
                   By:{" "}
-                  <Link to={`/user/${data.userId}`} target="_blank">
+                  <Link to={`/user/${data.userId}`}>
                     <u>{data.user}</u>
                   </Link>
                 </p>
@@ -388,7 +397,7 @@ const Card = (props) => {
                       handleLikeSong();
                     }}
                   >
-                    <p>{likes}</p>
+                    <p>{reviewLikes}</p>
                     <div className="heart-container">
                       <div className="heart" ref={heart}></div>
                     </div>
@@ -399,6 +408,12 @@ const Card = (props) => {
                       addToPlaylist();
                     }}
                   >
+                    {/* <Loader
+                      type="BallTriangle"
+                      color="rgb(12, 180, 49)"
+                      height={20}
+                      width={20}
+                    /> */}
                     <AnimatePresence>
                       {addAnim && isInPlaylist < 0 ? (
                         <motion.div
@@ -406,12 +421,13 @@ const Card = (props) => {
                           initial={{ scale: 0, display: "none" }}
                           animate={{ scale: 1, display: "flex" }}
                           exit={{ scale: 0, display: "none" }}
-                          transition={{
-                            type: "spring",
-                            bounce: 0.7,
-                          }}
                         >
-                          <FontAwesomeIcon icon={faCheck} className="check" />
+                          <Loader
+                            type="ThreeDots"
+                            color="rgb(12, 180, 49)"
+                            height={30}
+                            width={30}
+                          />
                         </motion.div>
                       ) : (
                         <motion.div

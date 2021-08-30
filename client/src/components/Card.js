@@ -51,7 +51,7 @@ const Card = ({ data, page }) => {
   return (
     <>
       <GlobalStyles />
-      <Link to={`/${page}/${data.id}`} id={data.id}>
+      <Link to={`/${page}/k8u8vkz1zxoqslo3g0voopd1e/${data.id}`} id={data.id}>
         <CustomCard>
           <div className="card-content-container">
             <motion.div

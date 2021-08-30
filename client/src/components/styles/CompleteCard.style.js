@@ -584,6 +584,7 @@ export const Card = styled.div`
 
       .check {
         color: rgb(12, 180, 49);
+        border: 10px solid !important;
       }
     }
 

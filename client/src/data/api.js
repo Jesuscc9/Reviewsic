@@ -8,6 +8,15 @@ export const api = {
   get: async function () {
     return (await Axios.get(`${this.endpoint}/api/get`)).data;
   },
+  getUser: async function (userId) {
+    return (
+      await Axios.get(`${this.endpoint}/api/getUser`, {
+        params: {
+          userId,
+        },
+      })
+    ).data;
+  },
   getByUser: async function (userId) {
     return (
       await Axios.get(`${this.endpoint}/api/getByUser`, {
