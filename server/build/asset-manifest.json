@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9bf81c73.chunk.css",
+    "main.js": "/static/js/main.ab86481c.chunk.js",
+    "main.js.map": "/static/js/main.ab86481c.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.c012fedc.js",
+    "runtime-main.js.map": "/static/js/runtime-main.c012fedc.js.map",
+    "static/css/2.04487a75.chunk.css": "/static/css/2.04487a75.chunk.css",
+    "static/js/2.e7174bef.chunk.js": "/static/js/2.e7174bef.chunk.js",
+    "static/js/2.e7174bef.chunk.js.map": "/static/js/2.e7174bef.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.04487a75.chunk.css.map": "/static/css/2.04487a75.chunk.css.map",
+    "static/css/main.9bf81c73.chunk.css.map": "/static/css/main.9bf81c73.chunk.css.map",
+    "static/js/2.e7174bef.chunk.js.LICENSE.txt": "/static/js/2.e7174bef.chunk.js.LICENSE.txt",
+    "static/media/3DFeatures.633bc864.png": "/static/media/3DFeatures.633bc864.png",
+    "static/media/3DHands.24fc3cb1.png": "/static/media/3DHands.24fc3cb1.png",
+    "static/media/3DMusic.19851055.png": "/static/media/3DMusic.19851055.png",
+    "static/media/3DPhoneWithNoDecoTrim2.1962589f.png": "/static/media/3DPhoneWithNoDecoTrim2.1962589f.png",
+    "static/media/GreenSphere.5d10b58e.png": "/static/media/GreenSphere.5d10b58e.png",
+    "static/media/OrangeSphere.bd36690e.png": "/static/media/OrangeSphere.bd36690e.png",
+    "static/media/VioleteSphere.3682ce59.png": "/static/media/VioleteSphere.3682ce59.png",
+    "static/media/music.b849c350.png": "/static/media/music.b849c350.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c012fedc.js",
+    "static/css/2.04487a75.chunk.css",
+    "static/js/2.e7174bef.chunk.js",
+    "static/css/main.9bf81c73.chunk.css",
+    "static/js/main.ab86481c.chunk.js"
+  ]
+}
