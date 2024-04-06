@@ -154,7 +154,7 @@ const Home = () => {
                     redirectUri={
                       DEVELOPMENT
                         ? 'http://localhost:3000/'
-                        : 'https://reviewsic.herokuapp.com/'
+                        : 'https://reviewsic-production-bb4a.up.railway.app/'
                     }
                     clientID='9751c1f85b2a4684a8cc0a02f6942b91'
                     btnClassName='loginbutton'
@@ -253,6 +253,7 @@ const Home = () => {
                         className='release'
                         href='https://open.spotify.com/track/5mIOsPuQdXchVY0jB5NO9Q?si=9babbe31b2214403'
                         target='_blank'
+                        rel='noreferrer'
                       >
                         <div className='image-container'>
                           <img src='https://i.scdn.co/image/ab67616d00001e0271179dd3ac3cba1d14920469' />
@@ -283,6 +284,7 @@ const Home = () => {
                         className='release second'
                         href='https://open.spotify.com/track/6z6Nd3M3D38XJMnkEC0GZh?si=e39c0117661d47b0'
                         target='_blank'
+                        rel='noreferrer'
                       >
                         <div className='image-container'>
                           <img src='https://i.scdn.co/image/ab67616d00001e02e11f1ac4d5dce1bc5fec6703' />
@@ -313,6 +315,7 @@ const Home = () => {
                         className='release third'
                         href='https://open.spotify.com/track/0t1WPoT5kNNIyNyUbOBOsV?si=76e424b0051440d8'
                         target='_blank'
+                        rel='noreferrer'
                       >
                         <div className='image-container'>
                           <img src='https://i.scdn.co/image/ab67616d00001e021f028a147500800d81ac1b32' />
