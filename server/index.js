@@ -20,8 +20,8 @@ const db = mysql.createPool({
   database: process.env.DATABASE_NAME
 })
 
-app.use(express.static(path.resolve(__dirname, 'build/')))
-app.use(express.static('public'))
+// app.use(express.static(path.resolve(__dirname, 'build/')))
+// app.use(express.static('public'))
 app.use(
   cors({
     origin: '*'
@@ -222,10 +222,13 @@ app.post('/api/qualifications/set', (req, res) => {
 app.post('/api/newUserConnection', (req, res) => {
   const userData = req.body
 
+  console.log({ userData })
+
   const sqlSelect = 'SELECT * FROM users WHERE userId = ?'
   db.query(sqlSelect, [userData.userId], (err, result) => {
+    console.log({ result })
     const user = result
-    if (user.length) {
+    if (user?.length) {
       const sqlUpdate =
         'UPDATE users SET user = ?, userId = ?, followers = ?, country = ?, image = ?, type = ?, email = ?, spotifyUrl = ?, spotifyUri = ?, connections = ? WHERE userId = ?'
 
@@ -276,6 +279,12 @@ const server = http.createServer(app)
 const io = socketIo(server)
 
 let users = {}
+
+app.use(
+  cors({
+    origin: '*'
+  })
+)
 
 io.on('connection', (socket) => {
   socket.on('newReview', (data) => {

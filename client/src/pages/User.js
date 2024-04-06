@@ -1,133 +1,131 @@
-import React, { useState, useEffect } from "react";
-import { SpotifyApiContext } from "react-spotify-api";
-import { AnimatePresence, motion } from "framer-motion";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import "../pages/styles/Register.css";
-import { useParams } from "react-router";
-import { Redirect } from "react-router-dom";
-import Cookies from "js-cookie";
-import { api } from "../data/api";
-import { DEVELOPMENT } from "../data/utils";
-import Loader from "react-loader-spinner";
-import CardsList from "../components/CardsList";
-import CompleteCard from "../components/CompleteCard";
-import LoadMore from "../components/LoadMore";
-import DropdownMenu from "../components/DropdownMenu";
-import Player from "../components/Player";
-import openSocket from "socket.io-client";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-import UpdateForm from "../components/UpdateForm";
-import { useSelector, useDispatch } from "react-redux";
-import userActions from "../redux/user/actions";
+import React, { useState, useEffect } from 'react'
+import { SpotifyApiContext } from 'react-spotify-api'
+import { AnimatePresence, motion } from 'framer-motion'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import '../pages/styles/Register.css'
+import { useParams } from 'react-router'
+import { Redirect } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import { api } from '../data/api'
+import { DEVELOPMENT } from '../data/utils'
+import Loader from 'react-loader-spinner'
+import CardsList from '../components/CardsList'
+import CompleteCard from '../components/CompleteCard'
+import LoadMore from '../components/LoadMore'
+import DropdownMenu from '../components/DropdownMenu'
+import Player from '../components/Player'
+import openSocket from 'socket.io-client'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import UpdateForm from '../components/UpdateForm'
+import { useSelector, useDispatch } from 'react-redux'
+import userActions from '../redux/user/actions'
 
 import {
   GlobalStyles,
   PageContainer,
   MainContainer,
-  ContentContainer,
-} from "./styles/Register.style";
+  ContentContainer
+} from './styles/Register.style'
 
-import { UserPresentation } from "./styles/User.style";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpotify } from "@fortawesome/fontawesome-free-brands";
+import { UserPresentation } from './styles/User.style'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpotify } from '@fortawesome/fontawesome-free-brands'
 
 const UserPage = ({ token, loaded, endpoint }) => {
-  const socket = openSocket(endpoint);
-  const params = useParams();
+  const socket = openSocket(endpoint)
+  const params = useParams()
 
-  console.log(params);
+  const MySwal = withReactContent(Swal)
 
-  const MySwal = withReactContent(Swal);
+  const [userData, setUserData] = useState({})
+  const [redirect, setRedirect] = useState(undefined)
+  const [cardsLimit, setCardsLimit] = useState(12)
 
-  const [userData, setUserData] = useState({});
-  const [redirect, setRedirect] = useState(undefined);
-  const [cardsLimit, setCardsLimit] = useState(12);
+  const [playingSong, setPlayingSong] = useState()
 
-  const [playingSong, setPlayingSong] = useState();
-
-  const [sortType, setSortType] = useState(undefined);
-  const [search, setSearch] = useState("");
-  const [filters, setFilters] = useState([]);
+  const [sortType, setSortType] = useState(undefined)
+  const [search, setSearch] = useState('')
+  const [filters, setFilters] = useState([])
 
   const songList = useSelector((state) => {
-    return state.data.reviews.filter((review) => review.userId == params.id);
-  });
+    return state.data.reviews.filter((review) => review.userId == params.id)
+  })
 
-  const likes = useSelector((state) => state.data.likes);
-  const qualifications = useSelector((state) => state.data.qualifications);
+  const likes = useSelector((state) => state.data.likes)
+  const qualifications = useSelector((state) => state.data.qualifications)
 
   const reviewExists =
     songList.length &&
     songList.filter((e) => {
-      return e.id == params.id;
-    }).length;
+      return e.id == params.id
+    }).length
 
   const updateReview = async (data, id) => {
-    socket.emit("updateReviews", [...(await api.update(data, id, songList))]);
-  };
+    socket.emit('updateReviews', [...(await api.update(data, id, songList))])
+  }
 
   const deleteReview = async (id) => {
-    socket.emit("updateReviews", [...(await api.delete(id, songList))]);
-    setRedirect("user");
-  };
+    socket.emit('updateReviews', [...(await api.delete(id, songList))])
+    setRedirect('user')
+  }
 
   const updateActivity = (activity) => {
-    socket.emit("updateActivity", { userId: userData.userId, activity });
-  };
+    socket.emit('updateActivity', { userId: userData.userId, activity })
+  }
 
   const updateModal = (id) => {
     MySwal.fire({
       html: (
         <UpdateForm
           data={songList.find((e) => {
-            return e.id == id;
+            return e.id == id
           })}
           submit={async (data) => {
-            updateReview(data, id);
-            MySwal.close();
+            updateReview(data, id)
+            MySwal.close()
           }}
         />
       ),
-      showConfirmButton: false,
-    });
-  };
+      showConfirmButton: false
+    })
+  }
 
   const CardActions = {
     update: (id) => {
-      updateModal(id);
+      updateModal(id)
     },
     delete: (data) => {
-      deleteReview(data);
+      deleteReview(data)
     },
     like: async (data) => {
-      socket.emit("updateLikes", [...(await api.setLikes(data))]);
+      socket.emit('updateLikes', [...(await api.setLikes(data))])
     },
     qualify: async (data) => {
-      socket.emit("updateQualifications", [
-        ...(await api.setQualifications(data)),
-      ]);
+      socket.emit('updateQualifications', [
+        ...(await api.setQualifications(data))
+      ])
     },
     playSong: (song) => {
       setPlayingSong((prevState) => ({
         ...prevState,
         ...song,
-        paused: false,
-      }));
+        paused: false
+      }))
     },
     pause: () => {
       setPlayingSong((prevState) => ({
         ...prevState,
-        paused: true,
-      }));
-    },
-  };
+        paused: true
+      }))
+    }
+  }
 
   useEffect(async () => {
-    console.log(await api.getUser(params.id));
-    setUserData(await api.getUser(params.id));
-  }, []);
+    console.log(await api.getUser(params.id))
+    setUserData(await api.getUser(params.id))
+  }, [])
 
   return (
     <>
@@ -142,23 +140,23 @@ const UserPage = ({ token, loaded, endpoint }) => {
             {!loaded ? (
               <ContentContainer
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
+                  display: 'flex',
+                  justifyContent: 'center'
                 }}
               >
                 <motion.div
-                  key="loader"
+                  key='loader'
                   initial={{ y: -200 }}
                   animate={{ y: 0 }}
                   exit={{ y: -200 }}
-                  style={{ position: "absolute" }}
+                  style={{ position: 'absolute' }}
                 >
                   <Loader
-                    type="Audio"
-                    color="#6c22cdc7"
+                    type='Audio'
+                    color='#6c22cdc7'
                     height={70}
                     width={70}
-                    className="mt-5"
+                    className='mt-5'
                   />
                 </motion.div>
               </ContentContainer>
@@ -172,20 +170,24 @@ const UserPage = ({ token, loaded, endpoint }) => {
                       exit={{ x: -200 }}
                     >
                       <UserPresentation>
-                        <div className="user-data">
-                          <div className="image">
-                            <img src={userData.image} alt="" />
+                        <div className='user-data'>
+                          <div className='image'>
+                            <img src={userData.image} alt='' />
                           </div>
-                          <div className="data">
-                            <h1 className="username">{userData.user}</h1>
-                            <p className="followers">
+                          <div className='data'>
+                            <h1 className='username'>{userData.user}</h1>
+                            <p className='followers'>
                               {userData.followers} follower
-                              {userData.followers > 1 && "s"}
+                              {userData.followers > 1 && 's'}
                             </p>
                           </div>
                         </div>
-                        <button className="spotify-button">
-                          <a href={userData.spotifyUrl} target="_blank">
+                        <button className='spotify-button'>
+                          <a
+                            href={userData.spotifyUrl}
+                            target='_blank'
+                            rel='noreferrer'
+                          >
                             <FontAwesomeIcon icon={faSpotify} />
                           </a>
                         </button>
@@ -199,15 +201,15 @@ const UserPage = ({ token, loaded, endpoint }) => {
                         filters={filters}
                         search={search}
                         limit={cardsLimit}
-                        redirect="user"
                         {...CardActions}
+                        redirect='user'
                       />
                       {cardsLimit < songList.length &&
                         !search.length &&
                         !filters.length && (
                           <LoadMore
                             onLoadMore={() => {
-                              setCardsLimit(cardsLimit + 4);
+                              setCardsLimit(cardsLimit + 4)
                             }}
                           />
                         )}
@@ -215,15 +217,15 @@ const UserPage = ({ token, loaded, endpoint }) => {
                         {params.id && reviewExists && params.reviewId && (
                           <CompleteCard
                             data={songList.find((song) => {
-                              return song.id == params.id;
+                              return song.id == params.id
                             })}
                             likes={likes}
                             qualifications={qualifications}
                             {...CardActions}
-                            key="item"
+                            key='item'
                             song={playingSong}
                             userType={userData.type}
-                            page="user"
+                            page='user'
                           />
                         )}
                       </AnimatePresence>
@@ -236,7 +238,7 @@ const UserPage = ({ token, loaded, endpoint }) => {
                   >
                     <p
                       style={{
-                        textAlign: "center",
+                        textAlign: 'center'
                       }}
                     >
                       Not reviews registered yet 😕.
@@ -246,23 +248,23 @@ const UserPage = ({ token, loaded, endpoint }) => {
               </React.Fragment>
             )}
           </AnimatePresence>
-          <div className="sidebar">
+          <div className='sidebar'>
             <div
-              className="player-container"
+              className='player-container'
               style={{
-                transform: playingSong ? "scale(1)" : "scale(0.6)",
-                opacity: playingSong ? 1 : 0,
+                transform: playingSong ? 'scale(1)' : 'scale(0.6)',
+                opacity: playingSong ? 1 : 0
               }}
             >
-              {userData.type == "premium" && (
+              {userData.type == 'premium' && (
                 <Player
                   token={token}
                   song={playingSong}
                   setInitialSong={(song) => {
-                    setPlayingSong(song);
+                    setPlayingSong(song)
                   }}
                   updateActivity={(activity) => {
-                    updateActivity(activity);
+                    updateActivity(activity)
                   }}
                 />
               )}
@@ -272,7 +274,7 @@ const UserPage = ({ token, loaded, endpoint }) => {
         <Footer token={token} />
       </PageContainer>
     </>
-  );
-};
+  )
+}
 
-export default UserPage;
+export default UserPage

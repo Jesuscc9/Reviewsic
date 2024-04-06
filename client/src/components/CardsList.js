@@ -1,19 +1,21 @@
-import React from "react";
-import { CardsContainer } from "./styles/CardsList.style";
-import { useSelector } from "react-redux";
-import Card from "./Card";
-import { useParams } from "react-router";
+import React from 'react'
+import { CardsContainer } from './styles/CardsList.style'
+import { useSelector } from 'react-redux'
+import Card from './Card'
+import { useParams } from 'react-router'
 
 const CardsList = (props) => {
-  const params = useParams();
-  const page = props.redirect;
+  const params = useParams()
+  const page = 'user'
 
-  const savedSongs = useSelector((state) => state.user.savedSongs);
+  console.log({ props })
 
-  var cards = props.songList;
+  const savedSongs = useSelector((state) => state.user.savedSongs)
+
+  var cards = props.songList
 
   if (params.id) {
-    cards = cards.filter((e) => e.id != params.id);
+    cards = cards.filter((e) => e.id != params.id)
   }
 
   if (props.search.length) {
@@ -22,71 +24,71 @@ const CardsList = (props) => {
         el.song?.toLowerCase().includes(props.search.toLowerCase()) ||
         el.artist?.toLowerCase().includes(props.search.toLowerCase()) ||
         el.user?.toLowerCase().includes(props.search.toLowerCase())
-      );
-    });
+      )
+    })
   }
 
   if (props.filters.length) {
     cards = cards.filter((el) => {
       for (let i = 0; i < props.filters.length; i++) {
         if (el.genre == props.filters[i]) {
-          return true;
+          return true
         } else {
-          return false;
+          return false
         }
       }
-    });
+    })
   }
 
-  const sortType = props.sortType;
+  const sortType = props.sortType
 
-  if (sortType === "song") {
+  if (sortType === 'song') {
     cards = [...cards].sort((a, b) =>
-      a[sortType].localeCompare(b[sortType], "en", { sensitivity: "base" })
-    );
+      a[sortType].localeCompare(b[sortType], 'en', { sensitivity: 'base' })
+    )
   } else {
-    cards = [...cards].sort((a, b) => b[sortType] - a[sortType]);
+    cards = [...cards].sort((a, b) => b[sortType] - a[sortType])
   }
 
-  cards = cards.slice(0, props.limit);
+  cards = cards.slice(0, props.limit)
 
   cards = cards.map((item) => {
     item.isInPlaylist = savedSongs.findIndex((song) => {
-      return song.track.id == item.id;
-    });
+      return song.track.id == item.id
+    })
     if (item.isInPlaylist > -1) {
-      item.uri = savedSongs[item.isInPlaylist].track.uri > -1;
+      item.uri = savedSongs[item.isInPlaylist].track.uri > -1
     }
 
-    var cant = 0;
+    var cant = 0
 
     const rating =
       (props.qualifications.reduce((acc, x) => {
         if (x.reviewId == item.id) {
-          cant++;
-          return acc + x.qualification;
+          cant++
+          return acc + x.qualification
         }
-        return acc;
+        return acc
       }, 0) +
         item.qualification) /
-      (cant + 1);
+      (cant + 1)
 
-    item.rating = rating;
+    item.rating = rating
 
     item.likes = props.likes.reduce((acc, x) => {
-      return x.reviewId == item.id && x.isLike ? acc + 1 : acc;
-    }, 0);
+      return x.reviewId == item.id && x.isLike ? acc + 1 : acc
+    }, 0)
 
-    return item;
-  });
+    return item
+  })
 
   return (
     <CardsContainer>
       {cards.map((item) => {
-        return <Card data={item} {...props} page={page} />;
+        return <Card data={item} {...props} page={page} />
       })}
     </CardsContainer>
-  );
-};
+  )
+}
 
-export default CardsList;
+export default CardsList
