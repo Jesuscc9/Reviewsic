@@ -1,39 +1,38 @@
-import React, { useState, useEffect, useRef } from "react";
-import Logo from "../assets/img/music.png";
-import Phone from "../assets/img/3DPhoneWithNoDecoTrim2.png";
-import Hands from "../assets/img/3DHands.png";
-import "../assets/animate.css";
-import Features from "../assets/img/3DFeatures.png";
-import Music from "../assets/img/3DMusic.png";
-import VioleteSphere from "../assets/img/3DShapes/VioleteSphere.png";
-import GreenSphere from "../assets/img/3DShapes/GreenSphere.png";
-import OrangeSphere from "../assets/img/3DShapes/OrangeSphere.png";
-import { Link } from "react-router-dom";
-import { Redirect } from "react-router-dom";
-import { SpotifyAuth, Scopes } from "react-spotify-auth";
-import Cookies from "js-cookie";
-import { SpotifyApiContext } from "react-spotify-api";
-import { AnimatePresence, motion } from "framer-motion";
-import ReactStars from "react-rating-stars-component";
-import Footer from "../components/Footer";
-import { watchViewport, unwatchViewport, getViewportState } from "tornis";
-import "animate.css/animate.min.css";
-import ScrollAnimation from "react-animate-on-scroll";
-import { DEVELOPMENT } from "../data/utils";
+import React, { useState, useEffect, useRef } from 'react'
+import Logo from '../assets/img/music.png'
+import Phone from '../assets/img/3DPhoneWithNoDecoTrim2.png'
+import Hands from '../assets/img/3DHands.png'
+import '../assets/animate.css'
+import Features from '../assets/img/3DFeatures.png'
+import Music from '../assets/img/3DMusic.png'
+import VioleteSphere from '../assets/img/3DShapes/VioleteSphere.png'
+import GreenSphere from '../assets/img/3DShapes/GreenSphere.png'
+import OrangeSphere from '../assets/img/3DShapes/OrangeSphere.png'
+import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
+import { SpotifyAuth, Scopes } from 'react-spotify-auth'
+import Cookies from 'js-cookie'
+import { SpotifyApiContext } from 'react-spotify-api'
+import { AnimatePresence, motion } from 'framer-motion'
+import ReactStars from 'react-rating-stars-component'
+import Footer from '../components/Footer'
+import { watchViewport, unwatchViewport, getViewportState } from 'tornis'
+import 'animate.css/animate.min.css'
+import { DEVELOPMENT } from '../data/utils'
 
-import Bounce from "react-reveal/Bounce";
-import Slide from "react-reveal/Flip";
+import Bounce from 'react-reveal/Bounce'
+import Slide from 'react-reveal/Flip'
 
 import {
   GlobalStyles,
   Navbar,
   MainContainer,
-  DecorationSquare,
-} from "./styles/Home.style";
-import { faSearchPlus } from "@fortawesome/free-solid-svg-icons";
+  DecorationSquare
+} from './styles/Home.style'
+import { faSearchPlus } from '@fortawesome/free-solid-svg-icons'
 
 const Home = () => {
-  const token = Cookies.get("spotifyAuthToken");
+  const token = Cookies.get('spotifyAuthToken')
   const scopes = [
     Scopes.playlistModifyPrivate,
     Scopes.userReadPrivate,
@@ -45,36 +44,36 @@ const Home = () => {
     Scopes.userModifyPlaybackState,
     Scopes.userReadPlaybackPosition,
     Scopes.userReadPrivate,
-    Scopes.userReadEmail,
-  ];
+    Scopes.userReadEmail
+  ]
 
-  const [scrolled, setScrolled] = useState(false);
-  const [actualSection, setActualSection] = useState("");
+  const [scrolled, setScrolled] = useState(false)
+  const [actualSection, setActualSection] = useState('')
 
   const updateValues = ({ scroll }) => {
     if (scroll.changed && scroll.velocity.x == 0 && scroll.velocity.y == 0) {
       if (scroll.top > 1) {
         if (!scrolled) {
-          setScrolled(true);
+          setScrolled(true)
         }
       } else {
         if (scrolled) {
-          setScrolled(false);
+          setScrolled(false)
         }
       }
 
       if (scroll.top <= 900) {
-        if (actualSection != "") {
-          setActualSection("");
+        if (actualSection != '') {
+          setActualSection('')
         }
       }
     }
-  };
+  }
 
-  watchViewport(updateValues);
+  watchViewport(updateValues)
 
-  const featuresRef = React.useRef(null);
-  const popularRef = React.useRef(null);
+  const featuresRef = React.useRef(null)
+  const popularRef = React.useRef(null)
 
   return (
     <>
@@ -83,55 +82,55 @@ const Home = () => {
           <GlobalStyles />
 
           <Navbar shadowed={scrolled}>
-            <Link className="title" to="/">
-              <img src={Logo} alt="" />
+            <Link className='title' to='/'>
+              <img src={Logo} alt='' />
               <h1>Reviewsic</h1>
             </Link>
-            <div className="menu">
-              <div className="link">
+            <div className='menu'>
+              <div className='link'>
                 <Link
                   onClick={() => {
-                    featuresRef.current.scrollIntoView();
-                    setActualSection("features");
+                    featuresRef.current.scrollIntoView()
+                    setActualSection('features')
                   }}
                 >
                   Features
                 </Link>
                 <div
                   className={`line ${
-                    actualSection == "features" && "selected-line"
+                    actualSection == 'features' && 'selected-line'
                   }`}
                 ></div>
               </div>
-              <div className="link">
+              <div className='link'>
                 <Link
                   onClick={() => {
-                    popularRef.current.scrollIntoView();
-                    setActualSection("popular");
+                    popularRef.current.scrollIntoView()
+                    setActualSection('popular')
                   }}
                 >
                   Popular
                 </Link>
                 <div
                   className={`line ${
-                    actualSection == "popular" && "selected-line"
+                    actualSection == 'popular' && 'selected-line'
                   }`}
                 ></div>
               </div>
               <div
-                className="link signin-button"
+                className='link signin-button'
                 onClick={() => {
-                  document.getElementsByClassName("loginbutton")[0].click();
+                  document.getElementsByClassName('loginbutton')[0].click()
                 }}
               >
                 <Link>Log In</Link>
-                <div className="line"></div>
+                <div className='line'></div>
               </div>
             </div>
           </Navbar>
           <MainContainer>
-            <div className="first-container">
-              <div className="content">
+            <div className='first-container'>
+              <div className='content'>
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -139,7 +138,7 @@ const Home = () => {
                 >
                   <h1>Discover NEW music</h1>
                 </motion.div>
-                <div className="line"></div>
+                <div className='line'></div>
                 <p>
                   Share your toughts about your favorite music, and be part of
                   worlwide communities with common music interest!
@@ -151,17 +150,17 @@ const Home = () => {
                 >
                   <SpotifyAuth
                     noLogo={true}
-                    title={"Get Started!"}
+                    title={'Get Started!'}
                     redirectUri={
                       DEVELOPMENT
-                        ? "http://localhost:3000/"
-                        : "https://reviewsic.herokuapp.com/"
+                        ? 'http://localhost:3000/'
+                        : 'https://reviewsic.herokuapp.com/'
                     }
-                    clientID="9751c1f85b2a4684a8cc0a02f6942b91"
-                    btnClassName="loginbutton"
+                    clientID='9751c1f85b2a4684a8cc0a02f6942b91'
+                    btnClassName='loginbutton'
                     scopes={scopes}
                     onAccessToken={() => {
-                      window.location = "/home";
+                      window.location = '/home'
                     }}
                   >
                     <p>Get Started!</p>
@@ -169,8 +168,8 @@ const Home = () => {
                 </motion.div>
               </div>
 
-              <div className="image-container">
-                <div className="background-image">
+              <div className='image-container'>
+                <div className='background-image'>
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -184,21 +183,21 @@ const Home = () => {
                   animate={{ y: 0 }}
                   transition={{ delay: 1.4 }}
                 >
-                  <img className="phone" src={Phone} alt="" />
+                  <img className='phone' src={Phone} alt='' />
                 </motion.div>
               </div>
             </div>
-            <div className="second-container container" ref={featuresRef}>
+            <div className='second-container container' ref={featuresRef}>
               <h1>Features</h1>
 
-              <div className="features">
+              <div className='features'>
                 <Bounce duration={700}>
                   <section>
-                    <div className="feature first">
-                      <div className="header">
-                        <img src={Features} alt="" />
+                    <div className='feature first'>
+                      <div className='header'>
+                        <img src={Features} alt='' />
                       </div>
-                      <div className="body">
+                      <div className='body'>
                         Interact with your own and others reviews! Like, rate
                         and save all the music you want.
                       </div>
@@ -208,11 +207,11 @@ const Home = () => {
 
                 <Bounce duration={700}>
                   <section>
-                    <div className="feature second">
-                      <div className="header">
-                        <img src={Music} alt="" />
+                    <div className='feature second'>
+                      <div className='header'>
+                        <img src={Music} alt='' />
                       </div>
-                      <div className="body">
+                      <div className='body'>
                         Use the spotify incorporated player as any other device
                         with your spotify account!
                       </div>
@@ -222,16 +221,16 @@ const Home = () => {
 
                 <Bounce duration={700}>
                   <section>
-                    <div className="feature third">
-                      <div className="coming-soon-container">
-                        <div className="coming-soon">
+                    <div className='feature third'>
+                      <div className='coming-soon-container'>
+                        <div className='coming-soon'>
                           <p>Coming Soon!</p>
                         </div>
                       </div>
-                      <div className="header">
-                        <img src={Hands} alt="" />
+                      <div className='header'>
+                        <img src={Hands} alt='' />
                       </div>
-                      <div className="body">
+                      <div className='body'>
                         Create and join to groups to share music about a
                         specific genre, artist, album or whatever you want!
                       </div>
@@ -241,31 +240,31 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="third-container container" ref={popularRef}>
+            <div className='third-container container' ref={popularRef}>
               <h1>Popular on Reviewsic</h1>
-              <div className="releases">
-                <div className="release-container">
-                  <div className="ball-decoration">
-                    <img src={VioleteSphere} alt="" className="ball" />
+              <div className='releases'>
+                <div className='release-container'>
+                  <div className='ball-decoration'>
+                    <img src={VioleteSphere} alt='' className='ball' />
                   </div>
                   <Slide left>
                     <section>
                       <a
-                        className="release"
-                        href="https://open.spotify.com/track/5mIOsPuQdXchVY0jB5NO9Q?si=9babbe31b2214403"
-                        target="_blank"
+                        className='release'
+                        href='https://open.spotify.com/track/5mIOsPuQdXchVY0jB5NO9Q?si=9babbe31b2214403'
+                        target='_blank'
                       >
-                        <div className="image-container">
-                          <img src="https://i.scdn.co/image/ab67616d00001e0271179dd3ac3cba1d14920469" />
+                        <div className='image-container'>
+                          <img src='https://i.scdn.co/image/ab67616d00001e0271179dd3ac3cba1d14920469' />
                         </div>
-                        <div className="song-data">
-                          <p className="song">4EVER</p>
-                          <p className="artist">Clairo</p>
-                          <div className="stars">
+                        <div className='song-data'>
+                          <p className='song'>4EVER</p>
+                          <p className='artist'>Clairo</p>
+                          <div className='stars'>
                             <ReactStars
-                              count="5"
-                              size="30"
-                              value="5"
+                              count='5'
+                              size='30'
+                              value='5'
                               edit={false}
                             />
                           </div>
@@ -274,28 +273,28 @@ const Home = () => {
                     </section>
                   </Slide>
                 </div>
-                <div className="release-container second-release">
-                  <div className="ball-decoration">
-                    <img src={GreenSphere} alt="" className="ball ballsecond" />
+                <div className='release-container second-release'>
+                  <div className='ball-decoration'>
+                    <img src={GreenSphere} alt='' className='ball ballsecond' />
                   </div>
                   <Slide right>
                     <section>
                       <a
-                        className="release second"
-                        href="https://open.spotify.com/track/6z6Nd3M3D38XJMnkEC0GZh?si=e39c0117661d47b0"
-                        target="_blank"
+                        className='release second'
+                        href='https://open.spotify.com/track/6z6Nd3M3D38XJMnkEC0GZh?si=e39c0117661d47b0'
+                        target='_blank'
                       >
-                        <div className="image-container">
-                          <img src="https://i.scdn.co/image/ab67616d00001e02e11f1ac4d5dce1bc5fec6703" />
+                        <div className='image-container'>
+                          <img src='https://i.scdn.co/image/ab67616d00001e02e11f1ac4d5dce1bc5fec6703' />
                         </div>
-                        <div className="song-data">
-                          <p className="song">Last man on the earth</p>
-                          <p className="artist">Wolf Alice</p>
-                          <div className="stars">
+                        <div className='song-data'>
+                          <p className='song'>Last man on the earth</p>
+                          <p className='artist'>Wolf Alice</p>
+                          <div className='stars'>
                             <ReactStars
-                              count="5"
-                              size="30"
-                              value="4.5"
+                              count='5'
+                              size='30'
+                              value='4.5'
                               edit={false}
                             />
                           </div>
@@ -304,28 +303,28 @@ const Home = () => {
                     </section>
                   </Slide>
                 </div>
-                <div className="release-container third-release">
-                  <div className="ball-decoration">
-                    <img src={OrangeSphere} alt="" className="ball ballthird" />
+                <div className='release-container third-release'>
+                  <div className='ball-decoration'>
+                    <img src={OrangeSphere} alt='' className='ball ballthird' />
                   </div>
                   <Slide left>
                     <section>
                       <a
-                        className="release third"
-                        href="https://open.spotify.com/track/0t1WPoT5kNNIyNyUbOBOsV?si=76e424b0051440d8"
-                        target="_blank"
+                        className='release third'
+                        href='https://open.spotify.com/track/0t1WPoT5kNNIyNyUbOBOsV?si=76e424b0051440d8'
+                        target='_blank'
                       >
-                        <div className="image-container">
-                          <img src="https://i.scdn.co/image/ab67616d00001e021f028a147500800d81ac1b32" />
+                        <div className='image-container'>
+                          <img src='https://i.scdn.co/image/ab67616d00001e021f028a147500800d81ac1b32' />
                         </div>
-                        <div className="song-data">
-                          <p className="song">Slide</p>
-                          <p className="artist">Jake Bugg</p>
-                          <div className="stars">
+                        <div className='song-data'>
+                          <p className='song'>Slide</p>
+                          <p className='artist'>Jake Bugg</p>
+                          <div className='stars'>
                             <ReactStars
-                              count="5"
-                              size="30"
-                              value="5"
+                              count='5'
+                              size='30'
+                              value='5'
                               edit={false}
                             />
                           </div>
@@ -338,13 +337,13 @@ const Home = () => {
             </div>
             <br />
           </MainContainer>
-          <Footer token="" />
+          <Footer token='' />
         </SpotifyApiContext.Provider>
       ) : (
-        <Redirect to="/home" />
+        <Redirect to='/home' />
       )}
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
