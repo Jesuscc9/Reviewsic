@@ -1,8 +1,8 @@
-import React from 'react'
 import '../components/styles/Footer.css'
 import { faGithub } from '@fortawesome/fontawesome-free-brands'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React from 'react'
 
 import Cookies from 'js-cookie'
 

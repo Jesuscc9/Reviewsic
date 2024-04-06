@@ -20,8 +20,8 @@ const db = mysql.createPool({
   database: process.env.DATABASE_NAME
 })
 
-// app.use(express.static(path.resolve(__dirname, 'build/')))
-// app.use(express.static('public'))
+app.use(express.static(path.resolve(__dirname, 'build/')))
+app.use(express.static('public'))
 app.use(
   cors({
     origin: '*'

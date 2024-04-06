@@ -6,8 +6,7 @@ import { useParams } from 'react-router'
 
 const CardsList = (props) => {
   const params = useParams()
-  const page = 'user'
-
+  const page = props.redirect
   console.log({ props })
 
   const savedSongs = useSelector((state) => state.user.savedSongs)

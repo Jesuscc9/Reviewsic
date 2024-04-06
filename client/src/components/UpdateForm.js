@@ -1,57 +1,57 @@
-import React, { useEffect, useState } from "react";
-import "tailwindcss/tailwind.css";
-import "../components/styles/UpdateForm.css";
-import { GlobalStyles } from "./styles/RegisterForm.style";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from 'react'
+import 'tailwindcss/tailwind.css'
+import '../components/styles/UpdateForm.css'
+import { GlobalStyles } from './styles/RegisterForm.style'
+import { motion } from 'framer-motion'
 
-import ReactStars from "react-rating-stars-component";
+import ReactStars from 'react-rating-stars-component'
 
 const UpdateForm = ({ data, submit }) => {
   const [songData, setSongData] = useState({
     review: data.review,
-    qualification: data.qualification,
-  });
+    qualification: data.qualification
+  })
 
   const stars = {
     size: 50,
     value: songData.qualification,
-    isHalf: true,
-  };
+    isHalf: true
+  }
 
-  const review = React.useRef(null);
-  const reviewAlert = React.useRef(null);
+  const review = React.useRef(null)
+  const reviewAlert = React.useRef(null)
 
   function validation() {
     if (review.current.value.length <= 0) {
-      reviewAlert.current.style.opacity = "1";
-      review.current.classList.add("wrong-input");
-      reviewAlert.current.textContent = "Please fill out this field.";
-      return false;
+      reviewAlert.current.style.opacity = '1'
+      review.current.classList.add('wrong-input')
+      reviewAlert.current.textContent = 'Please fill out this field.'
+      return false
     } else {
-      review.current.classList.remove("wrong-input");
-      reviewAlert.current.style.opacity = "0";
+      review.current.classList.remove('wrong-input')
+      reviewAlert.current.style.opacity = '0'
     }
 
     if (review.current.value.length <= 1) {
-      reviewAlert.current.style.opacity = "1";
-      reviewAlert.current.textContent = "Please, make a longer comment!";
-      review.current.classList.add("wrong-input");
-      return false;
+      reviewAlert.current.style.opacity = '1'
+      reviewAlert.current.textContent = 'Please, make a longer comment!'
+      review.current.classList.add('wrong-input')
+      return false
     } else {
-      review.current.classList.remove("wrong-input");
-      reviewAlert.current.style.opacity = "0";
+      review.current.classList.remove('wrong-input')
+      reviewAlert.current.style.opacity = '0'
     }
 
     if (review.current.value.length >= 150) {
-      reviewAlert.current.textContent = "Please, make a smaller comment!";
-      reviewAlert.current.style.opacity = "1";
-      review.current.classList.add("wrong-input");
-      return false;
+      reviewAlert.current.textContent = 'Please, make a smaller comment!'
+      reviewAlert.current.style.opacity = '1'
+      review.current.classList.add('wrong-input')
+      return false
     } else {
-      reviewAlert.current.style.opacity = "0";
-      review.current.classList.remove("wrong-input");
+      reviewAlert.current.style.opacity = '0'
+      review.current.classList.remove('wrong-input')
     }
-    return true;
+    return true
   }
 
   return (
@@ -59,69 +59,70 @@ const UpdateForm = ({ data, submit }) => {
       <GlobalStyles />
       <form
         onSubmit={(e) => {
-          e.preventDefault();
+          e.preventDefault()
           if (validation()) {
-            submit(songData);
+            submit(songData)
           }
         }}
-        className="register-form"
+        className='register-form'
       >
         <motion.div
-          className="selected-song swal2-input spotify-link-input"
+          className='selected-song swal2-input spotify-link-input'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.1 }}
-          key="selected-song"
+          key='selected-song'
         >
-          <div className="image-container">
-            <img src={data.image} alt="" />
+          <div className='image-container'>
+            <img src={data.image} alt='' />
           </div>
-          <div className="track-data">
-            <p className="track-name">{data.song}</p>
-            <p className="track-artist">{data.artist}</p>
+          <div className='track-data'>
+            <p className='track-name'>{data.song}</p>
+            <p className='track-artist'>{data.artist}</p>
           </div>
         </motion.div>
         <br />
         <br />
-        <p className="input-label">Review: </p>
+        <p className='input-label'>Review: </p>
 
         <input
-          type="text"
-          className="swal2-input"
+          type='text'
+          className='swal2-input'
           value={songData.review}
-          placeholder="A little commentary..."
+          placeholder='A little commentary...'
           onChange={(e) => {
+            e.persist()
             setSongData((prevState) => ({
               ...prevState,
-              review: e.target.value,
-            }));
+              review: e.target.value
+            }))
           }}
           ref={review}
         />
 
-        <p className="alert-label" ref={reviewAlert}>
+        <p className='alert-label' ref={reviewAlert}>
           Please fill out this field.
         </p>
 
-        <p className="input-label">Rating: </p>
+        <p className='input-label'>Rating: </p>
 
         <ReactStars
           {...stars}
-          className="stars-calification"
+          className='stars-calification'
           onChange={(e) => {
             setSongData((prevState) => ({
               ...prevState,
-              qualification: e,
-            }));
+              qualification: e
+            }))
           }}
         />
 
-        <button type="submit" className="submit-button">
+        <button type='submit' className='submit-button'>
           UPDATE
         </button>
       </form>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default UpdateForm;
+export default UpdateForm

@@ -1,31 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.9bf81c73.chunk.css",
-    "main.js": "/static/js/main.ab86481c.chunk.js",
-    "main.js.map": "/static/js/main.ab86481c.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.c012fedc.js",
-    "runtime-main.js.map": "/static/js/runtime-main.c012fedc.js.map",
-    "static/css/2.04487a75.chunk.css": "/static/css/2.04487a75.chunk.css",
-    "static/js/2.e7174bef.chunk.js": "/static/js/2.e7174bef.chunk.js",
-    "static/js/2.e7174bef.chunk.js.map": "/static/js/2.e7174bef.chunk.js.map",
+    "main.css": "/static/css/main.8a0f1db3.css",
+    "main.js": "/static/js/main.bc6d12cd.js",
+    "static/media/3DHands.png": "/static/media/3DHands.24fc3cb1a61c70893dc8.png",
+    "static/media/3DFeatures.png": "/static/media/3DFeatures.633bc8644ec7ba1878ca.png",
+    "static/media/VioleteSphere.png": "/static/media/VioleteSphere.3682ce59a3e37ecc6dac.png",
+    "static/media/OrangeSphere.png": "/static/media/OrangeSphere.bd36690eabf80d568c71.png",
+    "static/media/GreenSphere.png": "/static/media/GreenSphere.5d10b58e02dcd5b3e224.png",
+    "static/media/3DMusic.png": "/static/media/3DMusic.1985105597f568165bc2.png",
+    "static/media/3DPhoneWithNoDecoTrim2.png": "/static/media/3DPhoneWithNoDecoTrim2.1962589f988740fdd3b8.png",
+    "static/media/music.png": "/static/media/music.b849c350367a9cf9f0dc.png",
     "index.html": "/index.html",
-    "static/css/2.04487a75.chunk.css.map": "/static/css/2.04487a75.chunk.css.map",
-    "static/css/main.9bf81c73.chunk.css.map": "/static/css/main.9bf81c73.chunk.css.map",
-    "static/js/2.e7174bef.chunk.js.LICENSE.txt": "/static/js/2.e7174bef.chunk.js.LICENSE.txt",
-    "static/media/3DFeatures.633bc864.png": "/static/media/3DFeatures.633bc864.png",
-    "static/media/3DHands.24fc3cb1.png": "/static/media/3DHands.24fc3cb1.png",
-    "static/media/3DMusic.19851055.png": "/static/media/3DMusic.19851055.png",
-    "static/media/3DPhoneWithNoDecoTrim2.1962589f.png": "/static/media/3DPhoneWithNoDecoTrim2.1962589f.png",
-    "static/media/GreenSphere.5d10b58e.png": "/static/media/GreenSphere.5d10b58e.png",
-    "static/media/OrangeSphere.bd36690e.png": "/static/media/OrangeSphere.bd36690e.png",
-    "static/media/VioleteSphere.3682ce59.png": "/static/media/VioleteSphere.3682ce59.png",
-    "static/media/music.b849c350.png": "/static/media/music.b849c350.png"
+    "main.8a0f1db3.css.map": "/static/css/main.8a0f1db3.css.map",
+    "main.bc6d12cd.js.map": "/static/js/main.bc6d12cd.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.c012fedc.js",
-    "static/css/2.04487a75.chunk.css",
-    "static/js/2.e7174bef.chunk.js",
-    "static/css/main.9bf81c73.chunk.css",
-    "static/js/main.ab86481c.chunk.js"
+    "static/css/main.8a0f1db3.css",
+    "static/js/main.bc6d12cd.js"
   ]
 }

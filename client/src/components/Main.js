@@ -98,21 +98,11 @@ const Main = ({ token }) => {
           )}
           <Home />
         </Route>
-        <Route
-          exact
-          path={['/user/:id', '/user/:id/:reviewId']}
-          children={() => (
-            <>
-              {token ? (
-                <UserPage
-                  token={token}
-                  loaded={loaded}
-                  endpoint={API_ENDPOINT}
-                />
-              ) : null}
-            </>
-          )}
-        ></Route>
+        <Route exact path={['/user/:id', '/user/:id/:reviewId']}>
+          {token ? (
+            <UserPage token={token} loaded={loaded} endpoint={API_ENDPOINT} />
+          ) : null}
+        </Route>
         <Route exact path='/' component={Home} />
         <Route component={NotFound} />
       </SpotifyApiContext.Provider>
